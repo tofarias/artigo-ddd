@@ -6,10 +6,27 @@ Boulic, R. and Renault, O. (1991).
 \newblock In Magnenat-Thalmann, N. and Thalmann, D., editors, {\em New Trends
   in Animation and Visualization}. John Wiley {\&} Sons ltd.
 
+\bibitem[Carlos~Buenosvinos and Akbary 2014]{DDDinPHP}
+Carlos~Buenosvinos, C.~S. and Akbary, K. (2014).
+\newblock {\em Domain-Driven Design in PHP}.
+\newblock Leanpub.
+\newblock Real examples written in PHP showcasing DDD Architectural Styles,
+  Tactical Design, and Bounded Context Integration.
+
+\bibitem[Evans 2003]{Evans:2003:DDT:861502}
+Evans (2003).
+\newblock {\em Domain-Driven Design: Tacking Complexity In the Heart of
+  Software}.
+\newblock Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA.
+
 \bibitem[Knuth 1984]{knuth:84}
 Knuth, D.~E. (1984).
 \newblock {\em The {\TeX} Book}.
 \newblock Addison-Wesley, 15th edition.
+
+\bibitem[Millett and Tune 2015]{millett2015patterns}
+Millett, S. and Tune, N. (2015).
+\newblock Patterns, principles, and practices of domain-driven design.
 
 \bibitem[Smith and Jones 1999]{smith:99}
 Smith, A. and Jones, B. (1999).
