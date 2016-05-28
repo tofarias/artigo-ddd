@@ -10,7 +10,7 @@
      
 \sloppy
 
-\title{Aplicação de Domain-Driven Design no gerenciamento de GRUs de Cronotacógrafo no Inmetro/RS}
+\title{Aplicação de Domain-Driven Design no gerenciamento de GRU de Cronotacógrafo no Inmetro/RS}
 
 \author{Tiago O. de Farias\inst{1}}
 
@@ -25,7 +25,7 @@
 \maketitle
 
 \begin{abstract}
-  
+Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles with a gross weight exceeding 4536 kilograms and passengers with more than 10 seats must have tachograph. From 2009, the instruments should also be checked periodically by Inmetro (National Institute of Metrology, Quality and Technology), which increases the reliability of the measurements. All the tachograph verification process is managed through a web system. This paper presents a proposal for improving the current web system using some techniques Domain-driven design. The main objective is to provide an organized, highly reusable and production structure; where the application life cycle can be extended. Throughout this work is done a study on the concept of Domain-Driven Design, in addition to the current application improvement case study.
 \end{abstract}
      
 \begin{resumo} 
@@ -55,12 +55,52 @@ uso.
 \subsection{Domain-Driven Design}
 Domain-Driven Design é uma abordagem de desenvolvimento de software desenhado para gerir a complexa e grande escala de produtos de software.\cite{Evans:2003:DDT:861502}
 
-Segundo Evans é um processo que alinha o código do desenvolvedor com o problema real,  um conjunto de técnicas de desenvolvimento de software, usadas principalmente em projetos complexos que provê conceitos e regras para ajudar no cilco do desenvolvimento de software, essas técnicas também tem o objetivo de ajudar clientes, gestores e todas as pessoas envolvidas no processo de desenvolvimento. Seguir a filosofia DDD dará aos desenvolvedores o conhecimento e as habilidades que eles precisam para enfrentar sistemas de negócios grandes e complexos de maneira eficaz.\cite{millett2015patterns}
+A melhor maneira de justificar uma tecnologia ou técnica é fornecer valor ao negócio.\cite{DDDinPHP}
 
-A solução está em resolver o problema do domínio, focado no domínio do problema, falar a mesma linguagem dos especialistas do domínio. Pode ser aplicado em qualquer projeto desde que não torne complicado o desenvolvimento, algumas vezes o desenvolvimento não é tão complexo que necessite do DDD. No seu coração ele se concentra na criação de uma linguagem comum conhecida como a linguagem ubíqua para descrever de forma eficiente e eficaz um domínio de problemas.\cite{millett2015patterns}
+Segundo \cite{Evans:2003:DDT:861502} é um processo que alinha o código do desenvolvedor com o problema real,  um conjunto de técnicas de desenvolvimento de software, usadas principalmente em projetos complexos que provê conceitos e regras para ajudar no cilco do desenvolvimento de software, essas técnicas também tem o objetivo de ajudar clientes, gestores e todas as pessoas envolvidas no processo de desenvolvimento. Seguir a filosofia DDD dará aos desenvolvedores o conhecimento e as habilidades que eles precisam para enfrentar sistemas de negócios grandes e complexos de maneira eficaz.\cite{millett2015patterns}
+
+DDD utiliza o princípio da separação de conceitos. Este princípio é usado para separar a aplicação do modelo em um modelo de domínio, que consiste de domínio relacionado com a funcionalidade, e domínio independente de funcionalidade, que é representado por diferentes serviços que facilitam a usabilidade do modelo de domínio  \cite{essay58268}
+
+A solução está em resolver o problema do domínio, focado no domínio do problema, falar a mesma linguagem dos especialistas do domínio. Pode ser aplicado em qualquer projeto desde que não torne complicado o desenvolvimento, algumas vezes o desenvolvimento não é tão complexo que necessite do DDD. O foco está na criação de uma linguagem comum conhecida como a linguagem ubíqua para descrever de forma eficiente e eficaz um domínio de problemas.\cite{millett2015patterns}
 De acordo com o conceito do DDD o mais importante em um software não é somente o código, não é somente a arquitetura, tampouco a tecnologia sobre o qual foi desenvolvido, mas sim o problema que o mesmo se propõe a resolver, a regra de negócio. Ela é a razão do software existir. 
 DDD é sobre o desenvolvimento de conhecimento em torno do negócio e de utilizar a tecnologia para fornecer valor.\cite{DDDinPHP}
 
+Ainda segundo \cite{DDDinPHP} Domain-Driven Design não é uma bala de prata, como tudo em software, que depende do contexto. Como regra geral, deve ser utilizado para simplificar o domínio, nunca para adicionar mais complexidade.
+DDD é mais do que tecnologia ou metodologia, ou até mesmo um framework. É uma maneira de pensar, é um conjunto de prioridades que visa acelerar projetos de software que têm de lidar com domínios complicados. \cite{vlahovicimplications}
+
+Pensar nos problemas de forma técnica não é ruim, o único problema é que, às vezes, pensar menos tecnicamente é melhor. A fim pensar em comportamentos de objetos precisamos pensar na Linguagem universal em primeiro lugar. \cite{DDDinPHP}
+
+De forma geral \cite{DDDinPHP} aifrma que os benefícios com a utilização do DDD são:
+\begin{itemize}
+  \item Alinhamento com o modelo do domínio
+  \item Especialistas do domínio contribuem para o design do software
+  \item Melhor experiência do usuário
+  \item Limites claros
+  \item Melhor organização da arquitetura
+  \item Modelagem contínua de forma ágil
+\end{itemize}
+
+\subsection{Linguagem Ubiqua}
+Que está ou pode estar em toda parte ao mesmo tempo; onipresente. \cite{michaelis2011disponivel}
+
+A linguagem ubíqua é uma linguagem de equipe compartilhada. Ela é compartilhada por especialistas em domínio e desenvolvedores. Na verdade, ela é compartilhada por todos na equipe do projeto. Não importa o seu papel na equipe, uma vez que você está na equipe que usa a linguagem ubíqua do projeto. \cite{vernon2013implementing}
+Esta linguagem é composta de documentos, diagramas de modelo, e mesmo código. Se um termo está ausente no projeto, é uma oportunidade para melhorar o modelo incluindo-a.\cite{Evans:2003:DDT:861502}
+A linguagem ubíqua exige que os desenvolvedores trabalhem duro para entender o domínio do problema, mas também exige que a empresa trabalhe duro para ser precisa em suas nomenclaturas e descrição desses conceitos. \cite{haywood2009domain} Se uma ideia não pode ser expressa usando este grupo de conceitos, o modelo deve ser extendido para procurar e remover as ambiguidades e as inconsistências.\cite{haywood2009domain}
+
+Especialistas do domínio podem se comunicar com os times de desenvolvedores de sistema sobre as regras do domínio através da linguagem ubiqua que também representa a especificação formal do sistema.\cite{vlahovicimplications}
+
+Para \cite{millett2015patterns} se a equipe de desenvolvimento não se envolver com especialistas de domínio para compreender plenamente a linguagem e usá-la no âmbito da implementação de código, muito do seu benefício é perdido. Para alcançar uma melhor compreensão, as equipes precisam se comunicar de forma eficaz. É a criação da linguagem onipresente que permite uma compreensão mais profunda do que vai permanecer após o código ser reescrito e substituído. \cite{millett2015patterns} Ainda segundo \cite{millett2015patterns} a utilidade da criação de uma linguagem ubiqua tem um impacto que vai além da aplicação para o produto em desenvolvimento. Ela ajuda a definir explicitamente o que a empresa faz, revela uma compreensão mais profunda do processo e a lógica do negócio, e melhora a comunicação empresarial. Enquanto as equipes estão implementando o modelo em código, novos conceitos podem aparecer. Estes termos descobertos precisam ser levados de volta para os especialistas de domínio para validação e esclarecimentos. \cite{millett2015patterns}
+
+Um projeto enfrenta sérios problemas quando os membros da equipe não compartilham uma linguagem comum para discutir o domínio. \cite{avram2007domain}
+Ele ainda defende usar um modelo como espinha dorsal de uma línguagem. Solicitando que a equipe deve usar a linguagem de forma consistente em todas as comunicações e
+também no código.
+
+\subsection{Diagrama de Casos de Uso}
+É a especificação de uma seqûencia de interações entre um sistema e os agentes externos que utilizam esse sistema. \cite{bezerra2006principios}.
+
+O diagrama de casos de uso procura, por meio de uma linguagem simples possibilitar a compreensão do comportamento externo do sistema por qualquer pessoa, tentanto apresentar o sistema através da perspectiva do usuário. \cite{guedes2009uml}
+
+Ainda segundo {\cite{guedes2009uml} o diagrama de casos de uso sendo uma linguagem informal e apresentar uma visão geral do comportamento do sistema a ser desenvolvido, pode e deve ser apresentado durante as reuniões inicias com os clientes com uma forma de ilustrar o comportamento do sistema, facilitando a compreenção dos usuários e auxiliando na identificação de possíveis falhas de especificação, verificando se os requisitos do sistema foram bem compreendidos.
 \section{Estado da Arte}
 
 

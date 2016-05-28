@@ -1,5 +1,16 @@
 \begin{thebibliography}{}
 
+\bibitem[Avram 2007]{avram2007domain}
+Avram, A. (2007).
+\newblock {\em Domain-driven design Quickly}.
+\newblock Lulu. com.
+
+\bibitem[Bezerra 2006]{bezerra2006principios}
+Bezerra, E. (2006).
+\newblock {\em Princ{\'\i}pios De An{\'a}lise E Projeto De Sistemas Com
+  Uml-3{\textordfeminine} Edi{\c{c}}{\~a}o}, volume~3.
+\newblock Elsevier Brasil.
+
 \bibitem[Boulic and Renault 1991]{boulic:91}
 Boulic, R. and Renault, O. (1991).
 \newblock 3d hierarchies for animation.
@@ -19,10 +30,25 @@ Evans (2003).
   Software}.
 \newblock Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA.
 
+\bibitem[Guedes 2009]{guedes2009uml}
+Guedes, G.~T. (2009).
+\newblock Uml 2.
+\newblock {\em Uma Abordagem Pr{\'a}tica, S{\~a}o Paulo, Novatec}.
+
+\bibitem[Haywood 2009]{haywood2009domain}
+Haywood, D. (2009).
+\newblock {\em Domain-driven design using naked objects}.
+\newblock Pragmatic Bookshelf.
+
 \bibitem[Knuth 1984]{knuth:84}
 Knuth, D.~E. (1984).
 \newblock {\em The {\TeX} Book}.
 \newblock Addison-Wesley, 15th edition.
+
+\bibitem[Michaelis 2011]{michaelis2011disponivel}
+Michaelis, D. (2011).
+\newblock Dispon{\'\i}vel em: http://michaelis.uol.com.br.
+\newblock {\em Acesso em 28/05/2016}, 7.
 
 \bibitem[Millett and Tune 2015]{millett2015patterns}
 Millett, S. and Tune, N. (2015).
@@ -33,5 +59,19 @@ Smith, A. and Jones, B. (1999).
 \newblock On the complexity of computing.
 \newblock In Smith-Jones, A.~B., editor, {\em Advances in Computer Science},
   pages 555--566. Publishing Press.
+
+\bibitem[{Uithol} 2008]{essay58268}
+{Uithol}, M. (2008).
+\newblock Security in domain-driven design.
+
+\bibitem[Vernon 2013]{vernon2013implementing}
+Vernon, V. (2013).
+\newblock {\em Implementing domain-driven design}.
+\newblock Addison-Wesley.
+
+\bibitem[Vlahovic ]{vlahovicimplications}
+Vlahovic, N.
+\newblock Implications of domain-driven design in complex software value
+  estimation and maintenance using dsl platform.
 
 \end{thebibliography}
