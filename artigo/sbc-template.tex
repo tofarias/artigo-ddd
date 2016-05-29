@@ -65,12 +65,12 @@ A solução está em resolver o problema do domínio, focado no domínio do problema,
 De acordo com o conceito do DDD o mais importante em um software não é somente o código, não é somente a arquitetura, tampouco a tecnologia sobre o qual foi desenvolvido, mas sim o problema que o mesmo se propõe a resolver, a regra de negócio. Ela é a razão do software existir. 
 DDD é sobre o desenvolvimento de conhecimento em torno do negócio e de utilizar a tecnologia para fornecer valor.\cite{DDDinPHP}
 
-Ainda segundo \cite{DDDinPHP} Domain-Driven Design não é uma bala de prata, como tudo em software, que depende do contexto. Como regra geral, deve ser utilizado para simplificar o domínio, nunca para adicionar mais complexidade.
+Ainda segundo \cite{DDDinPHP} Domain-Driven Design não é uma bala de prata, como tudo em software, depende do contexto. Como regra geral, deve ser utilizado para simplificar o domínio, nunca para adicionar mais complexidade.
 DDD é mais do que tecnologia ou metodologia, ou até mesmo um framework. É uma maneira de pensar, é um conjunto de prioridades que visa acelerar projetos de software que têm de lidar com domínios complicados. \cite{vlahovicimplications}
 
-Pensar nos problemas de forma técnica não é ruim, o único problema é que, às vezes, pensar menos tecnicamente é melhor. A fim pensar em comportamentos de objetos precisamos pensar na Linguagem universal em primeiro lugar. \cite{DDDinPHP}
+Pensar nos problemas de forma técnica não é ruim, o único problema é que, às vezes, pensar menos tecnicamente é melhor. A fim pensar em comportamentos de objetos precisa-se pensar na Linguagem universal em primeiro lugar. \cite{DDDinPHP}
 
-De forma geral \cite{DDDinPHP} aifrma que os benefícios com a utilização do DDD são:
+De forma geral \cite{DDDinPHP} afirma que os benefícios com a utilização do DDD são:
 \begin{itemize}
   \item Alinhamento com o modelo do domínio
   \item Especialistas do domínio contribuem para o design do software
@@ -79,6 +79,8 @@ De forma geral \cite{DDDinPHP} aifrma que os benefícios com a utilização do DDD 
   \item Melhor organização da arquitetura
   \item Modelagem contínua de forma ágil
 \end{itemize}
+
+\subsection{Arquitetura}
 
 \subsection{Linguagem Ubiqua}
 Que está ou pode estar em toda parte ao mesmo tempo; onipresente. \cite{michaelis2011disponivel}
@@ -100,10 +102,102 @@ também no código.
 
 O diagrama de casos de uso procura, por meio de uma linguagem simples possibilitar a compreensão do comportamento externo do sistema por qualquer pessoa, tentanto apresentar o sistema através da perspectiva do usuário. \cite{guedes2009uml}
 
-Ainda segundo {\cite{guedes2009uml} o diagrama de casos de uso sendo uma linguagem informal e apresentar uma visão geral do comportamento do sistema a ser desenvolvido, pode e deve ser apresentado durante as reuniões inicias com os clientes com uma forma de ilustrar o comportamento do sistema, facilitando a compreenção dos usuários e auxiliando na identificação de possíveis falhas de especificação, verificando se os requisitos do sistema foram bem compreendidos.
+Ainda segundo {\cite{guedes2009uml} o diagrama de casos de uso sendo uma linguagem informal, apresenta uma visão geral do comportamento do sistema a ser desenvolvido, que pode e deve ser apresentado durante as reuniões inicias com os clientes com uma forma de ilustrar o comportamento do sistema, facilitando a compreenção dos usuários e auxiliando na identificação de possíveis falhas de especificação, verificando se os requisitos do sistema foram bem compreendidos.
+
+Sendo um cenário uma descrição de umas das maneiras pelas quais um caso de uso pode ser realizado, então um cenário é chamado também de instância de caso de uso. \cite{bezerra2006principios} e segundo \cite{guedes2009uml} atores e casos de uso são itens principais do diagrama de casos de uso. Atores represenam os papéis desempenhados pelos diversos usuários que poderão utilizar os serviços do sistema. Um ator também pode representar um hardware ou ouro software que interaja com o sistema, pode ser qualquer elemento externo que interaja com o software. \cite{guedes2009uml} Segundo \cite{bezerra2006principios} Um ator pode estar envolvido em vários casos de uso, e para cada caso de uso pode ter responsabilidades diferentes, o mais importante é que o nome dado a esse ator deve lembrar o seu papel em vez de lembrar o que o representa.
+
+Para \cite{guedes2009uml} um caso de uso normalmente é documentado de maneira informal, mas o engenheiro de software se considerar necessário, pode inserir detalhes de implementação em uma linguagem mais técnica e que a UML (Linguagem de Modelagem Unificada) não define um formato específico de documentação para casos de uso.
+
+\subsection{Entidades}
+Muitos objetos não são fundamentalmente definidos por seus atributos, mas sim por uma linha de continuidade e identidade.\cite{Evans:2003:DDT:861502}
+Um objeto deve ser distinguido por sua identidade, ao invés de seus atributos. Esse objeto, que é definido por sua identidade, é chamado de entidade. O modelo deve definir o que significa ser a mesma coisa. Suas identidades devem ser definidas de modo que possam ser efetivamente controladas. 
+Normalmente existem 4 maneiras de definir a identidade de uma entidade: Um cliente fornece a identidade, o próprio aplicativo fornece uma identidade, o mecanismo de persistência fornece a identidade ou outro contexto limitado fornece uma identidade.\cite{DDDinPHP}
+
+Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclos de vida que podem mudar sua forma e conteúdo, mas sua continuidade deve ser mantida. Suas definições de responsabilidades, atributos e associações devem girar em torno de quem elas são mais do que sobre os atributos que elas carregam. Entidades são objetos importantes de um modelo de domínio, e elas deve ser considerada a partir do começo da modelagem processo. É também importante para determinar se um objeto precisa de ser uma entidade ou não. \cite{avram2007domain}
+
+\subsection{Objetos de Valor}
+Um objeto que representa um aspecto descritivo do domínio sem identidade conceitual é chamado de Objeto de Valor. \cite{Evans:2003:DDT:861502} entidades de implementação em software significa criar
+identidade
+
+Segundo \cite{Evans:2003:DDT:861502} entender o pattern Value Object não é tão simples, já que na aplicabilidade exige abstração de OO para identificar quando precisamos de um. Um ponto de partida é ter sempre em mente que objetos de valor é um objeto pequeno e que pode ser facilmente criado, e que não representa nenhuma entidade de domínio. Outro ponto é relacionado a igualdade, uma entidade de domínio seja na aplicação orientada a objeto ou no banco relacional, existe um modo de especificar que é único.
+Um objeto de valor não deve ser considerado apenas uma coisa em seu domínio. Como um valor, é medido, quantificado, ou descreve um conceito no Domínio. \cite{DDDinPHP}
+
+Em banco de dados utiliza-se chave primária (PK), para tal identificação. Objetos de valor podem existir inúmeros objetos iguais ao mesmo tempo. Algumas classes de característica VO são: Dinheiro, Data, Coordenadas e etc. \cite{DDDinPHP}
+
+
+Enquanto um objeto de valor é imutável, gestão da mudança é simples: não há qualquer alteração para além da substituição completa. Objetos imutáveis pode ser livremente compartilhada, como no exemplo tomada eléctrica.
+Quando um objeto de valor é do tipo imutável no projeto, os desenvolvedores são livres para tomar decisões sobre questões como a cópia e compartilhamento em uma base puramente técnica, com a certeza de que a aplicação não depende de determinadas instâncias dos objetos. \cite{Evans:2003:DDT:861502}
+	
+\subsection{Serviços}
+Alguns conceitos do domínio não são naturais para modelar como objetos. Forçar a funcionalidade de domínio necessário para ser da responsabilidade de uma entidade ou valor ou distorce a definição de um objeto baseado em modelo ou adiciona objetos artificiais sem sentido. (Evans, Eric 2003)
+
+Serviços agem como interfaces para prover operações. Eles não possuem um estado interno, seu objetivo é simplesmente fornecer funcionalidades para o domínio sobre um conjunto de entidades ou objetos de valor. \cite{avram2007domain}
+
+Declarando explicitamente um serviço, o conceito é encapsulado criando uma distinção clara no domínio. Desta forma evita-se criar a confusão de onde colocar essa funcionalidade, se em uma entidade ou objeto de valor.
+Serviços de domínio não possuem qualquer tipo de estado por si só, para que os serviços de domínio são operações apátridas. \cite{DDDinPHP}
+
+\subsection{Agregados}
+Agrupar as entidades e objetos de valor em agregados e definir limites em torno cada. Escolha uma entidade para ser a raiz de cada agregado, e controlar todo o acesso aos objetos dentro do limite através da raiz. Permitir que objetos externos para armazenar referências a apenas a raiz. referências transitória a membros internos pode ser passado para fora para o uso dentro de uma única operação. Porque o acesso controles de raiz, não podem ser surpreendidos por alterações para os internos. este arrangement torna prático para fazer cumprir todas as invariantes para objetos no agregado e para o Agregada, como um todo, em qualquer mudança de estado. (Eric Evans, 2003)
+	Em um modelo dirigido por domínio, utilizamos o conceito de Agregado , que é um grupo de objetos associados que tratamos como sendo uma unidade para fins de alterações de dados, de forma que cada agregado possui um entidade raiz e um limite (o que está dentro do agregado). Os agregados demarcam o escopo dentro do qual as invariantes (invariante: algo que não tem variação), tem que ser mantidas em cada estágio do ciclo de vida. 
+\subsection{Fábricas}
+Criação de um objeto pode ser uma grande operação em si, mas as operações de montagem complexas não se encaixam a responsabilidade dos objetos criados. Combinando essas responsabilidades podem produzir desenhos desajeitados que são difíceis de entender. Fazendo o cliente construção directa turva a concepção do cliente, violações encapsulamento do objecto montado ou agregado, e excessivamente acopla o cliente para a implementação do objecto criado. (Evans, Eric 2003)
+	Fábricas em DDD são as mesmas classes normalmente responsáveis pela criação de objetos complexos, onde é necessário esconder alguma implementação, onde cada operação deve ser atômica e se preocupar caso a criação do objeto falhe, minimizando a dependência e o acoplamento.
+Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma factory (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante. 
+	Fábricas podem criar Value Objects, que produzem objetos prontos, no formato final, ou Entity factories apenas para os atributos essenciais.
+\subsection{Repositórios}
+Um cliente precisa de um meio prático de adquirir referências a preexistente objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo. Por outro lado, eles podem usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação. (Evans, Eric 2003)
+	Muitas regras no domain model acabam sendo colocadas nas query?s, consequentemente se perdendo da aplicação, os repositórios tenta fazer a transição entre o domain e a camada de persistência.
+	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar calculos, somatórias ou relatórios.
+	Pensando em DDD, Repository é um padrão conceitual simples para encapsular soluções de SQL, mapeamento de dados (ORM, DAO, e etc), fábricas e trazer de volta o foco no modelo. Quando o desenvolvedor tiver construído uma consulta SQL, transmitindo essa consulta para um serviço de consultas da camada de infraestrutura, obtendo um RecordSet que extrai as informações e transmite para um construtor ou fábrica, o foco do modelo já não existe mais.
+
+Repositórios representam coleções, enquanto DAOs estão mais perto do banco de dados, muitas vezes sendo muito mais table-centric. Normalmente, um DAO conteria métodos CRUD para um objeto de domínio particular.(Buenosvinos, Carlos. Soronellas, Christian and Akbary, Keyvan, 2016)
+Coleções são importantes por serem uma forma de expressar um dos mais fundamentais tipos de variação na programação:  a variação de número. (Beck, Kent. 2013)
+	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final.
+	
+\subsection{Módulos}
+Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxima desenvolvedor que olha para o seu projeto para pensar sobre eles juntos. Se o seu modelo é contar uma história, Os módulos são capítulos. (Evan, Eric 2003)
+	Uma preocupação comum ao criar um aplicativo seguinte DDD, é onde é que vamos colocar o código? O que é a maneira recomendada para colocar o código no aplicativo? Onde é que vamos colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturada? Há um padrão tático para isso: módulos. Hoje em dia, as estruturas de todos o código em módulos. Mas DDD vai queridos passo adiante e há preocupações técnicas são consideradas quando se usa módulos. De fato, trata módulos como uma parte do modelo.
+	Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua. módulos e seus nomes devem refletir uma visão sobre o domínio. (Evan, Eric 2003)
+Módulos não separam o código mas separam o significado conceitual. Buenosvinos, Carlos. Soronellas, Christian and Akbary, Keyvan (2016)
+
 \section{Estado da Arte}
 
+\subsection{Domain-driven design in action: designing an identity provider}
+\url{http://www.diku.dk/forskning/performance-engineering/Klaus/speciale.pdf}
 
+\subsection{Implications of Domain-driven Design in Complex Software Value Estimation and Maintenance using DSL Platform}
+\url{http://www.inase.org/library/2015/zakynthos/bypaper/COMPUTERS/COMPUTERS-35.pdf}
+
+\subsection{Using Domain-Driven Design to Evaluate Commercial Off-The-Shelf Software}
+\url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part2.pdf}
+
+\subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
+\url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part1.pdf}
+
+\subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
+\url{http://www.teses.usp.br/teses/disponiveis/55/55134/tde-24032009-192923/publico/dissertacao.pdf}
+
+Esta dissertação de mestrado tem como principal objetivo demonstrar através de um estudo de caso a aplicação de DDD (Domain-Driven Design) e métodos ágeis no desenvolvimento de linhas de produtos de software, a fim de analisar as principais vantagens em relação aos métodos tradicionais.
+
+O autor afirma que o processo de desenvolvimento em linhas de produtos de software (LPS) geralmente é sequencial e que o projeto não está focado em um modelo de domínio, mas mais intenssamente preocupado com questões técnicas, como alocação de componentes e separação em subsistemas. O aumento no reúso do software leva a um aumento por transformações nos sistemas.
+
+Os métodos tradicionais não incorporam o conceito de adaptabilidade a mudanças no seu corpo de princípios. Por não reconhecerem as mudanças como parte natural do desenvolvimento de software, esses métodos tentam evitá-la ao máximo, por meio de especificações prematuras e exaustivas. 
+
+O trabalho apresenta um estudo de caso, em que se desenvolve uma linha de produtos baseados em DDD para sistemas de transporte urbano. O BET (Bilhetes Eletrônicos de Transporte) é um protótipo de sistema que tem por objetivo gerenciamento de sistemas de transporte urbano onde propõe-se um conjunto de diretrizes de desenvolvimento de LPS. Segundo o autor são regras de caráter prático que visam a guiar o desenvolvimento de novas linhas de produtos. Adaptadas a cada contexto particular, as diretrizes podem ajudar a alcançar maior flexibilidade e extensibilidade nas LPS.
+
+O estudao de caso considera que as regras para transporte urbano variam de cidade para cidade, essas diferenças foram modeladas como variabilidades da linha, enquanto as regras e conceitos comuns foram desenvolvidos como parte do núcleo. 
+
+Foi priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o DDD o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
+A camada de aplicação é composta por classes de serviço que coordenam outros serviços e/ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
+
+Além disso, a prática de modelagem adotada parte do pressuposto de que não é vantajoso
+tentar prever possíveis cenários futuros no modelo enquanto eles não forem necessários. Por isso,
+a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com
+a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão
+Durante a implementação do sistema BET utilizando como base os princípios de DDD e méto-
+dos ágeis, surgiram vários problemas práticos de projeto. Sempre que possível, as soluções encon-
+tradas para cada um desses problemas foram generalizadas com o objetivo de serem reutilizadas
+em projetos posteriores
 
 \section{Solução Implementada}
 
