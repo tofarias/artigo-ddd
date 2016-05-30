@@ -6,45 +6,45 @@ Database file #1: sbc-template.bib
 Warning--empty journal in millett2015patterns
 Warning--empty year in vlahovicimplications
 Warning--empty journal in vlahovicimplications
-You've used 14 entries,
+You've used 12 entries,
             1935 wiz_defined-function locations,
-            546 strings with 5352 characters,
-and the built_in function-call counts, 4327 in all, are:
-= -- 409
-> -- 134
-< -- 16
-+ -- 41
-- -- 39
-* -- 290
-:= -- 789
-add.period$ -- 42
-call.type$ -- 14
-change.case$ -- 82
-chr.to.int$ -- 14
-cite$ -- 17
-duplicate$ -- 205
-empty$ -- 334
-format.name$ -- 61
-if$ -- 853
+            530 strings with 5089 characters,
+and the built_in function-call counts, 3354 in all, are:
+= -- 312
+> -- 96
+< -- 13
++ -- 28
+- -- 28
+* -- 219
+:= -- 631
+add.period$ -- 34
+call.type$ -- 12
+change.case$ -- 67
+chr.to.int$ -- 12
+cite$ -- 15
+duplicate$ -- 160
+empty$ -- 257
+format.name$ -- 44
+if$ -- 644
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 20
-newline$ -- 71
-num.names$ -- 46
-pop$ -- 101
+missing$ -- 18
+newline$ -- 61
+num.names$ -- 36
+pop$ -- 83
 preamble$ -- 1
-purify$ -- 88
+purify$ -- 74
 quote$ -- 0
-skip$ -- 156
+skip$ -- 124
 stack$ -- 0
-substring$ -- 202
-swap$ -- 21
-text.length$ -- 2
+substring$ -- 144
+swap$ -- 10
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 70
+type$ -- 58
 warning$ -- 3
-while$ -- 33
+while$ -- 24
 width$ -- 0
-write$ -- 172
+write$ -- 144
 (There were 3 warnings)

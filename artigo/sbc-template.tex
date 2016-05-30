@@ -80,8 +80,6 @@ De forma geral \cite{DDDinPHP} afirma que os benefícios com a utilização do DDD 
   \item Modelagem contínua de forma ágil
 \end{itemize}
 
-\subsection{Arquitetura}
-
 \subsection{Linguagem Ubiqua}
 Que está ou pode estar em toda parte ao mesmo tempo; onipresente. \cite{michaelis2011disponivel}
 
@@ -108,6 +106,58 @@ Sendo um cenário uma descrição de umas das maneiras pelas quais um caso de uso p
 
 Para \cite{guedes2009uml} um caso de uso normalmente é documentado de maneira informal, mas o engenheiro de software se considerar necessário, pode inserir detalhes de implementação em uma linguagem mais técnica e que a UML (Linguagem de Modelagem Unificada) não define um formato específico de documentação para casos de uso.
 
+\subsection{Blocos de Construção}
+
+A finalidade desses padrões é apresentar alguns dos principais elementos da modelagem de objeto e design de software do ponto de vista do design orientado por domínio. \cite{avram2007domain}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{imagens/ddd-building-blocks.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:exampleFig1}
+\end{figure}
+
+Segundo \cite{avram2007domain} existe uma necessidade de se ter um conhecimento aprimorado do domínio e que a camada modelo, tem como principal objetivo organizar todas as informações obtidas através dos especialistas. Um desafio para os desenvolvedores é de criar um modelo que reflita os conceitos do domínio de forma clara que também seja útil para o desenvolvimento.
+
+Os efeitos destes padrões é apresentar alguns dos elementos-chave para modelagem de objetos e  software do ponto de vista no DDD. Neste caso, o domínio sendo modelado é o próprio DDD. \cite{Evans:2003:DDT:861502}
+
+A criação de programas que podem lidar com chamadas de tarefas muito complexas para a separação de responsabilidades, permitindo a concentração em diferentes partes do projeto isoladamente. Ao mesmo tempo, o complexo de interações dentro do sistema deve ser mantido apesar da separação. \cite{Evans:2003:DDT:861502}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{imagens/layered-architecture.png}
+\caption{separação de responsabilidades}
+\label{fig:exampleFig1}
+\end{figure}
+
+Desenvolver um projeto dentro de cada camada que seja coesa e que depende apenas de níveis abaixo. Siga os padrões de padrões de arquitetura para fornecer acoplamento frouxo para as camadas acima. Concentrar todo o código relacionadas com o modelo de domínio em uma amada e isolar a partir da interface do usuário, aplicativo e código de infra-estrutura. \cite{avram2007domain}
+Normalmente encontra-se no desenvolvimento códigos de lógica comercial incorporado no comportamento de elementos na interface do usuário juntando e adicionando os scripts de acesso  dados e até de retorno de informações do objeto. Isso acontece porque é a maneira mais fácil que o desenvolvedor encontra para fazer com que as funcionalidades apresentem resultados, no curto prazo. \cite{vernon2013implementing}
+
+Observa-se que neste contexto fala-se a respeito de uma lógica comercial incorporada em elementos, ou seja não há uma separação de responsabilidade entre as camadas. Desse modo pode-se chamar de camadas, aquilo que tem uma separação de responsabilidades entre elas. \cite{Evans:2003:DDT:861502}
+	Ainda segundo \cite{Evans:2003:DDT:861502} a arquitetura em camadas do sistema deve ser capaz de substituir uma camada que está no nível superior e colocar uma camada de outro tipo de aplicação e ela deve funcionar, isso quer dizer, se há uma aplicação WEB e adiciona uma aplicação Mobile, então todo o resto continua funcionando. Isso é possível por conta dessa separação, onde pode-se citar: Camada de acesso a dados, Camada de lógica de negócio, entre outras, sem a necessidade de recodificar tudo que já foi definido ou modelado.
+	No entanto, quando o código é relacionado ao domínio e misturado com as outras camadas, torna-se extremamente difícil de ver e pensar. \cite{Evans:2003:DDT:861502}Mudanças superficiais na interface do usuário podem realmente mudar a lógica comercial. Para alterar uma regra de negócio pode exigir um rastreamento na Interface com Usuário, no código de banco de dados ou outros elementos do programa. Para evitar esse tipo de problema, deve-se isolar todo o código responsável por controlar o domínio de maneira que ele tenha uma única responsabilidade: implementar regras de negócio. \cite{Evans:2003:DDT:861502}
+
+	No DDD a arquitetura proposta muda um pouco do MVC, embora conceitualmente nas duas divisões eles sejam bastante parecidas, algumas questões técnicas fazem com que elas sejam diferentes.\cite{DDDinPHP}	
+	
+As camadas da arquitetura são descritas por \cite{Evans:2003:DDT:861502}:
+
+User Interface: Responsável pela interação com o usuário, seja interpretando comandos ou exibindo informação para o mesmo. Tuo daquilo que o usuário interage diretamente, elementos visuais.
+
+Application: Coordena as atividades da aplicação, sua responsabilidade é de trabalhar com os objetos de domínio, e não mantém estado de domino, ou seja, não contém regras de negócio. Pode por exemplo manter um estado de determinada transação. Porém ela possui uma ligação muito forte com a camada de domínio (Domain).
+
+Domain: Camada que concentra toda a regra de negócio da aplicação. para \cite{Evans:2003:DDT:861502}, esta camada é o coração de um software de negócios, ou seja DDD é utilizado em softwares de negócios com regras complexas.
+
+Infrastructure: É a camada de mais baixo nível, responsável por interações com infraestrutura técnica, a esta camada são colocadas as tarefas como interface com o sistemas de e-mail, banco de dados, sistemas de arquivos e outros objetos de infra-estrutura, ou seja, dar suporte tecnológico para as demais camadas.
+    
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{imagens/mvc.jpeg}
+\caption{arquitetura MVC (Model-View-Controller)}
+\label{fig:exampleFig1}
+\end{figure}
+    
+    Model View Controller (MVC) é o design pattern mais conhecido de todos. Seus conceitos remontam à plataforma Smaltalk na década de 1970. Basicamente uma aplicação que segue o pattern Model View Controller é dividida em três camadas. As letras que compõem o nome deste pattern representam cada um desses aspectos.\cite{dall2015php}
+
 \subsection{Entidades}
 Muitos objetos não são fundamentalmente definidos por seus atributos, mas sim por uma linha de continuidade e identidade.\cite{Evans:2003:DDT:861502}
 Um objeto deve ser distinguido por sua identidade, ao invés de seus atributos. Esse objeto, que é definido por sua identidade, é chamado de entidade. O modelo deve definir o que significa ser a mesma coisa. Suas identidades devem ser definidas de modo que possam ser efetivamente controladas. 
@@ -119,7 +169,7 @@ Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclo
 Um objeto que representa um aspecto descritivo do domínio sem identidade conceitual é chamado de Objeto de Valor. \cite{Evans:2003:DDT:861502} entidades de implementação em software significa criar
 identidade
 
-Segundo \cite{Evans:2003:DDT:861502} entender o pattern Value Object não é tão simples, já que na aplicabilidade exige abstração de OO para identificar quando precisamos de um. Um ponto de partida é ter sempre em mente que objetos de valor é um objeto pequeno e que pode ser facilmente criado, e que não representa nenhuma entidade de domínio. Outro ponto é relacionado a igualdade, uma entidade de domínio seja na aplicação orientada a objeto ou no banco relacional, existe um modo de especificar que é único.
+Segundo \cite{Evans:2003:DDT:861502} entender o pattern Value Object não é tão simples, já que na aplicabilidade exige abstração de OO para identificar quando precisamos de um. Um ponto de partida é ter sempre em mente que objeto de valor é um objeto pequeno e que pode ser facilmente criado, e que não representa nenhuma entidade de domínio. Outro ponto é relacionado a igualdade, uma entidade de domínio seja na aplicação orientada a objeto ou no banco relacional, existe um modo de especificar que é único.
 Um objeto de valor não deve ser considerado apenas uma coisa em seu domínio. Como um valor, é medido, quantificado, ou descreve um conceito no Domínio. \cite{DDDinPHP}
 
 Em banco de dados utiliza-se chave primária (PK), para tal identificação. Objetos de valor podem existir inúmeros objetos iguais ao mesmo tempo. Algumas classes de característica VO são: Dinheiro, Data, Coordenadas e etc. \cite{DDDinPHP}
@@ -155,24 +205,176 @@ Coleções são importantes por serem uma forma de expressar um dos mais fundamenta
 	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final.
 	
 \subsection{Módulos}
-Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxima desenvolvedor que olha para o seu projeto para pensar sobre eles juntos. Se o seu modelo é contar uma história, Os módulos são capítulos. (Evan, Eric 2003)
-	Uma preocupação comum ao criar um aplicativo seguinte DDD, é onde é que vamos colocar o código? O que é a maneira recomendada para colocar o código no aplicativo? Onde é que vamos colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturada? Há um padrão tático para isso: módulos. Hoje em dia, as estruturas de todos o código em módulos. Mas DDD vai queridos passo adiante e há preocupações técnicas são consideradas quando se usa módulos. De fato, trata módulos como uma parte do modelo.
-	Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua. módulos e seus nomes devem refletir uma visão sobre o domínio. (Evan, Eric 2003)
-Módulos não separam o código mas separam o significado conceitual. Buenosvinos, Carlos. Soronellas, Christian and Akbary, Keyvan (2016)
+Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxima desenvolvedor que olha para o seu projeto para pensar sobre eles juntos. Se o seu modelo é contar uma história, Os módulos são capítulos.\cite{Evans:2003:DDT:861502}
+	Uma preocupação comum ao criar um aplicativo seguinte DDD, é onde é colocar o código? Qual é a maneira recomendada para colocar o código no aplicativo? Onde colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturado? Há um padrão tático para isso: módulos. \cite{DDDinPHP} Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente. \cite{DDDinPHP}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/modules.png}
+\caption{separação do domínio em módulos}
+\label{fig:exampleFig1}
+\end{figure}
+
+Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua e seus nomes devem refletir uma visão sobre o domínio.\cite{Evans:2003:DDT:861502}
+
+Módulos não separam o código mas separam o significado conceitual. \cite{DDDinPHP}
 
 \section{Estado da Arte}
 
 \subsection{Domain-driven design in action: designing an identity provider}
 \url{http://www.diku.dk/forskning/performance-engineering/Klaus/speciale.pdf}
+\\
+\\
+Nesta tese de mestrado, os princípios de \textit{Domain-Driven Design} são usados para modelar um problema de negócio do mundo real, um provedor de identidade extensível (PDI). O trabalho mostra que a aplicação de \textit{Domain-Driven Design} é uma boa abordagem para a modelagem de um domínio complexo.
+O projeto do trabalho é desenvolvido na empresa Safewhere e tem como interessados além do autor do trabalho também o diretor técnico e o CEO da Safewhere.
 
+O trabalho cita que no início, a empresa por ter pouco capital para investir, ainda tinha como prioridade máxima mostrar um produto real. Dessa forma não houve comprometimento com design de software e modelagem. Desenvolvedores eram contratados, e cada um tinha seu próprio estilo de desenvolvimento e compreensção do domínio comercial.
+
+E, que no inicio não parecia causar grandes problemas e a versão do produto foi entregue e totalmente funcional. Após o lançamento inicial a necessidade de novos recursos cresceu rapidamente. O produto estava funcionando bem, mas se tornou cada vez mais dificil adicionar novos recursos em funcionalidades existentes, como refatorar o código base. Apesar de orientações de codificação estabelecidas, havia algo faltando no processo de desenvolvimento. Uma das maneiras de como isso se manifesta em si foi que tínhamos várias classes na di entravarão um conjuntos com nomes semelhantes mas com significado desiguais. Foi também difícil explicar a arquitectura para novos membros da equipe, dado que o código não foi organizado de forma heterogênea.
+Em retrospecto, o problema foi que claramente não tinha um modelo nem um idioma onipresente.
+
+Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo extensível o autor solicitou a alguns dos colegas para rever o modelo. Entrevistou cada pessoa para que avalia-se a qualidade do design e os benefícios do DDD:
+
+\begin{itemize}
+  \item Resolve bem o problema do negócio.
+  \item Representa uma linguagem ubíqua concisa e expressiva, o que torna mais fácil de discutir.
+  \item É flexível e tem uma clara separação de responsabilidades entre as camdas, tornando fácil  				refatorar
+  \item Conduz a um estável e maduro do produto final.
+\end{itemize}
+
+A solução implementada pelo autor vem ao encontro da proposta de solução neste artigo uma vez que
+aplica os conceitos de \textit{Domain-Driven Design} para tentar normalizar o processo de desenvolvimento de software. Sobretudo para garantir a manutenibilidade do sistema e padronizar o processo de codificação. Um dos pontos importantes que é citado pelo autor é o fato de repassar o conhecimento a novos membros da equipe, o atual artigo foca bastante na linguagem ubiqua, no caso é utilizado diagramas de classe e diagramas de caso de uso, respeitando os papéis dos atores. Isso tudo ainda ajuda para que o conhecimento sobre o negócio não fique preso a uma ou duas pessoas. E, o fator tempo de desenvolvimento, é diretamente prorporcional com o entendimento das regras de negócio.
+
+O maior valor do sistema de gerenciamento de GRU está no foco no negócio principal da empresa. As telas que serão apresentadas ao usuário final terão mais relação com a operação de negócio. 
+    
 \subsection{Implications of Domain-driven Design in Complex Software Value Estimation and Maintenance using DSL Platform}
 \url{http://www.inase.org/library/2015/zakynthos/bypaper/COMPUTERS/COMPUTERS-35.pdf}
+\\
+\\
+Neste artigo iremos apresentar e analisar uma dessas ferramentas, nomeadamente, plataforma de DSL. Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio. O objetivo deste artigo é analisar as implicações do uso do DDD através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
+
+O objetivo deste trabalho é investigar possíveis criticamente benefícios da adopção de design orientado para o domínio de gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. Inevitavelmente estas considerações irá reflectir sobre o valor do ativo de software e assim uma abordagem validada estimativa de ativos de software é chamado para
+
+implementar as principais características do objeto usando DDD orientados
+projeto pode ser usado para criar uma plataforma unificada para
+desenvolvimento e evolução de sistemas de software complexos.
+
+Plataforma DSL é um serviço que ajuda na concepção, construção
+e manutenção de aplicações de negócios. Ele permite a
+a automação do processo de desenvolvimento de aplicativos de negócios. o
+plataforma utiliza o modelo de negócio específico como entrada e saídas
+componentes acabados para software de negócios correspondente
+sistema
+
+Dois principais desafios que podem ser eficazmente solucionados com
+Plataforma DSL e abordagem DDD subjacente é a
+eliminação de falta de comunicação entre clientes e
+empreiteiros ou mesmo entre os desenvolvedores em equipes de desenvolvedores.
+A outra é a eliminação de não-criativo e repetitivo
+trabalho feito pelos desenvolvedores ao automatizar tarefas repetitivas da
+processo de desenvolvimento.
+
+
+O principal obstáculo
+impedindo a maior aceitação do domínio driven design
+na prática, é a falta de compreensão dos benefícios do DDD
+e as ferramentas potenciais ele fornece por quadros superiores. à medida que o
+linha de fundo na gestão do risco é para evitar riscos potenciais,
+ajustes adicionais de estimativas de valor de software
+
+\textbf{Cronotacógrafo}
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
 
 \subsection{Using Domain-Driven Design to Evaluate Commercial Off-The-Shelf Software}
 \url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part2.pdf}
+\\
+\\
+\\
+\\
+\\
+\\
+Neste documento vamos narrar a experiência e lições aprendidas quando foram avaliados três sistemas de berço para substituir um conjunto de comércio de petróleo e operações de legado de sistemas. Com base em deficiências na Arquitetura Corporativa, aplicamos domínio estratégico de projetos orientados por princípios de alargar a nossa arquitetura empresarial durante a avaliação. Observamos que estas técnicas nos permitiu analisar em profundidade o nosso domínio com os especialistas em domínio e fornecer respostas baseadas no conhecimento de domínio tácito, sem atravessar o custo e o esforço de realizar uma análise em escala total.
+
+Statoil está em processo de substituição de um conjunto de sistemas de software legado com novos sistemas que suportam a nossa cadeia de suprimento.
+
+Antes de começamos este projeto, as partes interessadas tiveram uma clara
+expectativa de que a arquitetura da empresa seria de ajuda na
+avaliar as diversas candi COTS
+Encontros. Quando tentamos usar
+a arquitetura da empresa, descobrimos que a arquitetura era
+não detalhada o suficiente, e que se estende a arquitetura com mais
+detalhes tornaria incontrolável com as ferramentas que tivemos em nossa
+disposição. O custo associado com um tal esforço também seria
+formidável, ao passo que a abordagem
+delineada no presente documento habilitado
+-nos para alcançar bons resultados precisos e ao longo de uns poucos
+oficinas de um par de horas cada.
+A nossa experiência neste projeto nos que se estendem a mostra
+Arquitetura empresarial com técnicas de nível estratégico
+-Domain Driven Design são úteis para:
+?
+Facilitar a exploração de domínio pelo uso de um comum
+língua.
+ domínio estratégico design orientado deu-nos uma
+linguagem comum com as quais poderíamos falar sobre o
+domínio. O uso de claramente
+termos e conceitos definidos
+
+permitiu que os diferentes participantes do projeto para entender
+e contribuir para a exploração do domínio.
+?
+Concentre-se nos aspectos fundamentais do domínio.
+A tradicional
+Enterprise Architecture coloca ênfase na igualdade de todos
+aspectos do domínio. Usando Domain-Driven Design
+técnicas, fomos capazes de se concentrar nos aspectos da
+domínio que era vital para a tarefa em mãos e colocar menos
+ênfase nos aspectos que não eram relevantes.
+?
+Faça o conhecimento tácito explícito.
+ Usando a responsabilidade
+camadas e mapas de contexto, fomos capazes de rotular
+relacionamentos e dependencie
+s em nosso domínio, assim,
+tornando o conhecimento tácito de cada membro do projeto
+explícita e compartilhada com os outros.
+?
+Investigar os limites do sistema.
+ Usando especulativa
+mapas de contexto com base em cada candidato COTS estávamos
+mais capazes de investigar novas fronteiras do sistema e
+determinar se a integração dos diferentes COTS
+candidato seria caro e desafiador.
+Em uma arquitetura Enterprise tradicional Isso, é claro, também
+teria sido possível. O resultado
+teria tomado considerável
+mais esforço em tempo e dinheiro,
+ e ser mais dependente do
+habilidades individuais dos arquitetos corporativos
+Google Tradutor para empresas:Google Toolkit de tradução para appsTradutor de sitesGlobal Market Finder
+
+\textbf{Cronotacógrafo}
+\\
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 \url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part1.pdf}
+
+
+\textbf{Cronotacógrafo}
+\\
 
 \subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
 \url{http://www.teses.usp.br/teses/disponiveis/55/55134/tde-24032009-192923/publico/dissertacao.pdf}
@@ -188,16 +390,44 @@ O trabalho apresenta um estudo de caso, em que se desenvolve uma linha de produt
 O estudao de caso considera que as regras para transporte urbano variam de cidade para cidade, essas diferenças foram modeladas como variabilidades da linha, enquanto as regras e conceitos comuns foram desenvolvidos como parte do núcleo. 
 
 Foi priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o DDD o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
-A camada de aplicação é composta por classes de serviço que coordenam outros serviços e/ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
+A camada de aplicação é composta por classes de serviço que coordenam outros serviços ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
 
 Além disso, a prática de modelagem adotada parte do pressuposto de que não é vantajoso
 tentar prever possíveis cenários futuros no modelo enquanto eles não forem necessários. Por isso,
-a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com
-a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão
-Durante a implementação do sistema BET utilizando como base os princípios de DDD e méto-
-dos ágeis, surgiram vários problemas práticos de projeto. Sempre que possível, as soluções encon-
-tradas para cada um desses problemas foram generalizadas com o objetivo de serem reutilizadas
-em projetos posteriores
+a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
+O projeto foi realizado com quatro 
+Ao contrário de métodos tradicionais onde é encorajado criar o modelo completo de todo o projeto logo no início, baseado nas \textit{features} que são as funcionalidades previstas para o sistema crescem a cada iteração.
+
+De modo geral, o processo utilizado começa com um entendimento superficial do domínio,
+seus principais conceitos e regras. Neste ponto, o conhecimento obtido não é suficiente para pre-
+ver todos os desafios que o projeto apresentará. No entanto, esse contato inicial é de extrema
+importância. A partir dele, o conhecimento pode ser refinado, de modo a dar origem a um modelo
+de domínio iterativo.
+Tendo esse conhecimento superficial sobre o domínio, os desenvolvedores podem começar a
+planejar a primeira iteração. É importante que a implementação comece o mais cedo possível,
+porque a existência de software funcionando (mesmo que incompleto e sem interface amigável,
+por exemplo) é o que dá chance ao cliente ou especialista no domínio de dar uma resposta e guiar
+os desenvolvedores no caminho correto. Assim, quaisquer erros ou não-conformidades podem ser
+detectados tão logo sejam criados.
+
+O estudo de caso sugere que é possível construir linhas de produtos fundamentadas em um
+modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A ex-
+pressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de
+produtos e, conseqüentemente, na sua evolução. Com isso, a adaptabilidade a mudanças ao longo
+do tempo é bem maior. Além disso, um modelo de domínio expresso diretamente no código da
+aplicação reduz a necessidade de documentação não executável, como diagramas UML e docu-
+mentos de casos de uso.
+
+Durante o desenvolvimento do projeto, houve uma preocupação em aumentar a coesão das
+classes e reduzir o acoplamento entre elas. Para tal, foram utilizadas várias técnicas e princípios,
+como polimorfismo e princípio da responsabilidade única.
+O \textit{design} resultante mostrou-se bastante flexível e extensível. A inclusão ou alteração de regras de negócio ou mesmo de fluxos inteiros de atividade (como a funcionalidade de crédito em lote) podem ser feitas facilmente. A configuração das funcionalidades requeridas para um produto consiste apenas de configuração do grafo de dependências, por meio de uma linguagem específica de domínio.
+
+A aplicação de DDD ao desenvolvimento de linhas de produtos de software mostrou-se bastante adequada. A razão disto é o enfoque do desenvolvimento baseado em uma linguagem ubíqua do domínio. Destarte, os conceitos do domínio revelam-se com muito mais clareza no código da LPS. O efeito mais relevante dessa transparência é uma maior facilidade de manutenção da linha a curto e longo prazo. As principais vantagens observadas na abordagem proposta em relação aos métodos tradicionais são: menor esforço na implementação de uma nova regra de negócios (em geral, uma nova classe, comparada a vários componentes e classes no modelo de componentes da implementação de referência) e maior capacidade de reúso, pela atribuição adequada de responsabilidades, pela divisão em vários níveis de granularidade (compatíveis com o nível de abstração da classe) e pela aplicação de princípios de orientação a objetos, como o princípio de substituição de Liskov e o princípio aberto-fechado.
+
+Em algumas situações, o uso de uma linguagem ubíqua pode trazer problemas, embora estes
+não tenham sido experimentados neste trabalho. Trata-se dos casos em que as linguagens utiliza-
+das no contexto de cada produto sejam diferentes.
 
 \section{Solução Implementada}
 
@@ -209,54 +439,7 @@ The subsection titles must be in boldface, 12pt, flush left.
 
 \section{Considerações Finais}
 
-\section{Figures and Captions}\label{sec:figs}
-
-
-Figure and table captions should be centered if less than one line
-(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
-be Helvetica, 10 point, boldface, with 6 points of space before and after each
-caption.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.5\textwidth]{fig1.jpg}
-\caption{A typical figure}
-\label{fig:exampleFig1}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one
-  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
-\label{fig:exampleFig2}
-\end{figure}
-
-In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data,
-do not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1)
-and the font used must also be Helvetica, 10 point, boldface, with 6 points of
-space before and after each caption.
-
-\begin{table}[ht]
-\centering
-\caption{Variables to be considered on the evaluation of interaction
-  techniques}
-\label{tab:exTable1}
-\includegraphics[width=.7\textwidth]{table.jpg}
-\end{table}
-
 \section{Referencias}
-
-Bibliographic references must be unambiguous and uniform.  We recommend giving
-the author names references in brackets, e.g. \cite{knuth:84},
-\cite{boulic:91}, and \cite{smith:99}.
-
-The references must be listed using 12 point font size, with 6 points of space
-before each reference. The first line of each reference should not be
-indented, while the subsequent should be indented by 0.5 cm.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}

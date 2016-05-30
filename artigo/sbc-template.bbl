@@ -11,18 +11,17 @@ Bezerra, E. (2006).
   Uml-3{\textordfeminine} Edi{\c{c}}{\~a}o}, volume~3.
 \newblock Elsevier Brasil.
 
-\bibitem[Boulic and Renault 1991]{boulic:91}
-Boulic, R. and Renault, O. (1991).
-\newblock 3d hierarchies for animation.
-\newblock In Magnenat-Thalmann, N. and Thalmann, D., editors, {\em New Trends
-  in Animation and Visualization}. John Wiley {\&} Sons ltd.
-
 \bibitem[Carlos~Buenosvinos and Akbary 2014]{DDDinPHP}
 Carlos~Buenosvinos, C.~S. and Akbary, K. (2014).
 \newblock {\em Domain-Driven Design in PHP}.
 \newblock Leanpub.
 \newblock Real examples written in PHP showcasing DDD Architectural Styles,
   Tactical Design, and Bounded Context Integration.
+
+\bibitem[Dall~Oglio 2015]{dall2015php}
+Dall~Oglio, P. (2015).
+\newblock {\em Php-programando com orienta{\c{c}}ao a objetos}.
+\newblock Novatec Editora.
 
 \bibitem[Evans 2003]{Evans:2003:DDT:861502}
 Evans (2003).
@@ -40,11 +39,6 @@ Haywood, D. (2009).
 \newblock {\em Domain-driven design using naked objects}.
 \newblock Pragmatic Bookshelf.
 
-\bibitem[Knuth 1984]{knuth:84}
-Knuth, D.~E. (1984).
-\newblock {\em The {\TeX} Book}.
-\newblock Addison-Wesley, 15th edition.
-
 \bibitem[Michaelis 2011]{michaelis2011disponivel}
 Michaelis, D. (2011).
 \newblock Dispon{\'\i}vel em: http://michaelis.uol.com.br.
@@ -53,12 +47,6 @@ Michaelis, D. (2011).
 \bibitem[Millett and Tune 2015]{millett2015patterns}
 Millett, S. and Tune, N. (2015).
 \newblock Patterns, principles, and practices of domain-driven design.
-
-\bibitem[Smith and Jones 1999]{smith:99}
-Smith, A. and Jones, B. (1999).
-\newblock On the complexity of computing.
-\newblock In Smith-Jones, A.~B., editor, {\em Advances in Computer Science},
-  pages 555--566. Publishing Press.
 
 \bibitem[{Uithol} 2008]{essay58268}
 {Uithol}, M. (2008).
