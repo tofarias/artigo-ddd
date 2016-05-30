@@ -1,0 +1,242 @@
+
+Melhoria arquitectónico pelo uso de nível estratégico Design Domain-Driven
+Einar Landre Harald Wesenberg
+Statoil ASA Statoil ASA
+Harald Rønneberg
+Business Application Services - Serviços de aplicativos de negócios em aplicativos - Energia
+Statoil ASA o
+Suporte Comercial do Centro de Desenvolvimento de Serviços Corporativos -
+Forusbeen 50 Rotvoll Tecnologia da Informação
+N-4035 Stavanger N-7005 Trondheim Forusbeen
++47 50 414 70 537 +47 995 79 083 N-4035 Stavanger
+einla@statoil.com Hwes@statoil.com
++47 915 76 165
+Resumo
+Neste artigo apresentamos a experiência adquirida e as lições aprendidas quando o departamento de TI da Statoil ASA, uma grande empresa de petróleo e gás na Noruega, alargaram a sua arquitetura corporativa com nível estratégico Domain-Driven técnicas de design e utilizado a extensão de arquitetura empresarial para melhorar a arquitetura de software de um grande sistema Enterprise.
+Tradicionalmente, a arquitetura da empresa tem sido prescrita como a principal ferramenta para conquistar a complexidade e alinhar o desenvolvimento de TI com as prioridades de negócios e estratégias, mas encontramos a nossa arquitetura empresarial demasiado grossa para ser prática útil no nível do software.
+Estendendo a arquitetura de nossa empresa com mapas de contexto e o processo de mapeamento de contexto conhecimentos valiosos foi adquirida, insight que permitiu melhorar o escopo dos novos projetos arquitetônicos e melhoria do software existente de uma forma controlada.
+Além disso, o uso de camadas de responsabilidade combinado com mapas de contexto reduz a complexidade percebida da arquitetura. A utilização de outras técnicas tais como a destilação e a identificação do domínio de núcleo parece promissor no nível táctico de um único projecto, mas o seu valor é mais incerta no nível estratégico.
+A questão fundamental é que os sistemas de grandes empresas não têm um único núcleo. Por outro lado, a nível de projecto, deve sempre ser um núcleo e o projeto é melhor de conhecendo o seu domínio principal e objectivo os seus melhores recursos para trabalhar com o núcleo.
+Categorias e descritores de assunto D.2.11 [Engenharia de Software]: Arquitecturas Software
+Termos Gerais Design, teoria, Gestão
+Palavras-chave Domain-Driven design, arquitetura corporativa, contexto mapa, responsabilidade, camada de complexidade, destilação
+1. Introdução a
+Statoil ASA tem abraçado arquitetura empresarial como um dos seus meios para alinhar melhor desenvolvimento de sistemas corporativos de TI com as prioridades de negócios e estratégias.
+Uma das nossas áreas pioneiras em arquitetura empresarial adopção foi molhado na cadeia de abastecimento (WSC). O WSC é o conjunto de vendas e entrega de Statoils petróleo, produtos de refinaria e gás natural líquido (GNL) aos direitos de
+
+
+autor é realizada pelo autor/proprietário(s).
+OOPSLA'06, Outubro 22-26, 2006, Portland, Oregon, EUA.
+ACM 1-59593-491-X/06/0010.
+
+Haro@statoil.com
+
+clientes internos e externos. O WSC suporta uma operação global de negócios que depende muito eficientes ferramentas de TI.
+A principal causa de conduzir o esforço de Arquitetura Corporativa no molhado cadeia de fornecimento é a necessidade de substituir um conjunto de grandes sistemas legados com uma combinação de pacotes comerciais [11] e soluções personalizadas. A substituição é motivada por novos requisitos de negócios que não podem ser cumpridas dentro de arquiteturas técnicas e funcionais dos sistemas existentes. O empreendimento está organizada como um programa e o plano é ter feito uma substituição completa dentro de um prazo de três a cinco anos. O primeiro dos novos sistemas foram implantados para produção em 2005.
+Na nossa tentativa de desenvolver e utilizar a Arquitectura Empresarial para a cadeia de fornecimento molhado, descobrimos que a nossa arquitetura corporativa não fornecer as ferramentas necessárias para abordar as principais preocupações quando projetar e integrar sistemas intensivos de software em grande escala.
+Enquanto arquitetos corporativos foco sobre os processos de negócios, funções e informações conceitos, arquitetos de software têm de se concentrar em fronteiras e interfaces.
+Como o trabalho com a nossa arquitetura empresarial correlacionada no tempo com a nossa aprovação do design Domain-Driven [3], descobrimos que a parte estratégica do design Domain-Driven desde que a mecanismos necessários.
+Nossa experiência relatório é fundada sobre o trabalho prático realizado no contexto de um projeto de desenvolvimento de software. O objetivo do projeto era o de substituir a carga de base de papel pastas com um arquivo digitalizado e capacidades de seguimento.
+Antes de prosseguirmos o nosso relato de experiência, uma curta introdução à arquitetura empresarial e design Domain-Driven é necessária.
+1.1 Arquitetura Corporativa (EA) de
+acordo com o [1] Arquitetura Corporativa (EA) identifica os principais componentes da organização, os seus sistemas de informação e as formas em que estes componentes trabalham em conjunto para alcançar objectivos de negócio definido. Os componentes incluem o pessoal, processos de negócio, tecnologia, informações financeiras e de outros recursos necessários pela empresa para atingir os seus objectivos de
+Arquitectura da empresa é baseada em uma visão holística em vez de um aplicativo de visualização do aplicativo. A maioria das empresas escolher para fazer o seu trabalho de arquitectura empresarial de acordo com as práticas definidas pelos quadros disponíveis como Zachman [6], TOGAF [10] e TAFIM [9], adaptados de modo a reflectir os princípios arquitectónicos, normas e modelos de referência definido pela empresa individual. Os quadros normalmente fornecem um processo do ciclo de vida da arquitetura e um conjunto de pontos de vista apoiar os
+
+
+
+
+interesses das diferentes partes: processo de negócios, informações, funções e infra-estrutura técnica [2].
+A finalidade da arquitetura empresarial é para fornecer a base para descrever a necessidade de novos sistemas de TI e as estratégias de modernização existentes. Ele deve fornecer um caminho claro para a aquisição de novos sistemas e deve ser o ponto de partida natural quando o escopo e priorizar novos projectos. Para que isso seja possível deve ser ancorada em uma visão de negócios e de TI identificar requisitos de negócios e objetivos de TI [2].
+A figura 1 ilustra a arquitetura da empresa comum blocos de construção.
+Arquitetura corporativa
+informações de negócios
+função processos (Serviço)
+atribuído ao
+sistema físico (Tecnologia)
+
+Figura 1. Blocos de construção de arquitectura empresarial
+1.2 Domain-Driven
+Domain-Driven Design design é uma filosofia cujo foco é a complexidades do domínio e se o objectivo é tornar estas complexidades explícita no modelo de domínio e sua aplicação no código. De acordo com o [4] a premissa de Domain-Driven design é duas vezes:
+• Para a maioria dos projetos de software, o foco principal deve ser sobre o domínio e lógica de domínio.
+• projetos de domínio complexo deve ser baseada em um modelo.
+Domain-Driven design não é uma tecnologia ou uma metodologia. É uma maneira de pensar e de um conjunto de prioridades destinadas a acelerar projetos de software que têm de lidar com complicados domínios. A fonte primária para estes princípios é Eric Evans livro [3].
+Basicamente Domain-Driven projeto pode ser dividido em três áreas:
+blocos de construção básicos - Aborda como o domínio está separada da tecnologia pelo uso de uma arquitetura em camadas, combinadas com práticas de padrões de projeto orientado a objetos.
+Modelos sofisticados - aborda o modo como o software é alinhado com o especialista de domínio pensar, conceitos de domínio são tornadas explícitas no código e Refatoração do código é acionado por domínio insight.
+Design estratégico - Modelo de integridade e gerenciamento de endereços de complexidade em grandes sistemas. Design estratégico fornece três blocos de construção essenciais:
+• Mapeamento de contexto • Destilação • estruturas em grande escala
+destes blocos de construção de mapeamento de contexto é o importante que constituem o núcleo do presente relatório, enquanto destilação e estruturas em grande escala fornecer útil arquitetando princípios e orientações que só será brevemente.
+2. Mapeamento de contexto
+um contexto mapa é um desenho que documentos contextos de modelagem e seus relacionamentos. Grandes sistemas contém vários contextos de modelagem, portanto temos representado o contexto de modelagem de interesses e não os aplicativos ou sistemas de informação que implementam a diferentes contextos.
+Contexto mapa na figura 2 ilustra a situação no arquivo de carga Digital (DCF), com o projeto de responsabilidades do projeto no lado direito da figura.
+DCF
+Cliente Fornecedor de alimentação criar/atualizar Página Operação Frontal
+criar/atualizar o plano de arquivo de
+arquivamento de fornecedor instrução compartilhada de
+
+Comunicação do Cliente Kernel Factura msg msg uma pasta/C Gateway de
+
+arquivamento do cliente instrução MSG OHS
+Apresentação Instrução
+msg Trading fornecedor criar/atualizar o documento
+compor e enviar para o controlo do documento de
+fornecedor de armazenamento de
+Embarque e alocação de cliente
+usuário final
+criar/atualizar o arquivo instrução plano de arquivo Msg
+Figura 2. Contexto Digital - Mapa Arquivo de carga
+
+no lado esquerdo do mapa de contexto podemos encontrar três contextos existentes:
+Operação de alimentação - apoio a entrega da carga, Factura e Trading - oferecendo suporte a vendas de cargas. Estes três contextos existem dentro de diferentes sistemas legados que deve ser integrada com DCF.
+Estes contextos foram identificadas quando desenvolvemos um contexto mapa para toda a WSC como parte de nosso esforço de arquitetura corporativa estendida [11].
+No meio encontramos o Gateway de comunicação, permitindo que a empresa para enviar e receber e-mails, fax e telex. O usuário final é representado para ilustrar o facto de que os seres humanos precisam operar o gateway de comunicação diretamente para duas finalidades: 1) O envio manual e o arquivamento de mensagens de negócios. 2) arquivamento manual de mensagens de entrada de contrapartes. Esta operação de arquivamento de mensagens é conhecido como documento de controlo.
+No lado direito encontramos o sistema de informação com o seu DCF três diferentes contextos de modelo: página frontal fornecendo a página de rosto de uma pasta física - usado para conteúdo de acompanhamento e gestão de casos, Pasta fornecendo o modelo de armazenamento lógico de armazenamento de documentos e a definição do modelo de armazenamento de documento físico.
+A finalidade do sistema de informação DCF é digitalizar o processo de lidar com informações não estruturadas (e-mail, fax, telex)
+
+
+
+
+associados com carga real e negociações e assim melhorar a operação de negócios. Antes DCF informações não estruturadas foi impresso e armazenados em pastas de física.
+Na parte inferior encontramos Embarque &amp; Atribuição de óleo suporte a operação de campo e o proprietário atribuição de volumes produzidos.
+2.1 Contexto relações
+para além dos contextos contexto mapa inclui o relacionamento real entre contextos. Aqui está uma breve introdução aos relacionamentos usados no mapa:
+• O cliente / Fornecedor significa que as equipes responsáveis por dois contextos têm um cliente / relação de fornecedor. Praticamente isto implica que o fornecedor deve fornecer o contexto sempre é necessário para o contexto do cliente. Essa relação é bem regulada em termos de quem é responsável por quê [3].
+• Kernel compartilhada significa que a base de código entre os dois do contexto são compartilhados. Estilha de um kernel significa que as alterações feitas em um contexto mais provável impacto a outros. Tendo em um kernel compartilhado sem saber que leva facilmente a situações indesejáveis e defeitos. É um cuidar de relacionamento do tipo [3].
+• Abra o serviço anfitrião (EGS) significa que um contexto fornece acesso ao seu modelo usando uma interface de serviço definidos. A documentação de qualquer serviço publicado deve ser baseada no idioma publicados padrão [3].
+O objectivo da linguagem é publicado para definir a tradução de conceitos entre modelos. Poderia ser alegado que o número de OHSs indicar como a arquitetura é orientada a serviços.
+• Camada Anticorrupção (A/C) significa que o contexto com o A/C de camada anexado protege a si mesmo do contexto a que está ligado. O objectivo da camada anticorrupção é traduzir entre contextos de modelagem.anti corrupção camadas são muito semelhantes para abrir serviço de acolhimento mas é usado pelo contexto que se integra com o que para eles é um modelo alienígena.
+Desenvolvimento e implantação de camadas anticorrupção envolve o uso de middleware de integração de aplicativos e como tal são construções de modelagem caro [3].
+Para obter mais modelos de relações e descrições mais profundas consultar o livro [3]. Um aspecto interessante do contexto de mapeamento é o seu alinhamento com sistemas bem documentados arquitetando a heurística [7] Incluindo: Não partição através de regiões onde altas taxas de troca de informações é necessário, a escolha adequada de agregação de funções é crítica em termos de concepção de sistemas e a maior alavancagem em sistemas arquitetando é a interface. Estas heurísticas, entre outros, orientado a nossa análise e o subsequente processo de melhoria.
+2.2 Contexto mapa análise
+com o contexto mapa no lugar é tempo para análise. A técnica de análise aplicada é fundada sobre Hitchins [5] A teoria da complexidade.
+Segundo Hitchins é complexidade subjetiva, onde a percepção de complexidade está relacionada com a combinação de: variedade, a conectividade e a desordem. Praticamente isto significa que um sistema com baixo nível de variedade, alto grau de ordem e baixo grau de vinculação é percebida menos complexa do que um sistema com alto grau de variedade, falta de ordem e alto grau de conectividade.
+A equipe do projeto enfrentou um conjunto de problemas que foi difícil de compreender, basicamente porque a equipe foi esmagada com detalhes. Eles não podiam ver a floresta a partir da árvores.
+A partir da análise do contexto mapa (Figura 2) se tornou claro que a maioria dos problemas foram causados por dois fatores:
+• o papel do gateway de comunicação • o papel da página da frente
+da unidade de ambos os factores da complexidade percebida devido a um alto grau de conectividade e desordem. Os problemas reais que serão discutidas nas seções subseqüentes.
+2.2.1 O papel do gateway de comunicação
+o gateway de comunicação esteve operacional durante anos quando o arquivo digitalizado foi idealizado. As mensagens de entrada e de saída foram impressas e arquivado na pasta correta de carga cuja primeira página foi atualizada para refletir a mudança de estado da pasta.como uma curiosidade seu vale a pena mencionar que a pasta encheu o papel como relé de-stick usado para passar a "caso" da operação de carga para tratar manuseio. Foram encontrados usuários necessários pastas por inspeção cada outros horas, ou seja a pasta cumpriu um papel como uma ferramenta de fluxo de trabalho humano.
+Além de fornecer a transmissão de mensagens, o gateway de comunicação foi responsável por controlar as mensagens recebidas e enviadas. Isso era conhecido como documento de controlo. Os usuários interagiram diretamente com o sistema de comunicação. Se partiu do princípio de que a introdução de um arquivo digitalizado deve apoiar o mesmo trabalho prática.
+Quando se iniciou o projeto de integração com o gateway de comunicação que foi esmagada por problemas tais como:
+• a necessidade de replicar depósito de informações no gateway de comunicação para efeitos de apresentação. Ou seja
+fornecer referências de arquivamento.
+• a necessidade de alargar o gateway de comunicação com interfaces de usuário adicionais para efeitos de apresentação manualmente as mensagens enviadas e recebidas no arquivo.
+• Interface complexa e fluxos de informação entre sistemas finais frontal (negociação, operação), o gateway de comunicação e o DCF.
+No contexto mapa a maioria destes problemas se materializar como dependências complexas entre contextos (Figura 2), ou seja o alto nível de conectividade.
+2.2.2 O papel da página frontal
+no sistema de arquivos de carga baseado em papel a página frontal representou a ferramenta-chave para o seguimento da pasta real (caso). A página frontal contido e tratar informações de carga agregados provenientes da operação de fornecimento e negociação contextos respectivamente, combinada com as informações relevantes sobre a comunicação com a real contrapartes. As informações reais foi escrito em mão na página frontal da física pasta.
+Conteúdo da página frontal combinada com que horas a pasta residia em desde que o fluxo de trabalho necessário apoio na operação de base de papel. Quando a pasta de base de papel foi removida a necessidade de suporte de fluxo de trabalho ainda estava lá e o necessário recursos tinham de ser fornecidos pelo DCF.
+O projeto decidiu fornecer as capacidades exigidas pela aplicação do conceito de página frontal como parte integrante do arquivo. A página frontal foi atualizado automaticamente pelo comércio e
+
+
+
+
+fornecimento. Ainda mais a página frontal foi prorrogado com anotações para permitir que os usuários a usar a página frontal como um scratchpad. A situação foi ainda mais complicado à medida que cada unidade de negócios tinha sua própria variante da página frontal mas o projeto conseguiu convencer os usuários a padronizar em um número limitado de variantes. No final houve um tipo de página de frente para o crude, um para produtos refinados, uma para o gás líquido e uma genérica para apoiar as restantes necessidades.
+Após a implantação da primeira versão do DCF a empresa solicitou mais avançado de gerenciamento de casos e os recursos de fluxo de trabalho Estes pedidos indicam que a tentativa de implementação do conceito de base de papel página frontal não fornecer as necessárias capacidades. Basicamente os utilizadores necessitam de um sistema de fluxo de trabalho que monitora a mudança e envolve-los quando é necessária atenção humana.
+2.2.3 Síntese
+com o contexto mapa em nossas mãos, análise de problemas acabou por ser mais fácil como a causa dos problemas se tornou visível. Eles directamente relacionados com estruturas insalubres em nossa arquitetura:
+• Tendo o gateway de comunicação como uma aranha na web se tornou contraproducente quando mover a partir de um arquivo de base de papel para um arquivo digital. As diferentes ligações para o gateway de comunicação representa apenas o topo do iceberg.
+• Alargar o arquivo com recursos de gerenciamento de caso poluído o arquivo com a funcionalidade não relacionadas ao seu principal objectivo: arquivamento e recuperação de documentos.
+Com base na análise da actual situação um contexto novo mapa reflectindo uma imagem a ser foi estabelecido e posteriormente utilizado para definir o escopo de um novo projeto. O objectivo é uma melhor novos projectos a arquitetura de software, gerenciamento de caso e recursos de controle de documento.
+O melhor contexto mapa foi desenvolvido em oficinas usando um smart-board para documentação eficiente do processo e seus resultados.
+2.3 Alterações recomendadas
+conforme indicado na seção anterior um contexto novo mapa reflectindo como queríamos que nossa arquitetura para olhar como foi desenvolvido. As principais alterações são:
+• página frontal conceito é separada da pasta contexto usando Abrir Serviço Hospedado e alargada para fornecer fluxo de trabalho mais sofisticados e recursos de gerenciamento de caso.
+• controle de documentos movida a partir do Gateway de comunicação para a pasta contexto e o contexto é renomeado para a pasta e o controlo de documentos.
+• sistemas front-end interagir com o contexto da pasta através do Serviço de arquivamento.
+As mudanças reais estão ilustrados na figura 3 e descrito em mais detalhes nas seções a seguir. O efeito das alterações sugeridas é reduzida conectividade e assim uma arquitetura menos complexa em comparação com a figura 2.
+
+Figura 3. Para ser contexto mapa
+2.3.1 página frontal e gerenciamento de caso
+desde a página frontal agregados venda e informações sobre a carga que pertence à negociação e operação de fornecimento de contextos para efeitos de gestão de casos, decidimos separar a página frontal contexto da pasta contexto através da introdução de um serviço (Serviço de apresentação na figura 3).
+No que diz respeito ao fornecimento e negociação a página frontal está protegido contra estes dois contextos de legado usando camadas anticorrupção.
+A página frontal interage com pasta e controlo de documentos através do serviço de arquivo (Figura. 3). Isso garante acoplamento frouxo e facilita mais a arquitetura orientada a serviços.
+Os principais benefícios da separação da página frontal da Pasta &amp; Controle de documentos são reduzidos e o acoplamento do contextos mais coesa com responsabilidades definidas e interfaces.
+2.3.2 Controlo do documento de
+controle de documentos é o nome da capacidade permitindo que os usuários para arquivo mensagens de entrada para o arquivo. Devido a razões históricas para o controlo do documento foi parte da responsabilidade do Gateway de comunicação. Movendo o controlo de documentos a partir de Gateway de comunicação e mesclar com a pasta contexto duas melhorias importantes que podem ser alcançados:
+• Os usuários não precisam interagir com o gateway de comunicação melhorar a sua eficiência operacional.
+Tempo médio usado para arquivar uma mensagem de entrada é estimado para ser reduzido por 30 segundos/mensagem. Com 1000 mensagens por dia, isso acrescenta mais de 8 horas de trabalho por dia, o tempo que pode ser gasto em actividades mais produtivas do que o arquivamento de mensagens para o arquivo.
+• Sistemas de front-end (negociação, Factura, etc) não precisam interagir tanto com o gateway de comunicação e a pasta contextos, reduzindo o número de acoplamentos por 4, de 12 para 8.
+Os impactos dessas alterações são claramente visíveis na figura 3.
+
+
+
+
+2.3.3 Apresentação serviço de comunicações e
+design Domain-Driven defende um princípio chamado intenção revelando interfaces. Em um contexto mapa tal intenção revelando serviço é expressa como um serviço hospedado aberto (SSO). A natureza de um OHS é descrito na seção 2.1 e mais detalhes podem ser encontrados em [3].
+O projeto decidiu usar um OHS como ponto de acesso para a pasta &amp; Controlo do documento de contexto. O benefício de um OHS é que a interface é documentado e publicado como um artefato de design de primeira ordem que facilita a reutilização e acoplamento frouxo.
+O padrão de SST está em linha com os princípios de arquitetura orientada a serviços (SOA) [8] e sistemas arquitetando a heurística com foco em interfaces e fronteiras [7].
+2.4 Resumo
+temos agora através do modo como contexto de mapeamento e contexto relações pode ser utilizado para analisar e melhorar a arquitetura de software.
+Também temos visto que a contextos reais são derivados da nossa Arquitetura Corporativa, e transformando a arquitetura da empresa em uma ferramenta útil para a arquitetura de software de melhoria.
+Mapeamento de contexto para a integridade do modelo representa a primeira perna no nível estratégico Domain-Driven design. Nas próximas duas seções de destilação e estruturas em grande escala será brevemente.
+3. Destilação a
+destilação é sobre a separação do importante do menos importante [3]. Idealmente deve ser possível identificar a área do problema que motiva o desenvolvimento deste software real. Que parte do domínio é chamado de domínio de núcleo. Para ser capaz de manter o núcleo tão pequena quanto possível, algumas funcionalidades relacionadas de domínio deve ser movida para fora do núcleo, permitindo-nos a deixar o nosso mais pessoas qualificadas foco no core [3].
+Esta movida para fora parte do domínio é chamado de domínio de apoio(s).
+Isso significa que os endereços específico de domínio conceitos, mas os recursos necessários só necessitam de ser bom o suficiente. Não há necessidade de um sofisticado modelo [3].
+O último tipo de software é um que é necessário mas não resolva qualquer conhecimento específico de domínio. Tal software é chamado de genérico sub-domínio(s). Este software deve, quando viável, ser baseado em pacotes disponíveis comercialmente [11] ou ofertas de fonte aberta.
+Aplicação de destilação sobre o conteúdo do mapa de contexto na figura 3 a seguinte história poderia ser dito:
+• Página Frontal / Case Management permite que a empresa gerencie cargas e trata com respeito à comunicação com os carregadores e as contrapartes, e apoia os processos de negócios principais relacionados com a carga e lida no molhado na cadeia de fornecimento. No contexto das redes digitais de arquivos de carga presente torna o núcleo de domínio. É com esses recursos que justificam o projecto de arquivo digital de carga.
+• Pasta &amp; Controle de documentos contêm informações específicas de domínio como pastas e secções reflectir o modo como a empresa encara os documentos no contexto dos negócios e cargas e rastreia o estado muda anexado a documentos enviados e recebidos das contrapartes. Isso o torna um domínio de apoio no contexto das redes digitais de arquivos de carga projeto.
+• Gateway de Comunicação e Armazenamento de documento não contém qualquer informação específica do domínio e a implementações reais são baseados em produtos comerciais disponíveis. Eles são exemplos clássicos de genéricos subdomínios.
+Entender a diferença entre o núcleo, apoiando e domínios genéricos é crítica como os recursos devem ser priorizados no desenvolvimento do núcleo e suporte de domínios devem ser apenas bom o suficiente, potencialmente terceirizada ou adquiridas. Melhorias de apoio dos domínios deverá ser motivado a partir de benefícios comprovados no núcleo [3].
+Experiência indicam que a destilação no nível empresarial é difícil, porque é que o comércio mais core de fornecimento? Por outro lado, existem conceitos dentro de negociação que são mais importantes que outros e ser capaz de localizar e priorizar esses conceitos soa como uma boa ideia. O efeito desta descoberta é que a destilação costuras para ser mais uma táctica de ferramenta estratégica.
+4. Estruturas de grande escala
+Contexto mapas são ferramentas valiosas para garantir a integridade do modelo em ambos os sistema e nível do projecto. O desafio é que para um grande domínio o contexto próprio mapa se tornar complexa e incontrolável como a floresta não pode ser visto para as árvores.
+Existem dois elementos de grande escala de estruturas que têm provado ser valioso: o princípio de evolução de ordem e o uso de camadas de responsabilidade.
+Evolução ordem é uma filosofia de design fundada sobre o facto de que até- frente designs, não com base na experiência, tendem a falhar. A mensagem de evolução fim é que as estruturas de grande escala conceitual deve evoluir, e reflectem a nossa compreensão do domínio na mão. As estruturas em grande escala não deve restringir o modelo de designs e decisões que exigem conhecimento detalhado [3].
+Níveis de responsabilidade a necessidade de lidar com grandes trechos de domínio de uma forma coerente. Os seus princípios são derivados a partir de padrões de arquitetura em camadas, mas aplicado em um nível mais abstracta. As convenções de nomenclatura aplicada para os diferentes níveis de responsabilidade reflecte o caminho que escolher para pensar sobre o domínio no lado [3].
+A figura 4 ilustra como o contexto mapa da Figura 3 pode ser reorganizada em uma representação em camadas. A colocação de contextos em diferentes camadas ilustra as responsabilidades encontradas no WSC [11].
+Com a responsabilidade camadas no lugar pode ser mais fácil de explicar a razão por que a página frontal deve ser separada da pasta contexto.
+Os dois contextos reside em diferentes níveis de responsabilidade.
+Uma outra discussão que podem ter origem na figura 4 está em qual camada deve segurar a página frontal contexto. É parte da operação ou de apoio a decisões? Podemos deixar isso para o princípio de evolução para classificar no futuro.
+A experiência com o uso de camadas de responsabilidade do berço avaliação [11] indicam que o uso de camadas de responsabilidade simplificam a comunicação com os interessados, porque eles reduzem a complexidade percebida pela introdução de mais de ordem [5].
+
+
+
+
+
+Decisão página frontal de
+Gerenciamento de Caso de suporte
+UM/A/C C
+Operação Embarque Alimentação Trading &amp;
+Serviço de arquivamento de alocação de operação (EGS)
+
+pasta Recursos de
+comunicação para o controlo do documento e factura Documento de Serviço de
+Infra-estrutura de serviços de armazenamento de dados (EGS) (EGS)
+Documento de comunicação de armazenamento Gateway
+
+Figura 4. Níveis de responsabilidade ilustrado
+5. Conclusão
+a experiência da nossa utilização de nível estratégico Domain-Driven design é que os mapas de contexto e a atividade de mapeamento de contexto pode melhorar a qualidade da Arquitectura da empresa e seus derivados arquiteturas de software bem.
+Outro achado é a de que ser capaz de identificar os projectos core domínio é importante no que diz respeito a como utilizar recursos de desenvolvimento e como os desenvolvedores escolhe para pensar sobre o software em desenvolvimento. Como um exemplo, aceitando que o núcleo do domínio em Arquivos de carga Digital é encontrado na página frontal / Gerenciamento de caso contexto e não no documento modelo de armazenamento aumenta a desenvolvedores compreensão do software e a sua utilização futura.
+O desafio encontrado é que a empresa para chegar a acordo sobre aquilo que é mais importante, onde uma das descobertas é que em sistemas de grande escala como o WSC haverá vários núcleos.
+O terceiro achado foi que a combinação de mapas de contexto e responsabilidade camadas reduz a complexidade percebida.
+Em resumo a nossa experiência é que a nível estratégico Domain-Driven desenho pode ser usado para melhorar as arquiteturas corporativas e arquiteturas de software derivado.
+5.1 A prossecução dos trabalhos
+é a nossa percepção de que a utilização de mapas de contexto e seu papel na melhoria de arquitetura é bem compreendido. Como exemplo o DCF sistema será refatorado no outono de 2006 para corresponder à recomendações sugeridas encontrados neste documento. A STATOIL tenha também adoptou formalmente o uso de mapas de contexto como um artefato de arquitetura.
+
+
+Quando se trata de uso de destilação e estruturas em grande escala e o seu potencial papel na arquitetura empresarial e arquiteturas de software derivados não são verdadeiramente compreendidos, mas o uso de camadas de responsabilidade parece reduzir a complexidade percebida [5].
+Em caso de destilação pode ser alegado que a técnica é mais tático do que estratégica. Embarque &amp; Alocação (Figura 4) representou um esforço de desenvolvimento de 20.000 horas. Sabendo que as peças de que grande parte do software é o seu núcleo é importante para o desenvolvimento do projeto como deveria concentrar os seus esforços sobre as partes. Uma discussão se embarque &amp; Atribuição faz parte do núcleo da WSC ou não, sente o significado.
+Com respeito a destilação e estruturas em grande escala temos apenas arranhado a parte superior do iceberg e convidamos outros investigadores e profissionais para participar na investigação.
+6. Agradecimentos
+Os nossos agradecimentos para: Eric Evans para suas intuições e contribuições com relação ao conteúdo deste documento. Também gostaria de lhe agradecer por ser um hábil mentor e coach. Além disso, gostaria também de agradecer ao Olaf Zimmermann e o ACM rehearsal pessoal por suas contribuições e por fim mas não menos importante, nossos colégios a Statoil para todas as discussões construtivas e exigentes.
+7. Referências
+[1], Kaisler Armadura.. E Y. Liu. Uma grande imagem de olhar em arquitetura corporativa, IEEE IT Pro Janeiro/Fevereiro de 1999.
+[2] a armadura., Kaisler. e Valivullah. Enterprise Arquitetando:
+problemas críticos, IEEE trabalhos da 38 Havaí Conferência Internacional sobre ciências sistemas - 2005.
+[3] Evans E., Domain-Driven Design, combater a complexidade no coração do Software, editora Addison-Wesley, 2003, ISBN 0-321- 12521-5.
+[4], Http://domaindrivendesign.org. Domain-Driven design
+[5] Hitchins D. K. sistemas avançados, pensar, engenharia e gestão, Artech House, 2003, ISBN 1-58053-619-0.
+[6], Http://www.zifa.com. Zachman J.
+[7] Rechtin E. e Maier M. a arte de sistemas arquitetando, CRC Press, 2002, ISBN 0-8493-0440-7.
+[8] A arquitetura orientada a serviços (SOA), http://en.wikipedia.org/wiki/Service_oriented_architecture.
+[9], Http://www.sei.cmu.edu/str/descriptions/tafim.html. TAFIM
+[10] TOGAF, http://www.opengroup.org/architecture/togaf.
+[11] Wesenberg, H., Landre, E., e Rønneberg, H. usando Domain-Driven Design para avaliar comercial e o software de prateleira, OOPSLA 2006.
+
+
+
+

@@ -1,0 +1,178 @@
+
+Usando Domain-Driven Design para avaliar a aplicação de software de prateleira Comercial
+
+Harald Wesenberg Einar Landre Harald Rønneberg
+Statoil ASA Statoil ASA Statoil ASA Business Application Services - Serviços de aplicativos de negócios de Energia - Aplicativo de Serviços Corporativos de Tecnologia da Informação - Centro de Desenvolvimento de Soluções Comerciais Rotvoll Forusbeen Forusbeen 50 50 N N-7005-4035 Stavanger Trondheim N-4035 Stavanger +47 915 76 165 995 79 083 +47 +47 414 70 537 Hwes@statoil.com einla@statoil.com Haro@statoil.com
+resumo a
+compra de um Commercial-Off-The-Shelf (Berço) Solução de pacote pode ser uma tarefa complexa e árdua tarefa. Escolher e avaliar o candidato certo é difícil, especialmente quando a solução visa o coração dos negócios da empresa. A vantagem competitiva da empresa deve ser mantida, assegurando ao mesmo tempo a destinados objectivos como a redução de custos e melhor cobertura funcional. Uma boa arquitetura empresarial deve ser uma ferramenta privilegiada ao avaliar diversas soluções contra as necessidades da empresa.
+Neste documento vamos narrar a experiência e lições aprendidas quando foram avaliados três sistemas de berço para substituir um conjunto de comércio de petróleo e operações de legado de sistemas. Com base em deficiências na Arquitetura Corporativa, aplicamos domínio estratégico de projetos orientados por princípios de alargar a nossa arquitetura empresarial durante a avaliação. Observamos que estas técnicas nos permitiu analisar em profundidade o nosso domínio com os especialistas em domínio e fornecer respostas baseadas no conhecimento de domínio tácito, sem atravessar o custo e o esforço de realizar uma análise em escala total. Ao mesmo tempo, o acordo tácito conhecimento de domínio se tornou explícita e compartilhada, facilitando a comunicação com as várias partes interessadas.
+Categorias e descritores de assunto D.2.11 [Engenharia de Software]: Arquiteturas de Software de gerenciamento de termos gerais, teoria, experimentação.
+Palavras-chave Domain-Driven Design, Arquitetura Corporativa, contexto mapa, responsabilidade, camada de arquitetura de informação.
+1. Introdução a
+Statoil está em processo de substituição de um conjunto de sistemas de software legado com novos sistemas que suportam a nossa cadeia de suprimento molhado (WSC) [5]. Uma das opções que estavam a estudar foi para comprar um comercial sistema para cobrir uma parte das nossas necessidades.
+Depois de um pedido de informações (RFI) tinham sido enviados, as respostas foram recebidas a partir de vários fornecedores e alguns desses direitos de
+
+autor é realizada pelo autor/proprietário(s).
+OOPSLA'06 22 de Outubro 26, 2006, Portland, Oregon, EUA.
+ACM 1-59593-491-X/06/0010.
+
+
+
+
+foram de curta listados para posterior avaliação e uma possível Solicitação de Proposta (RFP). Nós planejado para utilizar a Arquitectura Empresarial para o WSC como uma das ferramentas para avaliar quão bem cada berço montado em nossos candidatos a arquitetura geral. Estávamos sobretudo interessados em os seguintes aspectos dos candidatos:
+• Cobertura funcional: Como os candidatos cobrir nossos necessidades funcionais
+• Modelo de informação: os candidatos têm a informação necessária para cobrir nossos estruturado adequadamente às necessidades de informação
+com base na arquitectura aplicar dos diferentes candidatos, esperávamos para selecionar um ou mais deles para um RFP.
+Este esforço de avaliação coincidiu com a nossa aprovação do domínio design orientado- [3] e a sua utilização para expandir a Arquitectura Empresarial para nosso portfólio do sistema existente [5]. Quando tivemos problemas com o uso de nossa arquitetura corporativa, decidimos tentar usando técnicas de design Domain-Driven para ver se ele poderia trazer a avaliação ainda mais.
+Antes de prosseguirmos o relatório, uma curta introdução à arquitetura e design Domain-Driven Enterprise está em ordem.
+1.1 Arquitetura Corporativa (EA) de acordo com o [1] Arquitetura Corporativa (EA) identifica os principais componentes da organização, os seus sistemas de informação, as formas em que estes componentes trabalham em conjunto para alcançar objectivos de negócio definido e a forma em que os sistemas de informação de apoio aos processos de negócios da organização. Os componentes incluem o pessoal, processos de negócio, tecnologia, informações de recursos financeiros e outros.
+Arquitectura Empresarial é baseada em uma visão holística em vez de um aplicativo de visualização do aplicativo. A maioria das empresas escolher para fazer o seu trabalho de arquitectura empresarial de acordo com as práticas definidas pelos quadros disponíveis como TAFIM [6], TOGAF e Zachman [7] [8] e adaptado para refletir os princípios arquitectónicos, normas e modelos de referência definido pela empresa individual. Os quadros fornecem um conjunto de pontos de vista apoiar os interesses das diferentes partes, por exemplo processo de negócios, informações, funções e infra-estrutura técnica.
+
+
+
+
+Decidimos usar a arquitetura da empresa como uma fundação para descrever a necessidade de novos sistemas de TI e as estratégias de modernização existentes. Ele deve fornecer um caminho claro para a aquisição ou o desenvolvimento de novos sistemas e deve ser o ponto de partida natural quando o escopo e priorizar novos projectos.
+Para que isso seja possível deve ser ancorada em uma joint business &amp; Visão de TI identificar requisitos de negócios e objetivos de TI [2].
+Embora diferentes enquadramentos têm perspectivas diferentes, a maioria deles tem alguns blocos de montagem comuns. Estes blocos comuns de construção de uma arquitetura empresarial são encontrados na figura 1.
+Arquitetura corporativa
+informações de negócios
+função processos (Serviço)
+atribuído ao
+sistema físico (Tecnologia)
+
+Figura 1: O clássico de blocos de construção de uma arquitetura empresarial
+1.2 Domain-Driven Domain-Driven Design design é uma filosofia cujo foco é sobre as complexidades do domínio e se o objectivo é tornar estas complexidades explícita no modelo de domínio e sua aplicação no código. De acordo com o [3] a premissa de Domain-Driven design é duas vezes:
+• Para a maioria dos projetos de software, o foco principal deve ser sobre o domínio e lógica de domínio e
+• projetos de domínio complexo deve ser baseada em um modelo.
+Design orientado para o domínio não é uma tecnologia ou uma metodologia. É uma maneira de pensar e de um conjunto de prioridades destinadas a acelerar projetos de software que têm de lidar com complicados domínios.
+A fonte primária para estes princípios é Eric Evans " livro sobre Design Domain-Driven [4].
+Embora o design Domain-Driven principalmente visa o desenvolvimento de sistemas e não BERÇO avaliação candidatos, contexto mapas e níveis de responsabilidade a nível estratégico de design orientado por domínio provou ser muito útil durante a nossa avaliação de berço.
+1.2.1 Contexto Contexto mapas mapas mapas são do sistema de informação da paisagem particionado em grupos adequados de funcionalidade comum. Cada
+contexto então contém informações e funcionalidade relacionada ao contexto. Exemplos de um contexto são físicos de comércio de petróleo bruto (informações e funcionalidades relacionadas ao processo de negociação física de petróleo bruto) e as operações de abastecimento de petróleo bruto (informações e funcionalidades relacionadas à operação de movimentação de petróleo bruto proveniente de local para outro). Outro uso de mapas de contexto é o mapeamento de cada sistema de informação em relação a outros sistemas de informação. Exemplos de tais contextos são o sistema comercial e o sistema de fornecimento de [5].
+Quando os contextos têm sido identificados, é então possível investigar as relações entre cada contexto. Com base nas características da relação, potenciais desafios e problemas de interação entre os diferentes contextos podem ser identificados e descritos. As relações são mais comuns
+• O cliente/fornecedor: Um contexto é um fornecedor para o outro, fornecendo informações e funcionalidades conforme exigido pelo contexto do cliente. Acordo entre os contextos são alcançada através de negociações.
+• Conformista: o modelo de informação, a funcionalidade e a arquitetura do contexto conformista deve estar em conformidade com o contexto de fonte, sem influência sobre o modo como o contexto se desenvolve ao longo do tempo.
+• Shared Kernel: dois contextos compartilham um conjunto comum de informações e funcionalidade, e todas as atualizações em um contexto são também atualiza para o outro.
+Anteriormente tínhamos realizado diversos contexto mapa análise no nosso portfólio de sistemas e encontrei este para ser uma ferramenta valiosa para a comunicação das propriedades inerentes do nosso domínio [5].
+1.2.2 Responsabilidade camadas durante a exploração do domínio, o modelo de domínio resultantes muitas vezes se encaixa em estratos (layers) onde os objetos de uso semelhante são agrupadas. Exemplos de tais estratos foram encontrados são
+• Recursos: Informações e funcionalidades relacionadas a determinação e manter o controle do que é possível dentro de um determinado contexto. No nosso mundo, este poderia ser os níveis de estoque, obrigações de entrega, infra-estrutura de condutas, classificações de navio etc
+• Operacional: Informações e funcionalidades relacionadas com a execução das tarefas operacionais. No nosso mundo, este é tarefas tais como as actividades comerciais de operações de abastecimento etc
+frequentemente, as tarefas operacionais dependem de informações da camada de recursos.
+• Suporte a Decisão: Informações e funcionalidades relacionadas com o apoio ao usuário na tomada de decisões. No nosso mundo é este mercado de actividades tais como a monitorização da exposição, o controlo de riscos, planeamento da oferta. A camada de suporte de decisão depende frequentemente de informação da camada operacional e os resultados da essa camada é frequentemente alimentada de volta para a camada operacional como instruções para as tarefas a serem executadas.
+Embora estes são três exemplos de responsabilidade camadas em um domínio, outras camadas irá ocorrer em outros domínios. A
+
+
+
+
+importância reside no reconhecimento deste camadas e o conhecimento de domínio resultante que foi tácita, mas agora é explícito.
+2. O uso da arquitetura empresarial
+utilizando métodos de uma consultoria escandinavos, tínhamos anteriormente desenvolvido uma arquitetura empresarial para o WSC.
+Inicialmente a arquitetura consistiu de negócios, informações e arquiteturas funcionais, que tinha sido prorrogado com mapeamento de matrizes de elementos das arquiteturas diferentes juntos. Arquitectura de Informação define aproximadamente 150 core informações conceitos agrupados em 20 grupos, com a informação informações conceito dominante em cada grupo usado como nome de grupo. A arquitetura funcional define aproximadamente 120 funções de negócios agrupados em 28 áreas funcionais. Com base nesta, em seguida tivemos uma matriz 20x28 descrevendo o elevado nível de utilização de informações dentro das diferentes áreas funcionais. Da mesma forma que tínhamos mapeado informações grupos versus os processos de negócios e áreas de função versus processos de negócios. Um excerto de uma tal matriz é mostrado na Tabela 1 abaixo.
+
+Tabela 1 Resumo da arquitetura corporativa. Uma matriz é usado para mapear informações de grupos para áreas de função e mostrar quais áreas de função criar/atualizar (●) ou ler (○) que grupos de informações.
+Informações informações de grupos de grupos
+versus
+áreas de Função de
+Elevação de Posição estratégica do plano de técnicas de design orientado por domínio e queria ver se
+da mesma forma que tivemos para dividir outros conceitos (ex. Carga, viagem, Entrega) para ilustrar as diferenças entre os vários candidatos. Como a granularidade se tornou mais fina, matrizes e avaliações se tornou insustentável e intransmissíveis e só o projecto Core Team foi capaz de navegar e compreender as informações vitais contidas na avaliação.
+Outro exemplo foi a função de negócio arquitetura.
+Da mesma forma para a arquitetura de informação, a arquitetura inicial tinha uma área funcional para comércio físico. Como trabalhamos com a arquitetura e o berço dos candidatos que encontramos que diferiu significativamente em sua cobertura da área funcional.
+No entanto, não fomos capazes de ilustrar esta usando a arquitetura funcional ou os mapeamentos para os negócios e arquiteturas de informação.
+2.2 A falta de Limites do Sistema de empresa de outro problema que se nos depara durante a avaliação foi a falta de limites do sistema de empresa. Uma vez que todo o portfólio do sistema estava sendo considerado, poderíamos mover livremente a funcionalidade entre aplicações proposto, para cada berço poderíamos ao candidato será função de mover áreas entre aplicativos e áreas de funções do grupo em novo agrupamento das funções de acordo com o tipo específico de berço cobertura candidatos. A arquitetura da empresa nos deu nenhum apoio na avaliação das conseqüências do nosso trabalho ou decidir se um agrupamento foi melhor do que qualquer outro. Isto foi devido ao espaço físico resultante de cada agrupamento de toda a diferentes arquiteturas e mapeamento de matrizes.
+2.3 versus tácito conhecimento explícito sentimos que a Arquitetura Corporativa continha muitas informações implícitas com base no conhecimento da equipa de arquitectura de WSC. Este conhecimento tácito nos permitiu tomar decisões sobre a atribuição de funcionalidade para o berço candidato, mas fomos incapazes de partilhar este conhecimento tácito e justificando as decisões que tomámos. Tivemos algumas experiências com o uso de
+comércio físico tratar ● Carga ○ Operações de abastecimento ○ ● ○
+Planejamento de alimentação ●
+●
+Controle de Risco de comércio de derivados ● Áreas de função
+legado: criar/atualizar: ●, leia ○
+
+2.1 Granularidade problemas durante a nossa avaliação do berço candidatos, tentou usar nossa arquitetura empresarial como uma ferramenta para avaliar a sua capacidade de suportar a WSC, mas logo descobriu que a granularidade inicial das informações e arquiteturas de solução era demasiado grossa.
+Um exemplo é o conceito de tratar as informações iniciais da arquitetura de informação. Como trabalhamos com os diferentes candidatos, havia grandes diferenças no modo como o conceito de venda foi tratada em cada candidato. No entanto, uma vez que tivemos apenas um conceito de venda, as diferenças não foram muito visível na Arquitetura Corporativa. Temos portanto dividir o conceito inicial de tratar em vários conceitos diferentes de informação: Física lidar e derivado lidar. Com estes dois novos conceitos, as diferenças entre o sistema de cada candidato se tornou mais visível.
+Isso poderia tornar a informação e o conhecimento de uma forma mais explícita.
+3. Usando Domain-Driven Estratégica projeto
+com base nas fraquezas identificadas da nossa arquitetura corporativa, nós sentimos que tínhamos para o expandir para ser capaz de usá-lo no berço avaliação. Este seria no entanto exigem tempo e esforços consideráveis, algo que não têm nesta fase do projecto. Anteriormente tínhamos utilizado Domain-Driven estratégico técnicas de design para analisar nosso portfólio do sistema existente [5] e com base na experiência que queríamos experimentar a mesma abordagem para esta avaliação.
+3.1 a explorar o domínio que teve início com o desenho de um simples mapa de contexto, mostrado abaixo na Figura 2. Este mapa agrupadas as diferentes áreas funcionais das aplicações existentes em contextos de funcionalidade relacionada a. Desde a funcionalidade baseada em SAP não foi avaliado neste projecto, todos os aplicativos de zonas abrangidas pelo nosso portfólio de sistemas SAP foram contidas no contexto SAP. Isto foi feito para reduzir a complexidade do diagrama.Estes cinco contextos então formada a base de todas as nossas análises e como o domínio da exploração e berço de avaliação candidatos evoluíram, realizamos regularmente veio para estes cinco contextos como um ponto de partida para novas incursões no domínio.
+
+
+
+
+
+Figura 2: contexto simplificado mapa de áreas de aplicação baseado na arquitetura da solução existente. Todas as áreas de aplicação abrangidos pela SAP estão contidas no SAP R/3 Finanças e Contabilidade contexto.
+A nossa primeira tarefa foi o de obter um conhecimento mais profundo de todo o domínio. Tivemos vários especialistas em domínio em diferentes contextos dentro do domínio, mas poucos poderiam reivindicar amplos conhecimentos sobre vários contextos. Assim, executamos alguns workshops com vários peritos, explorar o domínio juntos durante um par de horas de cada vez.
+3.2 Usando Responsabilidade Níveis baseados sobre esses workshops, logo vimos que as várias áreas funcionais da arquitetura da solução partilhada determinadas características e começamos a organizar as áreas de responsabilidade em níveis baseados sobre essas características. Responsabilidade camadas são um conceito estratégico Domain-Driven Design, e são muito úteis como uma ferramenta para o gerenciamento de grandes porções do domínio. Observamos que a organização as áreas de aplicação em camadas nos forneceu muito conhecimento sobre a construção do domínio. Em um tal exercício mostrado na Figura 3 abaixo nós reorganizamos algumas áreas funcionais da arquitetura da solução em três níveis de responsabilidade.
+Decisão suporte de Alimentação de Controle de Risco C Planejamento
+Operacional física do abastecimento S derivados de operações comerciais de comércio de
+Recursos do Programa de Elevação
+Ri D
+
+nd ol um ng ntr radi
+Co s T sk e ativ
+eriv
+comércio físico e o cliente/fornecedor de operações de abastecimento contextos pendentes Figura 3: Responsabilidade camadas para áreas funcionais selecionados a partir da Arquitetura Corporativa. Usado para explorar a fronteira entre dois contextos de Figura 2 (Controle de Risco e derivados contexto comercial versus comércio físico e as operações de abastecimento de contexto).
+Os níveis de responsabilidade nos deu uma imagem clara de como algumas das nossas áreas funcionais foram dependentes uns dos outros e que áreas devem ser mantidos juntos ao decidir os limites do sistema.
+Identificamos três camadas, capacidades operacionais e de suporte à decisão os mesmos três níveis como na introdução):
+• Recursos é a camada onde nossos recursos básicos são definidos. Na Figura 3 o Programa de elevação é a área funcional onde todas as cargas de óleo disponíveis são recebidos a partir dos operadores de campo. As listas de cargas disponíveis são então usados como base para o comércio e operações de fornecimento. Há um limite de contexto para a operação do Terminal contexto aqui, mas este não é mostrado neste diagrama.
+• Operacional é a camada onde o dia-a-dia do trabalho operacional é definido. Negociação de operações de abastecimento e fornecimento de planejamento são bons exemplos de tais áreas funcionais.
+• Suporte a decisão é onde o sistema(s) ajuda o usuário(s) no seu processo de tomada de decisão. Um exemplo é o do controlo de riscos, onde vários riscos de mercado são avaliados e as decisões tomadas com base nesta avaliação. As decisões são alimentados de volta para a camada operacional como instruções de comércio de derivados.
+Quando tivemos a nossa camada de responsabilidade, adicionamos o contexto limites da figura 2. Vimos que a interface entre estes dois contextos foi uma simples relação unidirecional, resultando em uma interface não complexas com um fluxo de informação direccional e nenhuma funcionalidade compartilhada. Daí descobrimos que esta é uma relação cliente/fornecedor (identificada com C e S acima), onde o comércio físico fornece controle de risco com informações necessárias para controle de risco para cumprir o seu objectivo.
+Repetimos este exercício várias vezes até as áreas de aplicação foram mapeadas para fora e o contexto em que foram definidas as relações. Neste exemplo as áreas de aplicação foram em diferentes níveis de responsabilidade, mas isso nem sempre foi o caso.
+4. Avaliação berço candidatos
+depois de um período de exploração de domínio, tivemos uma boa visão geral dos diferentes aspectos do nosso domínio complicado e me senti pronto para iniciar a análise de nosso BERÇO candidatos. Para cada candidato, começámos por delinear uma avaliação de petróleo bruto do contexto de cobertura, o resultado para o candidato 1 mostrado na Figura 4 abaixo. Aqui, vimos que este berço candidata tinha uma quantidade razoável de cobertura de contexto fora de caixa, algumas possíveis extensões e algumas áreas que não puderam ser cobertas pelo sistema de berço sem grandes modificações.
+
+
+
+
+
+
+Figura 4: Análise de avaliação de cobertura de contexto BERÇO candidate 1 mostrando o quanto é coberto fora da caixa, os ramais que são possíveis e que não pode ser coberto sem grandes modificações/extensões.
+
+Com base em discussões anteriores com especialistas em domínio e elementos do comércio físico e as operações de abastecimento de contexto (relacionado ao gerenciamento de cargas de petróleo bruto a partir da plataforma continental Norueguesa) havia sido identificada como um domínio de núcleo. Um domínio é um núcleo de contexto que suporta o core business das organizações e é vital para a competitividade que esta é eficiente apoiada por processos e aplicativos. Estávamos particularmente ansioso para ver o impacto do berço candidatos neste contexto.
+Durante a nossa análise, verificamos que a análise contextos tínhamos identificado anteriormente não eram mais correto com base na funcionalidade abrangidos por cada berço de países candidatos e de outros sistemas.
+Por conseguinte, temos abandonado a nossa análise original contextos e chamou nova, contextos presume com base nas indicações de cada berço candidato. Para os países candidatos 1, identificamos vários novos contextos e divididas as áreas de aplicação entre eles. Os novos contextos são mostrados na Figura 5 abaixo. Com base no nosso conhecimento do berço candidato, descobrimos que nossas necessidades de planejamento do abastecimento de petróleo bruto foram insuficientemente coberta, e alimentação de petróleo bruto foi introduzido como um novo contexto. Do mesmo modo, observamos que alguns dos nossos recursos avançados de gestão de riscos precisa não eram abrangidos e introduziu o gerenciamento de risco como avançado um novo contexto.
+
+
+Figura 5: Novos contextos especulativos, identificados com base na análise do berço candidate 1.
+Contexto limite entre o berço e o fornecimento de petróleo bruto candidatos contexto parecia difícil para nós, porque sabíamos que muita da informação e a funcionalidade necessária para o berço candidato teria igualmente ser necessário para o fornecimento de petróleo bruto contexto. Decidimos investigar este limite ainda mais utilizando camadas de responsabilidade, e como temos explorado o domínio descobrimos que os dois contextos especulativos tinha um kernel compartilhado como mostrado na Figura 6 abaixo.
+
+Figura 6: esboçado diagrama UML mostrando três objetos de domínio em um kernel compartilhado entre o plano de fornecimento de petróleo bruto contexto e berço Candidate 1. A função de controle de risco a área é mostrada como um pacote para mostrar o uso sem desarrumar com detalhes.
+Um kernel compartilhado é um conjunto de informações e funcionalidade que é compartilhado entre os dois contextos. Neste caso, o kernel compartilhado consistiu de vários objetos de domínio que foram necessárias em ambos os contextos. Em nossos sistemas atuais, esses objetos de domínio estão no mesmo sistema e não constituem um contexto fronteira. Tendo em limites do sistema em toda esta kernel compartilhado significaria:
+
+
+
+
+• lógica de negócios teria de ser desenvolvida no contexto de fornecimento de petróleo bruto para duplicar a funcionalidade do berço candidato.
+• O modelo de domínio de fornecimento de petróleo bruto seriam ditados pelo modelo do berço candidato.
+• O custo de desviar do modelo significaria a construção de camadas anti-corrupção [4], em si uma tarefa onerosa e complexa.
+• Integrar dois contextos seria caro e exigente.
+• O kernel compartilhado não poderia ser um serviço fornecido em um dos contextos, tanto como funcionalidade e informações foram necessários para o exterior em diferentes contextos.
+A identificação de um kernel compartilhado entre o fornecimento de petróleo bruto e o contexto berço do projeto grupo candidato habilitado para concentrar os esforços de análise, investigando cobertura funcional e necessidades de informação em mais detalhe. Com base nos resultados desta análise, poderíamos afirmar que este candidato seria inadequado para nós.
+Para os outros candidatos, produzimos BERÇO mesmo contexto de avaliação de cobertura de diagramas conforme mostrado na figura 4. Com base nestes diagramas, exploramos o domínio como melhor poderíamos com base em contextos de execução assumidas. Isso nos permitiu avaliar quão bem cada candidato se encaixam em nossa arquitetura geral da empresa.
+Depois de um período de avaliação de cada candidato contra nosso contexto mapas, o grupo de projecto chegou à conclusão de que nenhum dos candidatos propostos berço montado em nossa arquitetura corporativa.
+Por isso o grupo de projeto recomendada para o grupo de direção que a nova solução para a WSC seria baseada em desenvolvimento personalizado. O grupo director aceitou a recomendação e desenvolvimento personalizado será iniciado no outono de 2006.
+5. Conclusão
+antes de começarmos este projecto, as partes interessadas tiveram uma clara expectativa de que a arquitetura da empresa seria de ajudar a avaliar os diversos BERÇO candidatos. Quando tentamos usar a nossa arquitetura corporativa, descobrimos que a arquitetura não era suficientemente detalhado e que prorroga a arquitetura com mais detalhes tornaria ingovernável com as ferramentas que temos à nossa disposição. O custo associado com um tal esforço seria igualmente formidáveis, considerando que a abordagem delineada no presente documento nos permitiu alcançar bons resultados precisos e ao longo de alguns workshops de um par de horas cada.
+A nossa experiência neste projeto nos mostra que a extensão da nossa arquitetura empresarial com técnicas de nível estratégico Domain-Driven design são úteis para:
+• facilitar a exploração de domínio através da utilização de uma linguagem comum. Design orientado para o domínio estratégico nos deu uma linguagem comum com o qual poderíamos falar sobre o domínio. O uso de termos e conceitos claramente definidos
+
+ativado os diferentes participantes do projeto para compreender e contribuir para a exploração do domínio.
+• O foco sobre os principais aspectos do domínio. Uma arquitetura empresarial tradicional coloca igual ênfase sobre todos os aspectos do domínio. Usando técnicas de design Domain-Driven, fomos capazes de se concentrar sobre os aspectos do domínio que era vital para a tarefa e colocar menos ênfase aos aspectos que não foram relevantes.
+• Verifique o conhecimento tácito explícito. Usando níveis de responsabilidade e de contexto mapas, fomos capazes de rotular relações e dependências no nosso domínio, tornando assim o conhecimento tácito de cada projecto os explícita e compartilhada com os outros.
+• investigar os limites do sistema. Usando mapas de contexto especulativos baseados em cada berço que foram melhores candidatos capazes de investigar novos limites do sistema e determinar se a integração dos diferentes BERÇO candidato seria oneroso e desafiador.
+Em uma arquitetura empresarial tradicional isso seria naturalmente também teria sido possível. O resultado teria tomado considerável mais esforço em termos de tempo e dinheiro, e ser mais dependente da habilidades individuais dos arquitetos corporativos.
+Agradecimentos
+Os nossos agradecimentos a sua útil de Eric Evans para discussões com relação ao conteúdo deste artigo e sua habilidades de tutoria. Agradecemos também o Olaf Zimmermann e o ACM rehearsal pessoal para a sua ajuda durante a preparação deste documento.
+Referências
+[1], Kaisler armaduras, Y. Liu, uma grande imagem de olhar em Arquitetura Corporativa, IEEE IT Pro Janeiro/Fevereiro de 1999.
+[2] armaduras, Kaisler, Valivullah, Enterprise Arquitetando:
+problemas críticos, IEEE trabalhos da 38 Havaí Conferência Internacional sobre ciências sistemas - 2005.
+[3], Http://domaindrivendesign.org/. Domain-Driven Design
+[4] Evans, E., Domain-Driven Design, combater a complexidade no coração do Software, 2003, editora Addison-Wesley, ISBN 0-321- 12521-5.
+[5] Landre E., Wesenberg H., Rønneberg H., Arquitectónico melhoria através da utilização de nível estratégico Domain-Driven Design, OOPSLA 2006 relatório médico.
+[6], Http://www.sei.cmu.edu/str/descriptions/tafim.html/. TAFIM
+[7], Http://www.opengroup.org/architecture/togaf/. TOGAF
+[8] João Zachman http://www.zifa.com/.
+
+
+
+
+
