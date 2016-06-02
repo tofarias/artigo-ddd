@@ -211,7 +211,7 @@ Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxim
 \begin{figure}[ht]
 \centering
 \includegraphics[width=.5\textwidth]{imagens/modules.png}
-\caption{separação do domínio em módulos}
+\caption{agrupando o domínio em módulos}
 \label{fig:exampleFig1}
 \end{figure}
 
@@ -243,7 +243,7 @@ Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo exte
 \end{itemize}
 
 A solução implementada pelo autor vem ao encontro da proposta de solução neste artigo uma vez que
-aplica os conceitos de \textit{Domain-Driven Design} para tentar normalizar o processo de desenvolvimento de software. Sobretudo para garantir a manutenibilidade do sistema e padronizar o processo de codificação. Um dos pontos importantes que é citado pelo autor é o fato de repassar o conhecimento a novos membros da equipe, o atual artigo foca bastante na linguagem ubiqua, no caso é utilizado diagramas de classe e diagramas de caso de uso, respeitando os papéis dos atores. Isso tudo ainda ajuda para que o conhecimento sobre o negócio não fique preso a uma ou duas pessoas. E, o fator tempo de desenvolvimento, é diretamente prorporcional com o entendimento das regras de negócio.
+aplica os conceitos de \textit{Domain-Driven Design} para tentar normalizar o processo de desenvolvimento de software. Sobretudo para garantir a manutenibilidade do sistema e padronizar o processo de codificação. Um dos pontos importantes que é citado pelo autor é o fato de repassar o conhecimento a novos membros da equipe, o atual artigo foca bastante na linguagem ubiqua, no caso é utilizado diagramas de classe e diagramas de caso de uso, respeitando os papéis dos atores. Isso tudo ainda ajuda para que o conhecimento sobre o negócio não fique preso a uma ou duas pessoas. E, o fator tempo de desenvolvimento, é diretamente prorporcional ao entendimento das regras de negócio.
 
 O maior valor do sistema de gerenciamento de GRU está no foco no negócio principal da empresa. As telas que serão apresentadas ao usuário final terão mais relação com a operação de negócio. 
     
@@ -251,37 +251,20 @@ O maior valor do sistema de gerenciamento de GRU está no foco no negócio princip
 \url{http://www.inase.org/library/2015/zakynthos/bypaper/COMPUTERS/COMPUTERS-35.pdf}
 \\
 \\
-Neste artigo iremos apresentar e analisar uma dessas ferramentas, nomeadamente, plataforma de DSL. Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio. O objetivo deste artigo é analisar as implicações do uso do DDD através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
+Neste artigo é apresentado e analisado a ferramenta DSL. Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio. O objetivo deste artigo é analisar as implicações do uso do DDD através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
 
-O objetivo deste trabalho é investigar possíveis criticamente benefícios da adopção de design orientado para o domínio de gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. Inevitavelmente estas considerações irá reflectir sobre o valor do ativo de software e assim uma abordagem validada estimativa de ativos de software é chamado para
+O objetivo deste trabalho é investigar possíveis benefícios da adopção de \textit{Domain-Driven Design} no gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. Inevitavelmente estas considerações irá reflectir sobre o valor do ativo de software e assim uma abordagem validada estimatida de ativos de software é chamado para implementar as principais características do objeto. Usando \textit{Domain-Driven Design} pode ser utilizado para criar uma plataforma unificada para de desenvolvimento e evolução de sistemas de software complexos.
 
-implementar as principais características do objeto usando DDD orientados
-projeto pode ser usado para criar uma plataforma unificada para
-desenvolvimento e evolução de sistemas de software complexos.
+A Plataforma DSL permite a a automação do processo de desenvolvimento de aplicativos de negócios. A
+plataforma utiliza o modelo de negócio específico como entrada e saídas de componentes acabados para software de negócios correspondente sistema.
 
-Plataforma DSL é um serviço que ajuda na concepção, construção
-e manutenção de aplicações de negócios. Ele permite a
-a automação do processo de desenvolvimento de aplicativos de negócios. o
-plataforma utiliza o modelo de negócio específico como entrada e saídas
-componentes acabados para software de negócios correspondente
-sistema
+Dois principais desafios que podem ser eficazmente solucionados com Plataforma DSL e abordagem DDD subjacente é a eliminação de falta de comunicação entre clientes e desenvolvedores em equipes de desenvolvedores.
 
-Dois principais desafios que podem ser eficazmente solucionados com
-Plataforma DSL e abordagem DDD subjacente é a
-eliminação de falta de comunicação entre clientes e
-empreiteiros ou mesmo entre os desenvolvedores em equipes de desenvolvedores.
-A outra é a eliminação de não-criativo e repetitivo
-trabalho feito pelos desenvolvedores ao automatizar tarefas repetitivas da
-processo de desenvolvimento.
+A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao automatizar tarefas repetitivas no processo de desenvolvimento.
 
+O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
 
-O principal obstáculo
-impedindo a maior aceitação do domínio driven design
-na prática, é a falta de compreensão dos benefícios do DDD
-e as ferramentas potenciais ele fornece por quadros superiores. à medida que o
-linha de fundo na gestão do risco é para evitar riscos potenciais,
-ajustes adicionais de estimativas de valor de software
-
+Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe. Padrões de codificação e 
 \textbf{Cronotacógrafo}
 \\
 \\
@@ -298,73 +281,23 @@ ajustes adicionais de estimativas de valor de software
 \\
 \\
 
-\subsection{Using Domain-Driven Design to Evaluate Commercial Off-The-Shelf Software}
-\url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part2.pdf}
+\subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
+\url{http://dbis.eprints.uni-ulm.de/1373/1/Masterarbeit%20Herbert%20Hayato%20Hess.pdf}
 \\
 \\
 \\
 \\
 \\
 \\
-Neste documento vamos narrar a experiência e lições aprendidas quando foram avaliados três sistemas de berço para substituir um conjunto de comércio de petróleo e operações de legado de sistemas. Com base em deficiências na Arquitetura Corporativa, aplicamos domínio estratégico de projetos orientados por princípios de alargar a nossa arquitetura empresarial durante a avaliação. Observamos que estas técnicas nos permitiu analisar em profundidade o nosso domínio com os especialistas em domínio e fornecer respostas baseadas no conhecimento de domínio tácito, sem atravessar o custo e o esforço de realizar uma análise em escala total.
+Esta tese de mestrado descreve a utilização de \textit{Domain-Drive Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
 
-Statoil está em processo de substituição de um conjunto de sistemas de software legado com novos sistemas que suportam a nossa cadeia de suprimento.
+O autor cita que o principal desafio é que o DDD foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
 
-Antes de começamos este projeto, as partes interessadas tiveram uma clara
-expectativa de que a arquitetura da empresa seria de ajuda na
-avaliar as diversas candi COTS
-Encontros. Quando tentamos usar
-a arquitetura da empresa, descobrimos que a arquitetura era
-não detalhada o suficiente, e que se estende a arquitetura com mais
-detalhes tornaria incontrolável com as ferramentas que tivemos em nossa
-disposição. O custo associado com um tal esforço também seria
-formidável, ao passo que a abordagem
-delineada no presente documento habilitado
--nos para alcançar bons resultados precisos e ao longo de uns poucos
-oficinas de um par de horas cada.
-A nossa experiência neste projeto nos que se estendem a mostra
-Arquitetura empresarial com técnicas de nível estratégico
--Domain Driven Design são úteis para:
-?
-Facilitar a exploração de domínio pelo uso de um comum
-língua.
- domínio estratégico design orientado deu-nos uma
-linguagem comum com as quais poderíamos falar sobre o
-domínio. O uso de claramente
-termos e conceitos definidos
+Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo Domain-Driven Design. A justificativa se origina do sistema de ser muito antigo. Outro fator é a comunicação, pois para aumentar esse problema, existem desenvolvedor na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilados pela equipe de desenvolimento.
 
-permitiu que os diferentes participantes do projeto para entender
-e contribuir para a exploração do domínio.
-?
-Concentre-se nos aspectos fundamentais do domínio.
-A tradicional
-Enterprise Architecture coloca ênfase na igualdade de todos
-aspectos do domínio. Usando Domain-Driven Design
-técnicas, fomos capazes de se concentrar nos aspectos da
-domínio que era vital para a tarefa em mãos e colocar menos
-ênfase nos aspectos que não eram relevantes.
-?
-Faça o conhecimento tácito explícito.
- Usando a responsabilidade
-camadas e mapas de contexto, fomos capazes de rotular
-relacionamentos e dependencie
-s em nosso domínio, assim,
-tornando o conhecimento tácito de cada membro do projeto
-explícita e compartilhada com os outros.
-?
-Investigar os limites do sistema.
- Usando especulativa
-mapas de contexto com base em cada candidato COTS estávamos
-mais capazes de investigar novas fronteiras do sistema e
-determinar se a integração dos diferentes COTS
-candidato seria caro e desafiador.
-Em uma arquitetura Enterprise tradicional Isso, é claro, também
-teria sido possível. O resultado
-teria tomado considerável
-mais esforço em tempo e dinheiro,
- e ser mais dependente do
-habilidades individuais dos arquitetos corporativos
-Google Tradutor para empresas:Google Toolkit de tradução para appsTradutor de sitesGlobal Market Finder
+O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubiqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
+
+Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
 
 \textbf{Cronotacógrafo}
 \\
@@ -372,9 +305,22 @@ Google Tradutor para empresas:Google Toolkit de tradução para appsTradutor de si
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 \url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part1.pdf}
 
+Neste artigo é apresentado a utilização de \textit{Domain-Drive Design} na empresa de petróleo Statoil ASA situada na Noruega, com foco nos conceitos do nível estratégico. O objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente de empresarial para melhorar a arquitetura de software de um grande sistema corporativo.
 
-\textbf{Cronotacógrafo}
-\\
+O artigo cita a utilização de mapas de contexto e que a utilização foi de grande valor também pelo conhecimento adquirido, permitiu melhorar o escopo de novos projetos arquiteturais e melhoria do softwre existente de forma controlada.
+
+O autor afirma que grandes empresas não tem um único núcelo. Mas que por outro lado, a nível de projeto, deve-se sempre ter um núcleo e que assim é melhor para conhecer o domínio principal e os objetivos.
+
+A partir da análise da criação do mapa de contexto, um novo objetivo foi estabelecido e utilizado posteriormente para definir o escopo de um novo projeto, e este objetivo é a melhoria da arquitetura em novos projetos, gerenciamento e controle de recursos de documento.
+
+Os contextos reais são derivados da Arquitetura corporativa, e transformando a arquitetura da empresa em uma ferramenta útila para a arquitetura de software de melhoria.
+
+Um mapa de contexto é um desenho que documenta contextos de modelagem e suas relações. Grandes sistemas contém vários contextos de modelagem, então, eles representaram no contexto de modelagem de interesses, não as aplicações ou sistemas de informação que implementam os diferentes contextos.
+O autor ainda afirma que mapa de contexto representa o primeiro ítem no nível estratégico \textit{Domain-Driven design}. Para o autor ficou a percepção de que a utilização do mapa de contexto e o seu papel na melhoria da arquitetura foi bem compreendido pela equipe, e que o sistema \textit{Digital Cargo File (DCF)} foi refatorado em 2006 para corresponder as recomendações sugeridas.
+
+A empresa Statoil também adotou formalmente o uso de mapas de contexto como um artefato da arquitetura. O autor finaliza afirmando que o uso de camadas de responsabilidade parece reduzir a complexidade percebida.
+
+No presente artigo sobre o gerenciamento de GRU de Cronotacógrafo, este sistema representa apenas um núcleo de todo o ecossistema que envolve o processo de verificação de cronotaógrafo. A GRU participa de vários contextos durante o processo de verificação de cronotacógrafo. Dentre estes contextos, a GRU possui responsablidades diferentes dependendo do cenário onde se encontra ao realizar selagem, realizar ensaio, subsituir selos, cancelamento de GRU, emissão de relatórios de ensaio, etc.
 
 \subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
 \url{http://www.teses.usp.br/teses/disponiveis/55/55134/tde-24032009-192923/publico/dissertacao.pdf}
@@ -428,6 +374,18 @@ A aplicação de DDD ao desenvolvimento de linhas de produtos de software mostrou-
 Em algumas situações, o uso de uma linguagem ubíqua pode trazer problemas, embora estes
 não tenham sido experimentados neste trabalho. Trata-se dos casos em que as linguagens utiliza-
 das no contexto de cada produto sejam diferentes.
+
+Por conseguinte, deve ser tido em consideração que a distribuição da
+arquitetura do sistema antigo também influencia a equipe de distribuição.
+Como discutido na seção 3.3.3, a contextos delimitada, tendo em diferentes idioma onipresente, podem exigir uma camada de conversão. Além disso, delimitada contextos pode ser encapsulado com
+as portas e os adaptadores (ver secção 3.4.7) arquitetura para comunicar com bases de dados,
+bibliotecas de terceiros e outros sistemas externos.
+
+como a equipa de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
+continuamente expandida até chegar a uma verdadeira arquitectura refatoração.
+
+Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser
+avaliado.
 
 \section{Solução Implementada}
 
