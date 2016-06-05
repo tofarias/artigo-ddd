@@ -42,14 +42,6 @@ O sistema de gerenciamento de verificação do cronotacógrafo existe há pelo menos
 
 No dia 01 de janeiro de 2016 houve uma grande mudança no processo de emissão de GRU, hoje os postos de selagem e de ensaio emitem a GRU, e  semelhante a um plano pré-pago de celular, o posto compra créditos para cada GRU emitida, cada crédito permite ao posto acessar o site do Inmetro e registrar os dados do serviço realizado, seja serviço de selagem ou de ensaio metrológico.
 
-Este artigo está organizado da seguinte forma. A seção 2 descreve o que é a
-Linguagem Ubíqua e sua importância. A seção 3 introduz o conceito de Domain­Driven
-Design. A seção 4 descreve como isolar o domínio das demais partes do sistema. A
-seção 5 fala sobre representação do modelo no software e a diferença entre entidade e
-objeto de valor. A seção 6 trata de padrões para se manter o ciclo de vida de um objeto
-de domínio. A seção 7 demonstra algumas técnicas descritas pelo DDD em um caso de
-uso.
-
 \section{Referencial Teórico} \label{sec:firstpage}
 
 \subsection{Domain-Driven Design}
@@ -94,6 +86,10 @@ Para \cite{millett2015patterns} se a equipe de desenvolvimento não se envolver c
 Um projeto enfrenta sérios problemas quando os membros da equipe não compartilham uma linguagem comum para discutir o domínio. \cite{avram2007domain}
 Ele ainda defende usar um modelo como espinha dorsal de uma línguagem. Solicitando que a equipe deve usar a linguagem de forma consistente em todas as comunicações e
 também no código.
+
+\subsection{Mapa de Contexto}
+
+\textit{Descrever os conceitos}...
 
 \subsection{Diagrama de Casos de Uso}
 É a especificação de uma seqûencia de interações entre um sistema e os agentes externos que utilizam esse sistema. \cite{bezerra2006principios}.
@@ -187,26 +183,26 @@ Declarando explicitamente um serviço, o conceito é encapsulado criando uma disti
 Serviços de domínio não possuem qualquer tipo de estado por si só, para que os serviços de domínio são operações apátridas. \cite{DDDinPHP}
 
 \subsection{Agregados}
-Agrupar as entidades e objetos de valor em agregados e definir limites em torno cada. Escolha uma entidade para ser a raiz de cada agregado, e controlar todo o acesso aos objetos dentro do limite através da raiz. Permitir que objetos externos para armazenar referências a apenas a raiz. referências transitória a membros internos pode ser passado para fora para o uso dentro de uma única operação. Porque o acesso controles de raiz, não podem ser surpreendidos por alterações para os internos. este arrangement torna prático para fazer cumprir todas as invariantes para objetos no agregado e para o Agregada, como um todo, em qualquer mudança de estado. (Eric Evans, 2003)
-	Em um modelo dirigido por domínio, utilizamos o conceito de Agregado , que é um grupo de objetos associados que tratamos como sendo uma unidade para fins de alterações de dados, de forma que cada agregado possui um entidade raiz e um limite (o que está dentro do agregado). Os agregados demarcam o escopo dentro do qual as invariantes (invariante: algo que não tem variação), tem que ser mantidas em cada estágio do ciclo de vida. 
+Agrupar as entidades e objetos de valor em agregados e definir limites em torno cada. Escolha uma entidade para ser a raiz de cada agregado, e controlar todo o acesso aos objetos dentro do limite através da raiz. Permitir que objetos externos para armazenar referências a apenas a raiz. referências transitória a membros internos pode ser passado para fora para o uso dentro de uma única operação. Porque o acesso controles de raiz, não podem ser surpreendidos por alterações para os internos. este arrangement torna prático para fazer cumprir todas as invariantes para objetos no agregado e para o Agregada, como um todo, em qualquer mudança de estado.\cite{Evans:2003:DDT:861502}
+	Em um modelo dirigido por domínio, utiliza-se o conceito de Agregado , que é um grupo de objetos associados que tratamos como sendo uma unidade para fins de alterações de dados, de forma que cada agregado possui um entidade raiz e um limite (o que está dentro do agregado). \cite{vernon2013implementing} Os agregados demarcam o escopo dentro do qual as invariantes (invariante: algo que não tem variação), tem que ser mantidas em cada estágio do ciclo de vida.\cite{vernon2013implementing}
 \subsection{Fábricas}
-Criação de um objeto pode ser uma grande operação em si, mas as operações de montagem complexas não se encaixam a responsabilidade dos objetos criados. Combinando essas responsabilidades podem produzir desenhos desajeitados que são difíceis de entender. Fazendo o cliente construção directa turva a concepção do cliente, violações encapsulamento do objecto montado ou agregado, e excessivamente acopla o cliente para a implementação do objecto criado. (Evans, Eric 2003)
-	Fábricas em DDD são as mesmas classes normalmente responsáveis pela criação de objetos complexos, onde é necessário esconder alguma implementação, onde cada operação deve ser atômica e se preocupar caso a criação do objeto falhe, minimizando a dependência e o acoplamento.
-Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma factory (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante. 
-	Fábricas podem criar Value Objects, que produzem objetos prontos, no formato final, ou Entity factories apenas para os atributos essenciais.
+Criação de um objeto pode ser uma grande operação em si, mas as operações de montagem complexas não se encaixam a responsabilidade dos objetos criados. Combinando essas responsabilidades podem produzir desenhos desajeitados que são difíceis de entender. Fazendo o cliente construção directa turva a concepção do cliente, violações encapsulamento do objecto montado ou agregado, e excessivamente acopla o cliente para a implementação do objecto criado.\cite{Evans:2003:DDT:861502}
+	Fábricas em DDD são as mesmas classes normalmente responsáveis pela criação de objetos complexos, onde é necessário esconder alguma implementação, onde cada operação deve ser atômica e se preocupar caso a criação do objeto falhe, minimizando a dependência e o acoplamento.\cite{avram2007domain}
+Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma factory (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante.\cite{vernon2013implementing}
+	Fábricas podem criar Value Objects, que produzem objetos prontos, no formato final, ou Entity factories apenas para os atributos essenciais.\cite{DDDinPHP}
 \subsection{Repositórios}
-Um cliente precisa de um meio prático de adquirir referências a preexistente objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo. Por outro lado, eles podem usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação. (Evans, Eric 2003)
-	Muitas regras no domain model acabam sendo colocadas nas query?s, consequentemente se perdendo da aplicação, os repositórios tenta fazer a transição entre o domain e a camada de persistência.
-	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar calculos, somatórias ou relatórios.
-	Pensando em DDD, Repository é um padrão conceitual simples para encapsular soluções de SQL, mapeamento de dados (ORM, DAO, e etc), fábricas e trazer de volta o foco no modelo. Quando o desenvolvedor tiver construído uma consulta SQL, transmitindo essa consulta para um serviço de consultas da camada de infraestrutura, obtendo um RecordSet que extrai as informações e transmite para um construtor ou fábrica, o foco do modelo já não existe mais.
+Um cliente precisa de um meio prático de adquirir referências a preexistente objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo.\cite{Evans:2003:DDT:861502} Por outro lado, eles podem usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação.\cite{Evans:2003:DDT:861502}
+	Muitas regras no domain model acabam sendo colocadas nas querys, consequentemente se perdendo da aplicação, os repositórios tenta fazer a transição entre o domain e a camada de persistência.
+	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar calculos, somatórias ou relatórios.\cite{vernon2013implementing}
+	Pensando em DDD, Repository é um padrão conceitual simples para encapsular soluções de SQL, mapeamento de dados (ORM, DAO, e etc), fábricas e trazer de volta o foco no modelo. Quando o desenvolvedor tiver construído uma consulta SQL, transmitindo essa consulta para um serviço de consultas da camada de infraestrutura, obtendo um RecordSet que extrai as informações e transmite para um construtor ou fábrica, o foco do modelo já não existe mais.\cite{vernon2013implementing}
 
-Repositórios representam coleções, enquanto DAOs estão mais perto do banco de dados, muitas vezes sendo muito mais table-centric. Normalmente, um DAO conteria métodos CRUD para um objeto de domínio particular.(Buenosvinos, Carlos. Soronellas, Christian and Akbary, Keyvan, 2016)
-Coleções são importantes por serem uma forma de expressar um dos mais fundamentais tipos de variação na programação:  a variação de número. (Beck, Kent. 2013)
-	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final.
+Repositórios representam coleções, enquanto DAOs estão mais perto do banco de dados, muitas vezes sendo muito mais table-centric. Normalmente, um DAO conteria métodos CRUD para um objeto de domínio particular. \cite{avram2007domain}
+Coleções são importantes por serem uma forma de expressar um dos mais fundamentais tipos de variação na programação:  a variação de número. [Beck, Kent. 2013]
+	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final.\cite{DDDinPHP}
 	
 \subsection{Módulos}
 Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxima desenvolvedor que olha para o seu projeto para pensar sobre eles juntos. Se o seu modelo é contar uma história, Os módulos são capítulos.\cite{Evans:2003:DDT:861502}
-	Uma preocupação comum ao criar um aplicativo seguinte DDD, é onde é colocar o código? Qual é a maneira recomendada para colocar o código no aplicativo? Onde colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturado? Há um padrão tático para isso: módulos. \cite{DDDinPHP} Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente. \cite{DDDinPHP}
+	Uma preocupação comum ao criar um aplicativo segundo o DDD, é onde é colocar o código? Qual é a maneira recomendada para colocar o código no aplicativo? Onde colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturado? Há um padrão tático para isso: módulos. \cite{DDDinPHP} Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente. \cite{DDDinPHP}
 
 \begin{figure}[ht]
 \centering
@@ -264,31 +260,14 @@ A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao
 
 O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
 
-Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe. Padrões de codificação e 
-\textbf{Cronotacógrafo}
+Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe.
 \\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
-\\
+\textit{comparar com o artigo atual}
 \\
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
 \url{http://dbis.eprints.uni-ulm.de/1373/1/Masterarbeit%20Herbert%20Hayato%20Hess.pdf}
-\\
-\\
-\\
-\\
-\\
-\\
+
 Esta tese de mestrado descreve a utilização de \textit{Domain-Drive Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
 
 O autor cita que o principal desafio é que o DDD foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
@@ -299,7 +278,7 @@ O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicio
 
 Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
 
-\textbf{Cronotacógrafo}
+\textit{comparar com o artigo atual}
 \\
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
@@ -375,28 +354,84 @@ Em algumas situações, o uso de uma linguagem ubíqua pode trazer problemas, embor
 não tenham sido experimentados neste trabalho. Trata-se dos casos em que as linguagens utiliza-
 das no contexto de cada produto sejam diferentes.
 
-Por conseguinte, deve ser tido em consideração que a distribuição da
-arquitetura do sistema antigo também influencia a equipe de distribuição.
-Como discutido na seção 3.3.3, a contextos delimitada, tendo em diferentes idioma onipresente, podem exigir uma camada de conversão. Além disso, delimitada contextos pode ser encapsulado com
-as portas e os adaptadores (ver secção 3.4.7) arquitetura para comunicar com bases de dados,
-bibliotecas de terceiros e outros sistemas externos.
-
-como a equipa de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
+Como a equipe de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
 continuamente expandida até chegar a uma verdadeira arquitectura refatoração.
 
-Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser
-avaliado.
+Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser avaliado.
 
 \section{Solução Implementada}
 
+\subsection{Diagrama de Casos de Uso}
 
+Afim de auxiliar a comunicação entre os analistas e o cliente, o sistema e suas funcionalidades são apresentados conforme figura 5.
 
-\subsection{Subsections}
+\newpage
 
-The subsection titles must be in boldface, 12pt, flush left.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth, height=0.5\textheight]{imagens/diagram-use-case.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:diagram-use-case}
+\end{figure}
 
-\section{Considerações Finais}
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Emitir GRU de Selagem}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Emitir GRU de Selagem                                                                                                    \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de selagem.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para \\ cada GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
 
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Informar Ensaio}
+\label{my-label}
+\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de  \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Cancelar GRU}
+\label{my-label}
+\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de  \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+\clearpage
 \section{Referencias}
 
 \bibliographystyle{sbc}
