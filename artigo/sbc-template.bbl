@@ -5,11 +5,11 @@ Avram, A. (2007).
 \newblock {\em Domain-driven design Quickly}.
 \newblock Lulu. com.
 
-\bibitem[Bezerra 2006]{bezerra2006principios}
-Bezerra, E. (2006).
-\newblock {\em Princ{\'\i}pios De An{\'a}lise E Projeto De Sistemas Com
-  Uml-3{\textordfeminine} Edi{\c{c}}{\~a}o}, volume~3.
-\newblock Elsevier Brasil.
+\bibitem[CakePHP ]{cakephpmvc}
+CakePHP.
+\newblock
+  http://book.cakephp.org/1.3/pt/the-manual/beginning-with-cakephp/understanding-model-view-controller.html.
+\newblock {\em Acesso em 21/05/2016}.
 
 \bibitem[Carlos~Buenosvinos and Akbary 2014]{DDDinPHP}
 Carlos~Buenosvinos, C.~S. and Akbary, K. (2014).
@@ -29,19 +29,19 @@ Evans (2003).
   Software}.
 \newblock Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA.
 
-\bibitem[Guedes 2009]{guedes2009uml}
-Guedes, G.~T. (2009).
-\newblock Uml 2.
-\newblock {\em Uma Abordagem Pr{\'a}tica, S{\~a}o Paulo, Novatec}.
-
 \bibitem[Haywood 2009]{haywood2009domain}
 Haywood, D. (2009).
 \newblock {\em Domain-driven design using naked objects}.
 \newblock Pragmatic Bookshelf.
 
+\bibitem[Inmetro ]{oquecronotacografo}
+Inmetro.
+\newblock http://cronotacografo.rbmlq.gov.br/o-que-e-cronotacografo.
+\newblock {\em Acesso em 20/05/2016}.
+
 \bibitem[Michaelis 2011]{michaelis2011disponivel}
 Michaelis, D. (2011).
-\newblock Dispon{\'\i}vel em: http://michaelis.uol.com.br.
+\newblock http://michaelis.uol.com.br.
 \newblock {\em Acesso em 28/05/2016}, 7.
 
 \bibitem[Millett and Tune 2015]{millett2015patterns}

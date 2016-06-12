@@ -1,0 +1,84 @@
+\begin{table}[]
+\centering
+\caption{Documentação do Caso de Uso Informar Selagem}
+\label{my-label}
+\begin{tabular}{|p{8cm}|p{8cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de selagem.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto de \\ Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+%\\
+
+\begin{table}[]
+\centering
+\caption{Documentação do Caso de Uso Cancelar GRU}
+\label{my-label}
+\begin{tabular}{|p{8cm}|p{8cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de selagem.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto de \\ Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+%.\\
+
+
+
+.\\
+
+\begin{table}[]
+\centering
+\caption{Documentação do Caso de Uso Emitir GRU de Ensaio}
+\label{my-label}
+\begin{tabular}{|p{8cm}|p{8cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Emitir GRU de Ensaio\\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de ensaio.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar ensaio metrológico                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto de \\Ensaio\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Diagrama de Classes}
+
+\subsection{Diagrama de Pacotes}
+
+A partir do desse diagrama A estrutura hierarquica da aplicação, todas as camadas dependem do domínio (Domain) do neǵocio, a interfeace precisa acessar artefatos do domínio, comunica-se com a aplicação e da infraestrutura para ser montada. A aplicação precisa da infraestrutura e comunica-se também coma insfraestrutura, na camada aplicação temos os controllers, onde serçao recebidas as requisições do usuários. Database é o banco de dados com o qual o sistema tambéwm irá se comunicar.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{imagens/pck-diagram-system.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:exampleFig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth, height=0.7\textheight]{imagens/pck-diagram-detail.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:exampleFig1}
+\end{figure}

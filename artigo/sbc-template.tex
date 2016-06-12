@@ -10,7 +10,7 @@
      
 \sloppy
 
-\title{Aplicação de Domain-Driven Design no gerenciamento de GRU de Cronotacógrafo no Inmetro/RS}
+\title{Aplicação de \textit{Domain-Driven Design} no gerenciamento de GRU de Cronotacógrafo no Inmetro/RS}
 
 \author{Tiago O. de Farias\inst{1}}
 
@@ -25,22 +25,32 @@
 \maketitle
 
 \begin{abstract}
-Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles with a gross weight exceeding 4536 kilograms and passengers with more than 10 seats must have tachograph. From 2009, the instruments should also be checked periodically by Inmetro (National Institute of Metrology, Quality and Technology), which increases the reliability of the measurements. All the tachograph verification process is managed through a web system. This paper presents a proposal for improving the current web system using some techniques Domain-driven design. The main objective is to provide an organized, highly reusable and production structure; where the application life cycle can be extended. Throughout this work is done a study on the concept of Domain-Driven Design, in addition to the current application improvement case study.
+Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles with a gross weight exceeding 4536 kilograms and passengers with more than 10 seats must have tachograph. From 2009, the instruments should also be checked periodically by Inmetro (National Institute of Metrology, Quality and Technology), which increases the reliability of the measurements. All the tachograph verification process is managed through a web system, this system is used a framework that provides an architecture based on the MVC architecture. This paper presents a proposal for restructuring the current architecture according to the techniques of \ textit {Domain-Driven Design}. Throughout this work is done a study on the concept of Domain-driven design and how it helps in the field of identification, as well as the delegation of the architectural point of view responsibilities, beyond the case study of the organization of GRU module tachograph.
 \end{abstract}
      
 \begin{resumo} 
-Desde 1997, quando foi instituído o Código de Trânsito Brasileiro, veículos de carga com peso bruto superior a 4.536 kg e de passageiros com mais de 10 lugares devem possuir cronotacógrafo. A partir de 2009, os instrumentos também devem ser verificados periodicamente pelo Inmetro (Instituto Nacional de Metrologia, Qualidade e Tecnologia), o que aumenta a confiabilidade das medições. Todo o processo de verificação do cronotacógrafo é gerenciado através de um sistema web. Este trabalho apresenta uma proposta de melhoria do atual sistema web utilizando algumas técnicas de Domain-Driven Design. O principal objetivo é fornecer uma estrutura organizada, altamente reutilizável e produtiva; onde o ciclo de vida da aplicação pode ser prolongado. Ao longo deste trabalho é feito um estudo sobre o conceito de Domain-Driven Design, além do estudo de caso de melhoria da atual aplicação.
+Desde 1997, quando foi instituído o Código de Trânsito Brasileiro, veículos de carga com peso bruto superior a 4.536 kg e de passageiros com mais de 10 lugares devem possuir cronotacógrafo. A partir de 2009, os instrumentos também devem ser verificados periodicamente pelo Inmetro (Instituto Nacional de Metrologia, Qualidade e Tecnologia), o que aumenta a confiabilidade das medições. Todo o processo de verificação do cronotacógrafo é gerenciado através de um sistema web, neste sistema é utilizado um framework que oferece uma arquitetura baseada na arquitetura MVC. Este trabalho apresenta uma proposta de reestruturação da arquitetura atual segundo as técnicas de \textit{Domain-Driven Design}. Ao longo deste trabalho é feito um estudo sobre o conceito de Domain-Driven Design e como ele ajuda na identificação do domínio, bem como a delegação de responsabilidades do ponto de vista arquitetural, além do estudo de caso da nova organização do módulo de GRU de Cronotacógrafo.
 \end{resumo}
 
 
 \section{Introdução}
 
-O Brasil está entre os países que tornaram o uso do cronotacógrafo obrigatório em ônibus e caminhões, o instrumento inibe os excessos e ajuda a reduzir os acidentes, uma vez que registra o histórico das velocidades desenvolvidas, distâncias percorridas e tempos de movimento e paradas do veículo.
+Cronotacógrafo é o instrumento ou conjunto de instrumentos destinado a indicar e registrar, de forma simultânea, inalterável e instantânea, a velocidade e a distância percorrida pelo veículo, em função do tempo decorrido, assim como os parâmetros relacionados com o condutor do veículo, tais como: o tempo de trabalho e os tempos de parada e de direção \cite{oquecronotacografo} e o Brasil está entre os países que tornaram o uso do cronotacógrafo obrigatório em ônibus e caminhões, pois registra o histórico das velocidades, distâncias percorridas e tempos de movimento e paradas do veículo \cite{oquecronotacografo}.
 
-O processo de verificação tem basicamente três grandes etapas: emissão e pagamento da GRU (Guia de Recolhimento da União), realização da selagem e realização do ensaio metrológico.
-O sistema de gerenciamento de verificação do cronotacógrafo existe há pelo menos oito anos e atende a todos os estados da federação. Inicialmente foi concebido para simples emissão de GRU onde o proprietário do veículo acessava o site do cronotaógrafo preenchia seus dados, emitia e pagava GRU, após se dirigia a um posto de selagem para dar inicio ao processo, ao finalizar a selagem e dentro de um período determinado deveria procurar um posto de ensaio para realizar o ensaio metrológico e assim recebia o certificado do Inmetro que garante que o instrumento atende aos padrões vigentes sob penalização de ser autuado pela policia federal. 
+O processo de verificação do Cronotacógrafo tem basicamente três grandes etapas: emissão e pagamento da GRU (Guia de Recolhimento da União), realização da selagem e realização do ensaio metrológico.
+As informações do processo de verificação de Cronotacógrafo são gerenciadas através de um sistema web que inicialmente foi concebido para simples emissão de GRU onde o proprietário do veículo acessava o site do cronotaógrafo preenchia os dados pessoais e dados sobre o veículo, emitia e pagava GRU, após se dirigia à um posto de selagem para dar inicio ao processo, ao finalizar a selagem e dentro de um período determinado deve procurar um posto de ensaio para realizar o ensaio metrológico e assim recebia o certificado do Inmetro que garante que o instrumento juntamente com o veículo atendem aos padrões vigentes sob penalização de ser autuado pela polícia federal. 
 
-No dia 01 de janeiro de 2016 houve uma grande mudança no processo de emissão de GRU, hoje os postos de selagem e de ensaio emitem a GRU, e  semelhante a um plano pré-pago de celular, o posto compra créditos para cada GRU emitida, cada crédito permite ao posto acessar o site do Inmetro e registrar os dados do serviço realizado, seja serviço de selagem ou de ensaio metrológico.
+A cada etapa do processo de selagem e de ensaio o posto deve registrar no site do Cronotacógrafo as informações sobre os serviços realizados.
+
+O sistema web de gerenciamento de verificação do cronotacógrafo existe há pelo menos oito anos e atende à todos os estados da federação. Foi desenvolvido em PHP com o \textit{framework} \textit{CakePHP}. Aplicações bem escritas em \textit{CakePHP} seguem o \textit{design pattern} MVC (\textit{Model-View-Controller}) \cite{cakephpmvc}. O \textit{framework} permitite uma programação orientada a objetos, mas é muito comum, por culpa do desenvolvedor ver código escrito de forma estruturada, implementação de regras de negócio dentro da camada \textit{view} e a mesma regra duplicada ou triplicada dentro de \textit{controllers}, classes que tem o papel apenas de repositório de funções e que não tem se quer relação com o propósito da classe. Algumas classes e métodos só fazem sentido para o desenvolvedor que a criou. As classes são altamente acopladas, e por isso alterações mesmo que pequenas se não bem testadas causam um grande defeito que se propaga em outros módulos do sistema. Algumas informações para serem utilizadas no site do Cronotacógrafo tem como origem o SGI (Sistema de Gestão Integrada) que possui banco de dados próprio, e alguns termos que tem o mesmo significado sofreram alteração de nome no banco de dados do Cronotacógrafo, causando mais dificuldades quando os desenvolvedores tentam fazer os dois sistemas se comunicarem.
+
+No dia 01 de janeiro de 2016 houve uma grande mudança no processo de emissão de GRU, atualmente os postos de selagem e de ensaio (PAC) emitem a GRU, e  semelhante a um plano pré-pago de celular, o posto compra créditos para cada GRU emitida, cada crédito permite ao posto acessar o site do Cronotacógrafo e registrar os dados do serviço realizado, seja serviço de selagem ou de ensaio metrológico.
+
+Essa alteração afetou diretamente a codificação no sistema, o código e a arquitetura que antes já eram complicados, ficou maior e mais complexo, pois as regras antigas deveriam ser mantidas sem alteração, e o sistema teve que comportar muitas regras novas, os desenvolvedores tiveram que adquirir conhecimento das novas regras de negócio e que algumas vezes na hora de serem implementadas se confundiam com regras antigas.
+
+O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
+
+Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando DDD.
 
 \section{Referencial Teórico} \label{sec:firstpage}
 
@@ -89,18 +99,30 @@ também no código.
 
 \subsection{Mapa de Contexto}
 
-\textit{Descrever os conceitos}...
+Além de demonstrar como o modelo se relaciona dentro de outros contextos, permite também delimitar a aplicabilidade de um modelo do domínio para que a equipe de desenvolvimento tenha um conhecimento mais claro e que possa ser compatilhado de forma eficiente \cite{Evans:2003:DDT:861502}.
 
-\subsection{Diagrama de Casos de Uso}
-É a especificação de uma seqûencia de interações entre um sistema e os agentes externos que utilizam esse sistema \cite{bezerra2006principios}.
+Segundo é de vital importância para proteger a integridade de cada modelo  definir claramente os limites da sua responsabilidade no código \cite{millett2015patterns}.
 
-O diagrama de casos de uso procura, por meio de uma linguagem simples possibilitar a compreensão do comportamento externo do sistema por qualquer pessoa, tentanto apresentar o sistema através da perspectiva do usuário \cite{guedes2009uml}.
+Ainda segundo \cite{Evans:2003:DDT:861502}, o mapa de contexto é uma ferramenta de modelagem muito importante no \textit{Domain-Drive Design} e quando se pensa em vários subsistemas de uma aplicação como \textit{Bounded Contexts}, se perde a visão geral do negócio como um todo, e que é inevitável que os vários delimitadores de contextos de uma aplicação serão necessários para comunicar ou compartilhar dados entre eles.
 
-Ainda segundo {\cite{guedes2009uml} o diagrama de casos de uso sendo uma linguagem informal, apresenta uma visão geral do comportamento do sistema a ser desenvolvido, que pode e deve ser apresentado durante as reuniões inicias com os clientes com uma forma de ilustrar o comportamento do sistema, facilitando a compreenção dos usuários e auxiliando na identificação de possíveis falhas de especificação, verificando se os requisitos do sistema foram bem compreendidos.
+Um mapa de contexto é uma visão geral da aplicação como um todo. Cada contexto delimitado (\textit{Bounded Context}) se encaixa dentro de um mapa de contexto para mostrar como eles devem se comunicar entre si e como os dados devem ser compartilhados.
 
-Sendo um cenário uma descrição de umas das maneiras pelas quais um caso de uso pode ser realizado, então um cenário é chamado também de instância de caso de uso  \cite{bezerra2006principios}. E segundo \cite{guedes2009uml} atores e casos de uso são itens principais do diagrama de casos de uso. Atores represenam os papéis desempenhados pelos diversos usuários que poderão utilizar os serviços do sistema. Um ator também pode representar um hardware ou ouro software que interaja com o sistema, pode ser qualquer elemento externo que interaja com o software. \cite{guedes2009uml} Segundo \cite{bezerra2006principios} Um ator pode estar envolvido em vários casos de uso, e para cada caso de uso pode ter responsabilidades diferentes, o mais importante é que o nome dado a esse ator deve lembrar o seu papel em vez de lembrar o que o representa.
 
-Para \cite{guedes2009uml} um caso de uso normalmente é documentado de maneira informal, mas o engenheiro de software se considerar necessário, pode inserir detalhes de implementação em uma linguagem mais técnica e que a UML (Linguagem de Modelagem Unificada) não define um formato específico de documentação para casos de uso.
+Para \cite{millett2015patterns}, \textit{Bounded Contexts} permitem que se possa dividir um problema grande e complexo em problemas de menor complexidade e assim pode-se focar nas particularidades de forma individual sem interferências externas, o que permite ainda criar um linguagem em torno do problema específico que todos tem como definicção clara de cada termo relevante.
+
+Normalmente em aplicações do meio web tem diferentes definições em contextos diferentes da aplicação. Dividindo a aplicação em contextos limitados, pode-se ter a certeza que as idéias, terminologias e conceitos da aplicação estarão plenamente entendidos \cite{millett2015patterns}.
+
+
+%\subsection{Diagrama de Casos de Uso}
+%É a especificação de uma seqûencia de interações entre um sistema e os agentes externos que utilizam esse sistema \cite{bezerra2006principios}.
+
+%O diagrama de casos de uso procura, por meio de uma linguagem simples possibilitar a compreensão do comportamento externo do sistema por qualquer pessoa, tentanto apresentar o sistema através da perspectiva do usuário \cite{guedes2009uml}.
+
+%Ainda segundo {\cite{guedes2009uml} o diagrama de casos de uso sendo uma linguagem informal, apresenta uma visão geral do comportamento do sistema a ser desenvolvido, que pode e deve ser apresentado durante as reuniões inicias com os clientes com uma forma de ilustrar o comportamento do sistema, facilitando a compreenção dos usuários e auxiliando na identificação de possíveis falhas de especificação, verificando se os requisitos do sistema foram bem compreendidos.
+
+%Sendo um cenário uma descrição de umas das maneiras pelas quais um caso de uso pode ser realizado, então um cenário é chamado também de instância de caso de uso  \cite{bezerra2006principios}. E segundo \cite{guedes2009uml} atores e casos de uso são itens principais do diagrama de casos de uso. Atores represenam os papéis desempenhados pelos diversos usuários que poderão utilizar os serviços do sistema. Um ator também pode representar um hardware ou ouro software que interaja com o sistema, pode ser qualquer elemento externo que interaja com o software. \cite{guedes2009uml} Segundo \cite{bezerra2006principios} Um ator pode estar envolvido em vários casos de uso, e para cada caso de uso pode ter responsabilidades diferentes, o mais importante é que o nome dado a esse ator deve lembrar o seu papel em vez de lembrar o que o representa.
+
+%Para \cite{guedes2009uml} um caso de uso normalmente é documentado de maneira informal, mas o engenheiro de software se considerar necessário, pode inserir detalhes de implementação em uma linguagem mais técnica e que a UML (Linguagem de Modelagem Unificada) não define um formato específico de documentação para casos de uso.
 
 \subsection{Blocos de Construção}
 
@@ -113,7 +135,9 @@ A finalidade desses padrões é apresentar alguns dos principais elementos da mode
 \label{fig:exampleFig1}
 \end{figure}
 
-Segundo \cite{avram2007domain} existe uma necessidade de se ter um conhecimento aprimorado do domínio e que a camada modelo, tem como principal objetivo organizar todas as informações obtidas através dos especialistas. Um desafio para os desenvolvedores é de criar um modelo que reflita os conceitos do domínio de forma clara que também seja útil para o desenvolvimento.
+A figura 1 representa os \textit{patterns} que ajudam na modelagem do  \textit{domain model} com o objetivo de apresentar alguns elementos-chave para modelagem de objetos e software do ponto de vista do DDD e que segundo \cite{Evans:2003:DDT:861502}, um desafio para os desenvolvedores é de criar um modelo que reflita os conceitos do domínio de forma clara que também seja útil para o desenvolvimento.
+
+Segundo \cite{avram2007domain} existe uma necessidade de se ter um conhecimento aprimorado do domínio e que a camada modelo, tem como principal objetivo organizar todas as informações obtidas através dos especialistas.
 
 Os efeitos destes padrões é apresentar alguns dos elementos-chave para modelagem de objetos e  software do ponto de vista no DDD. Neste caso, o domínio sendo modelado é o próprio DDD \cite{Evans:2003:DDT:861502}.
 
@@ -126,11 +150,14 @@ A criação de programas que podem lidar com chamadas de tarefas muito complexas p
 \label{fig:exampleFig1}
 \end{figure}
 
-Desenvolver um projeto dentro de cada camada que seja coesa e que depende apenas de níveis abaixo. Siga os padrões de padrões de arquitetura para fornecer acoplamento frouxo para as camadas acima. Concentrar todo o código relacionadas com o modelo de domínio em uma amada e isolar a partir da interface do usuário, aplicativo e código de infra-estrutura  \cite{avram2007domain}.
+Desenvolver um projeto dentro de cada camada que seja coesa e que depende apenas de níveis abaixo. Siga os padrões de padrões de arquitetura para fornecer acoplamento frouxo para as camadas acima. Concentrar todo o código relacionadas com o modelo de domínio em uma camada e isolar a partir da interface do usuário, aplicativo e código de infra-estrutura  \cite{avram2007domain}.
 Normalmente encontra-se no desenvolvimento códigos de lógica comercial incorporado no comportamento de elementos na interface do usuário juntando e adicionando os scripts de acesso  dados e até de retorno de informações do objeto. Isso acontece porque é a maneira mais fácil que o desenvolvedor encontra para fazer com que as funcionalidades apresentem resultados, no curto prazo. \cite{vernon2013implementing}
 
 Observa-se que neste contexto fala-se a respeito de uma lógica comercial incorporada em elementos, ou seja não há uma separação de responsabilidade entre as camadas. Desse modo pode-se chamar de camadas, aquilo que tem uma separação de responsabilidades entre elas  \cite{Evans:2003:DDT:861502}.
-	Ainda segundo \cite{Evans:2003:DDT:861502} a arquitetura em camadas do sistema deve ser capaz de substituir uma camada que está no nível superior e colocar uma camada de outro tipo de aplicação e ela deve funcionar, isso quer dizer, se há uma aplicação WEB e adiciona uma aplicação Mobile, então todo o resto continua funcionando. Isso é possível por conta dessa separação, onde pode-se citar: Camada de acesso a dados, Camada de lógica de negócio, entre outras, sem a necessidade de recodificar tudo que já foi definido ou modelado.
+
+A figura 2 representa a separação em camadas da arquitetura, que segundo  \cite{Evans:2003:DDT:861502} e \cite{vernon2013implementing} para que seja realmente funcional deve seguir algumas premissas: completamente isolada uma da outra, a comunicação entre elas deve ocorrer através de interfaces e a camada inferior não deve executar operações na camada superior. Ainda segundo \cite{vernon2013implementing} a arquitetura de camandas não se resume apenas na reusabilidade de componentes ou numa arquitetura que evolui juntamente com a aplicação mas no fato que ela oforece maior manutenibilidade.
+
+Para \cite{Evans:2003:DDT:861502} a arquitetura em camadas do sistema deve ser capaz de substituir uma camada que está no nível superior e colocar uma camada de outro tipo de aplicação e ela deve funcionar, isso quer dizer, se há uma aplicação WEB e adiciona uma aplicação Mobile, então todo o resto continua funcionando. Isso é possível por conta dessa separação, onde pode-se citar: Camada de acesso a dados, Camada de lógica de negócio, entre outras, sem a necessidade de recodificar tudo que já foi definido ou modelado.
 	No entanto, quando o código é relacionado ao domínio e misturado com as outras camadas, torna-se extremamente difícil de ver e pensar \cite{Evans:2003:DDT:861502}.  Mudanças superficiais na interface do usuário podem realmente mudar a lógica comercial. Para alterar uma regra de negócio pode exigir um rastreamento na Interface com Usuário, no código de banco de dados ou outros elementos do programa. Para evitar esse tipo de problema, deve-se isolar todo o código responsável por controlar o domínio de maneira que ele tenha uma única responsabilidade: implementar regras de negócio  \cite{Evans:2003:DDT:861502}.
 
 	No DDD a arquitetura proposta muda um pouco do MVC, embora conceitualmente nas duas divisões eles sejam bastante parecidas, algumas questões técnicas fazem com que elas sejam diferentes \cite{DDDinPHP}.
@@ -361,6 +388,15 @@ Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é 
 
 \section{Solução Implementada}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth, height=0.65\textheight]{imagens/context-mapping.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:diagram-use-case}
+\end{figure}
+
+
+
 \subsection{Modelando a Aplicação}
 
 Afim de auxiliar a comunicação entre os analistas e o cliente, o sistema e suas funcionalidades são apresentados conforme figura 5.
@@ -492,7 +528,23 @@ Restrições/Validações                                                           
 
 \clearpage
 
-%\subsection{Arquitetura da Aplicação}
+\subsection{Arquitetura da Aplicação}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth, height=0.5\textheight]{imagens/pck-diagram-system.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:diagram-use-case}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=1\textwidth, height=0.6\textheight]{imagens/pck-diagram-detail.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:diagram-use-case}
+\end{figure}
+
+\clearpage
 
 \section{Referencias}
 

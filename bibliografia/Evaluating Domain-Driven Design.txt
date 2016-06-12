@@ -1,0 +1,2669 @@
+
+Universidade | 89069 Ulm Ulm | Alemanha Faculdade de Engenharia Informática e Instituto de Psicologia de bases de dados e sistemas de informação a
+avaliação Domain-Driven Design para Refatoração de sistemas de informação existentes de
+teses de mestrado em Ulm Universidade
+Enviado por:
+Hayato Hess
+Hayato.Hess@uni-ulm.de
+os comentadores:
+Prof Dr Manfred Reichert (Universidade de Ulm) Dra Jan Scheible (MERCAREON GmbH Ulm)
+Advisor:
+Nicolas Mundbrod (Universidade de Ulm)
+2016
+
+
+
+
+Revisão de 2 de Maio de 2016
+
+c 2016 Hayato Hess
+
+
+
+
+Resumo
+quando modificar os sistemas de informação existentes, pode enfrentar algumas dificuldades na melhor, uma noite-
+Mare, na pior das hipóteses. Isto é normalmente causado pela enorme bola de lama design anti-padrão [FY97],
+levando a "código que faz algo de útil, mas sem explicar como" [Eva04]. Para resolver este
+problema, Eric Evans sugere Domain-Driven Design (DDD) para a criação de novos
+sistemas de software [Eva04]. Tendo em um modelo baseado em uma linguagem partilhada no seu núcleo, DDD ajuda a im- provar a compreensão e assim facilita a comunicação entre as partes envolvidas.
+Como DDD foi projetado para novos sistemas, surge espontaneamente a pergunta neste ponto, se e como arquiteturas baseadas em DDD pode ser criada a partir de sistemas de informação existentes. Execu Ño do DDD para um sistema de informação existente pode resultar em benefícios na comunicação e
+manutenção ao mesmo tempo em que minimiza os riscos de desenvolvimento. Para avaliar a viabilidade e o
+sistema de gestão de Slot existingTime MERCAREON GmbH é usado como um objeto de pesquisa para esta tese.
+Para avaliar a DDD para refatoração de sistemas de informação existentes, este trabalho primeiro extrai o conhecimento sobre o negócio a partir de um sistema de informação existente. Este conhecimento é composto dos termos utilizados, apoiado as operações e os dados acessados por essas operações. Com base neste, DDD modelos são criados manualmente e automaticamente para ser usada para refatoração em direção a uma arquitetura com um modelo de domínio no seu núcleo. A fim de gerar automaticamente modelos, sev- teral abordagens de transformação são utilizados, artefato de transformações de modelos gerar o modelo inicial DDD, vários modelos de transformações de modelo de transformar o modelo inicial em um mais ab- stract DDD modelo e modelo de artefato transformações gerar código fonte baseado
+no modelo DDD.
+A abordagem tem de ser suficientemente flexível para apoiar as mudanças contínuas como o Time Slot-
+torais MERCAREON pelo sistema é constantemente mantida e melhorada.
+Para lidar com os desafios que surgiram a partir de manutenção contínua, um protótipo do Java para a criação
+de modelos de DDD foi desenvolvido em conformidade e é apresentada neste trabalho como bem. Ela não só apoia a criação do modelo mas também ajuda a rastrear e comunicar o impacto de alterações no modelo. Além disso, bolha estratégias, que também são sugeridas por Eric Evans [Eva13], foram avaliados como uma estratégia para evoluir a partir de uma arquitetura original para uma
+com um modelo de domínio no seu núcleo.
+Com base em uma prova de conceito de lidar com um Live Yardview, uma nova visão para a Hora atual do
+sistema de gesta ̃o implementado como um estilo de DDD, a abordagem do presente trabalho mostra promessa para a
+evolução de um sistema existente para um DDD baseado em
+iii
+
+
+
+
+agradecimentos em
+primeiro lugar, gostaria de agradecer ao Professor Doutor Manfred Reichert, Meus supervisores Dr Jan Scheible
+e Nicolas Mundbrod por seu interesse e orientações valiosas.
+Em segundo lugar, também eu gostaria de agradecer ao Instituto de banco de dados e sistemas de informação
+bem como a empresa para seu apoio MERCAREON tornando esta tese possível.
+Por último mas não menos importante, gostaria de agradecer aos meus pais, minha irmã e meus amigos (incluindo pessoal da MERCAREON) apoiar-me com a sua empresa, aconselhamento e deliciosas
+refeições.
+v
+
+
+
+
+conteúdo
+1 Introdução 1
+1.1 Motivação . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1 1.2 Declaração do Problema . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2 1.3 Meta . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3 1.4 Estrutura do trabalho . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2 Contexto 5
+2.1 sobre MERCAREON . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5 2.2 Time Slot Management System . . . . . . . . . . . . . . . . . . . . . . . . 5 2.3 Refatoração rumo a um design Domain-Driven . . . . . . . . . . . . . . . . 7
+3 Domain-Driven Design 9
+3.1 Modelo de Domínio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11 3.2 Onipresente Idioma . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11 3.3 Design estratégico . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13 3.3.1 Core e subdomínios . . . . . . . . . . . . . . . . . . . . . . . . . 13 3.3.2 delimitada contextos . . . . . . . . . . . . . . . . . . . . . . . . . . . 14 3.3.3 Delimitada Contexto Comunicação . . . . . . . . . . . . . . . . . . 15 3.3.4 Módulos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17 3.4 desenho tático . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18 3.4.1 entidades . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19 3.4.2 objetos de valor . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19 3.4.3 agregados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20 3.4.4 repositórios . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21 3.4.5 Serviços . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22 3.4.6 Eventos de Domínio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24 3.4.7 Portos e adaptadores . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+vii
+
+
+
+
+conteúdo
+4 trabalho relacionado com 29
+4.1 Modelagem . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29 4.1.1 Unified Modeling Language . . . . . . . . . . . . . . . . . . . . . . 29 4.1.2 Arquitetura Controlada por modelo . . . . . . . . . . . . . . . . . . . . . . . 30 4.2 de bancos de dados distribuídos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+5 Domain-Driven Design para um sistema de informação existente 35
+5.1 Refatoração Processo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36 5.1.1 Onipresente Idioma . . . . . . . . . . . . . . . . . . . . . . . . . . 37 5.1.2 Operações de Negócios . . . . . . . . . . . . . . . . . . . . . . . . . . 39 5.1.3 Design estratégico . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40 5.1.4 desenho tático . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42 5.2 Definição de Línguas de modelagem usando Meta-Model . . . . . . . . . . . . . . 45 5.3 Rede Semântica Meta-Model . . . . . . . . . . . . . . . . . . . . . . . . 45 5.4 Regras de Transformação . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49 5.5 Regra de transformação - Plataforma . . . . . . . . . . . . . . . . . . . . . . . . . 49 5.6 Regra de transformação - Declaração . . . . . . . . . . . . . . . . . . . . . . . 50 5.6.1 Declaração - Condições . . . . . . . . . . . . . . . . . . . . . . . . 51 5.6.2 Declaração - Conclusões . . . . . . . . . . . . . . . . . . . . . . . . 55 5.6.3 Exemplos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57 5.7 Modelo de fonte . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58 5.8 Modelos agregados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 60 5.8.1 Modelos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 60 5.8.2 Agregar regras de transformação . . . . . . . . . . . . . . . . . . . 62 5.8.3 Potencial Função de Agregação de peso . . . . . . . . . . . . . . . . . 66 5.9 Modelos de Serviço . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 68 5.9.1 Regras de Transformação de serviço . . . . . . . . . . . . . . . . . . . . . 69
+6 Protótipo 75
+6.1 artefatos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 76 6.1.1 Glossário . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 77 6.1.2 Operações de Negócios . . . . . . . . . . . . . . . . . . . . . . . . . . 78
+viii
+
+
+
+
+conteúdo
+6.2 Artifact-Model Transformação . . . . . . . . . . . . . . . . . . . . . . . . . 79 6.2.1 Glossário Planilhas Parser . . . . . . . . . . . . . . . . . . . . . 80 6.2.2 Operação de Negócios Parser . . . . . . . . . . . . . . . . . . . . . . . 81 6.2.3 Artefato Validação . . . . . . . . . . . . . . . . . . . . . . . . . . . 82 6.2.4 Analyzer . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 84 6.3 Model-Model transformações . . . . . . . . . . . . . . . . . . . . . . . . . 84 6.3.1 agregados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 85 6.3.2 gerando potenciais agregados . . . . . . . . . . . . . . . . . . . 85 6.3.3 Potencial de ponderação agregados . . . . . . . . . . . . . . . . . . . . 86 6.3.4 Criar agregados . . . . . . . . . . . . . . . . . . . . . . . . . . 87 6.3.5 manualmente a definição de agregados . . . . . . . . . . . . . . . . . . . . . 87 6.3.6 Serviços . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 88 6.4 Model-Artifact Transformação . . . . . . . . . . . . . . . . . . . . . . . . . 88 6.4.1 Visualização . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 89 6.4.2 Media Wiki . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 93 6.4.3 Geração de Código . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94 6.5 Refatoração realização . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+7 Conclusão e trabalho futuro 103
+ix
+
+
+
+
+
+Introdução1
+1.1 Motivação
+uma maneira de abordar a complexidade envolvidos com sistemas de informação1 é através de abstração,
+problema decomposição e separação de preocupações. Arquitetos de software para alcançar este objectivo movendo o foco da programação para modelagem resultando em uma solução mais amigável abstração [SK03]. Ao longo do tempo, várias soluções diferentes modelos têm
+sido propostos, tais como Domain-Driven Design (DDD) [Eva04]. Tendo em um modelo no seu núcleo,
+DDD apoia a criação de um som mais seguro e arquitetura de software bem como ela
+pretende ser o mais amigável possível.
+A arquitetura de software, conforme definido por Ralph Johnson, é subjectivo, compreensão partilhada de um projeto do sistema pelo sistema de desenvolvedores especialistas [Joh02]. Este entendimento varia de conhecimento que os principais componentes de um sistema são a forma como eles interagem.
+Ele também contém as decisões iniciais do projeto que são sentidas para ser importante e são difíceis de
+reverter em fases posteriores do projecto [Joh02].
+A questão de saber quais as medidas a tomar quando a arquitetura de software
+o propósito original de TI cresce mais lentamente, deriva rumo a uma enorme bola de lama [FY97], o que é um
+software anti- padrão para sistemas sem equívoco arquitetura e aumentando assim os esforços e custos de manutenção. Refatoração arquitectónico, tal como sugerido pelo Stal [Sta07] foi concebida para resolver este problema. Embora foi sugerido em 2007, este
+método de refatoração está ainda na sua infância hoje [Zim15].
+1 de um sistema de informação, neste contexto, é um sistema de software "para recolha, armazenamento e processamento de dados e de informação, de conhecimento e de produtos digitais" [BRI16]
+1
+
+
+
+
+1 Introdução
+Esta tese examina a possibilidade de aplicação de refatoração para DDD sobre arquitetura de um sistema de informação existente. O desafio enfrentado é que a DDD foi concebido para a
+criação de novos sistemas de campo verde ou marrom mas não para refatoração existentes.
+1.2 Declaração do problema
+comum é uma arquitetura refatoração tópico no desenvolvimento de software de hoje. Quando os sistemas de informação têm evoluído ao longo do tempo, eles se tornam difíceis de manter. Isto é devido ao fato de que as arquiteturas do sistema se tornam obsoletos como a maioria não foram concebidos para serem adaptados às novas exigências. Utilizando a arquitetura refactoring, arquiteturas obsoletos podem ser adaptadas às novas necessidades. Isto leva para o problema que a nova arquitetura refatorado também se tornará obsoleto ao longo do tempo. Por esta razão, o sistema refatorado deve ter uma arquitetura adaptável removendo a necessidade de refactorings repetitivas e portanto reduzindo custos no futuro. Design Domain-Driven fornece
+tais uma arquitetura por ser baseada em um modelo adaptativo.
+A empresa MERCAREON (ver secção 2.1) decidiu incorporar uma nova
+arquitetura de software no seu sistema de gestão de slot de tempo (ver secção 2.2). Este traz MER-
+CAREON na difícil situação de ter de manter o sistema ao mesmo tempo em que adiciona novos
+recursos desejados. Escolhendo Domain-Driven Design (ver capítulo 3) como o futuro archi
+arquitetura-, MERCAREON visa reduzir o tempo e o custo de manutenção fazendo a
+arquitectura do sistema mais amigável.
+O problema enfrentado com o DDD é que ela não foi projetada para o processo de refatoração arquitetura. Por conseguinte, um mapeamento da arquitectura antiga no sentido de a DDD é necessária para extrair o conhecimento para Design de Domain-Driven sistema de informação existentes de uma forma eficiente. Este mapeamento deve ser criado em um recurso modo completo apoio rápida
+adaptação, assim, a questão de saber se as peças muitas vezes sendo sujeitas a alterações como en-
+trada (ver secção 3.4.1), os objetos de valor (ver secção 3.4.2), agregados (ver secção 3.4.3) e serviços (ver secção 3.4.5) poderiam ser obtidos automaticamente considerando peças, raramente
+alterados, como módulos (consultar a secção 3.3.4) e delimitada contextos (ver secção 3.3.2) são
+2
+
+
+
+
+1.3 Meta
+mantida manualmente. Além disso, camadas protetoras devem ser criados impedindo o vazamento
+de informações independentes para a nova arquitetura (ver secção 3.4.7).
+1.3 Objectivo
+o objectivo de MERCAREON é obter um projeto de arquitetura de software com base em Domain-Driven que podem ser imediatamente utilizados para o desenvolvimento de novas funcionalidades integradas na arquitetura do sistema antigo enquanto a arquitectura antiga é passo a passo refatorado para a nova arquitetura baseada em DDD. Quando o processo estiver completo refactoring arquitectónico, o
+Time Slot Management system (sistema de TSM) será principalmente alimentado por uma arquitetura
+tendo em um modelo de domínio no núcleo. O objetivo de implantar esta nova arquitetura, impulsionado por uma linguagem ubíqua, é a comunicação de impacto, para reduzir as incompreensões e proporcionando melhor canais de comunicação. Além disso, um modelo baseado, melhor estruturado e auto-explicativa código base facilita a manutenção do código. Esta por sua vez, melhora o tempo de envio de novos recursos devido à capacidade de adaptar o modelo às novas
+exigências ao garantir uma elevada qualidade global do código.
+Portanto, o objetivo deste trabalho é o de encontrar e estabelecer uma abordagem refatorar o antigo a arquitectura do sistema para a nova arquitetura baseada em DDD extraindo o conhecimento como
+linguagem onipresente (ver secção 3.2) e as operações de negócio (ver secção 5.1.2)
+do antigo sistema utilizado como base para o novo sistema baseado em DDD. A abordagem deve suportar que as alterações do sistema podem ser facilmente verificado e traduzido para a nova
+arquitetura de sistema DDD conduzido posteriormente. Como discutido na seção Declaração do Problema (ver secção 1.2),
+peças sendo sujeitas a alterações frequentes deverão ser traduzidas para a arquitetura baseada em DDD automaticamente. Por último, a arquitetura baseada em DDD é traduzido para o
+código Java automaticamente utilizando o modelo baseado na geração de código.
+1.4 Estrutura do trabalho
+em primeiro lugar, o capítulo contexto (ver capítulo 2) Discute o motivo e as circunstâncias em
+que esta tese foi criado em destaque os problemas resolvidos por este trabalho. O CHAP-
+3
+
+
+
+
+1 Introdução
+ter Domain-Driven Design (ver capítulo 3) explica DDD e seus componentes, tais como a
+linguagem ubíqua e estabelecendo as bases teóricas para o coração deste trabalho, o
+processo de refatoração arquitetura. O capítulo sobre o trabalho (ver capítulo 4) qualifica
+outras abordagens de modelização aplicáveis e discute a abordagem de um banco de dados distribuído
+mostrando semelhanças com esta abordagem do trabalho. Em seguida, o capítulo Domain-Driven Design para
+um sistema de informação existentes (ver capítulo 5) descreve a criação automática de
+modelos DDD permitindo que arquitectónico refatoração. O Capítulo Protótipo (veja Chap-
+tulo 6) utiliza o modelo previamente definido o modelo de teoria de transformação apresentando a utilização e a geração de fragmentos utilizados pela técnica de refatoração arquitetura.
+Além disso, a refatoração é avaliado em um estudo de caso da Live Yardview na
+discusso ̃ de MERCAREON. Finalmente, o capítulo Conclusão e os trabalhos futuros (ver capítulo 7)
+resume e conclui esta tese e pontos fora possível trabalho futuro.
+A figura 1.1 mostra a metodologia utilizada neste trabalho. Ele começa com a pesquisa da fundação do tópico (ver capítulo 3) e continua com o trabalho relacionado com a avaliação (ver capítulo 4). Próxima, combinando a abordagem foi encontrado com as técnicas sugeridas por Eric Evans [Eva04], a abordagem arquitetônica refatoração é apresentado (ver capítulo 5).
+Por último, a abordagem é que foram protótipos (ver capítulo 6) e realizados (ver secção 6.5).
+Fundação relacionados Refatoração Protótipo Realização Abordagem de trabalho
+Figura 1.1: Metodologia
+
+
+
+
+
+
+Contexto 42
+O objetivo deste capítulo é destacar o contexto em que este trabalho foi criado. Para isso, uma visão geral da empresa MERCAREON (ver secção 2.1). Então o seu
+sistema de gestão de slot de tempo (ver secção 2.2) é apresentado mostrando o seu contexto e
+os desafios que acabaram por levar à criação deste trabalho.
+2.1 Sobre MERCAREON
+MERCAREON GmbH, parte do grupo TRANSPOREON, é uma empresa de software localizado em Ulm com uma sucursal na Polónia, tendo actualmente 28 funcionários e foi fundada em 2009. Como o nome indica, as empresas do grupo são a criação de logística TRANSPOREON software que suporta o transporte e gestão de bens. A empresa de software fornece um sistema MERCAREON que apoia o processo de entrega de mercadorias encomendadas. Como ele é baseado em slots de tempo, o sistema criado pela MERCAREON é chamado de slot de tempo do sistema de gestão e foi decidido ser refatorado para
+Domain-Driven Arquitetura Design.
+2.2 Sistema de Gerenciamento de slot de tempo
+o Time Slot Management system (sistema de TSM) é um sistema baseado na web que permita uma transportadora
+para reservar um slot de tempo específico para entregar as mercadorias foi ordenado a transporte.
+Quando um revendedor encomendas de mercadorias a partir de um fornecedor, o fornecedor obtém as mercadorias e atribui
+o transporte de mercadorias a uma transportadora aérea. Como mostrado na figura 2.1 em vermelho, não houve
+5
+
+
+
+
+2 Contexto
+definitivo canal de comunicação entre o transportador e o revendedor antes de o sistema de TSM estava em vigor. Uma transportadora aérea normalmente usado chamadas telefônicas ou listas transmitidas via fax para fazer compromissos de entrega levando a imprecisão regimes temporizado eram normalmente a ausência de informações sobre as capacidades de descarga em um determinado período de tempo. Para o transportador, esta situação significava inestimável tempos de espera até que o veículo de transporte foi tratada no seu destino. O retalhista tinha um problema de logística uma vez que não havia informação sobre o tempo de chegada nem a quantidade de mercadorias. Além disso, o fornecedor não tivessem meios de avaliação das
+suas transportadoras aéreas comunitárias em termos de eficiência energética.
+Atribuição de TSM transportes
+transportadora retalhista
+fim
+Figura 2.1: o ambiente do Sistema de Gestão de time slots1fornecedor
+com a ajuda de um sistema de TSM (consulte a Figura 2.1), o retalhista entra no fim, identificada
+por um número de ordem, no sistema. Quando a transportadora recebe a atribuição de entrega, um
+time slot pode ser reservado para a entrega pendente usando o número do pedido e fornecendo
+informações adicionais tais como muitos bens são transportados permitindo que o sistema de TSM para calcular uma estimativa de duração de descarga. Deste modo, o retalhista pode perceber a informações importantes quando a transportadora chega e quanto tempo aproximadamente leva para descarregar a entrega. Além disso, o Revendedor pode planejar e além disso as entregas de controle restringindo o reservado slots de tempo (por exemplo, limitando slots para as entregas de bebidas em uma determinada porta). Saber quando para entregar e quanto tempo demora a entrega, o transportador por sua vez tem menos tempo ocioso e, assim, provavelmente irá poupar dinheiro. O fornecedor pode visualizar
+as estatísticas sobre as transportadoras de entregas e, portanto, taxa a sua eficácia.
+1adaptado de MERCAREON GmbH
+6
+
+
+
+
+2.3 Refatoração rumo a um design Domain-Driven
+2.3 Refatoração rumo a um design Domain-Driven
+Embora o sistema de gestão de slot de tempo está sendo executado com êxito, MERCAREON decidiu
+alterar a arquitectura do sistema introduzindo Domain-Driven Design.
+A primeira razão se origina do sistema de TSM da longa história. Antes MERCAREON foi fundada, TRANSPOREON já havia trabalhado sobre a criação de um sistema de TSM em C#.
+MERCAREON assumiu no ano de 2009 e portar o aplicativo a partir do C# para Java
+resultantes no sistema contendo ambos MERCAREON e desaprovado TRANSPOREON termos que podem confundir os desenvolvedores. Além disso, ao se comunicar em casa ou com os clientes, a equipe de MERCAREON enfrenta um outro tipo de problema de comunicação: por exemplo, um atendimento ao cliente membro tem de se certificar de que ele não irá misturar tanto o cliente específico e em termos de comunicação de casa. Comunicação interna pode assim gama de falar aos outros membros do atendimento ao cliente, TRANSPOREON colegas, falando o seu próprio dialeto divergiram, ou para os desenvolvedores. Isso pode ser muito assustador especialmente quando o sistema está em evolução e está constantemente a ser influenciada por factores externos como as empresas que trabalham com ou contribuam para o sistema de TSM. Além disso, os desenvolvedores do sistema estão parcialmente baseada na Alemanha e parcialmente na Polónia. A distância espacial em combinação com termos fuzzy aumenta a dificuldade de comunicação. Para resolver este problema,
+uma linguagem ubíqua (ver secção 3.2) precisa ser introduzido como sugerido pela DDD.
+Em segundo lugar em sistemas com requisitos em constante mudança, complexidade é susceptível de aumentar enquanto manutibilidade diminui. O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais. Além disso, é implantado em um ambiente que contém
+várias empresas (retalhista, fornecedor, e transportadores) continuamente voltado para novos
+requisitos decorrentes. Daí, o TSM sistema provavelmente sofrem de complexidade crescente no futuro. Como qualquer arquitetura de manutenção, Domain-Driven arquiteturas de projeto também sofrem de alta complexidade mas não tanto como as abordagens tradicionais (consulte a Figura 2.2).
+Isto é devido ao fato de que o Design Domain-Driven (DDD) ajuda a lidar com a complexidade
+usando um modelo de domínio no seu núcleo abstrair a realidade para tornar mais fácil de compreender para os desenvolvedores e outras partes envolvidas [Eva04; Avr07]. Com o DDD código de programa é simplificado de o tornar mais fácil de compreender o seu significado [Eva04] código assim começa a ser parte da
+documentação [Divirta05a].
+7
+
+
+
+
+2 Contexto
+Script
+módulo Tabela de Transação Maitenence EOE ords Modelo Domínio
+Figura 2.2: Custos de manutenção versus a complexidade da lógica de domínio domínio complexidade
+2
+2adaptado de [Divirta02]
+8
+
+
+
+
+
+3
+Domain-Driven Domain-Driven Design Design (DDD) é uma engenharia Model-Driven (EDM) a abordagem de desenvolvimento de software projetado para as necessidades de "complexo de ligação profundamente a implementação de um
+modelo de evolução do core business conceitos" [Git07]. Ela visa fornecer práticas e
+terminologia permitindo que decisões de design que concentrar e acelerar a criação de
+softwares complexos. Por isso não é nem uma tecnologia nem uma metodologia. [Git07]
+O objetivo deste capítulo é apresentar a abordagem DDD (consulte a Figura 3.1) conforme necessário
+para o património arquitectónico refatoração como indicado na secção objectivo (ver secção 1.3).
+Repositórios de eventos de domínio
+raiz com acesso acesso publica com
+serviços
+express modelo com encapsular com entidades
+express modelo com agregados
+agir como Raiz de express modelo com Model-Driven
+Valor de Design encapsular com modelo express com
+objetos se comunica com o modelo oferece estrutura para deOE ne modelo dentro de
+nomes parte de / protegido por adaptadores de portas e
+introduza o idioma onipresente delimitada Contexto
+mapeado para um ou causas múltiplas cultivar rico modelo com (um) partições de forma ideal de núcleo e nomes de subdomínio Inserir
+Módulo
+Figura 3.1: Visão Geral do Design Domain-Driven1
+9
+
+
+
+
+3 Domain-Driven Design
+a abordagem tem três instalações: em primeiro lugar, uma colaboração entre os desenvolvedores e especialistas em domínio é necessária para obter o coração do problema conceitual (ver secção 3.1). Em segundo lugar, designs complexos são baseados em modelos como os sugeridos por Eric Evans (veja Chap-
+tulo 3) ou apresentados no trabalho relacionados (ver capítulo 4). Em terceiro lugar, o foco principal deve
+estar no domínio do núcleo e a sua lógica de domínio (ver secção 3.3.1) [Git07].
+Eric Evans descreve o modo como os modelos são utilizados pela DDD em três formas diferentes [Eva04]:
+a "espinha dorsal de idioma" - onipresente linguagem (ver secção 3.2) - que é de-
+rived a partir do modelo de domínio (ver secção 3.1) especifica os termos utilizados pelo nomeada-
+ipating partes e formas uma fundação da DDD. [Eva04] Então modelos do
+projeto estratégico (ver secção 3.3) servem como água destilada conhecimento. Além disso, os modelos transmitir
+como o modelo de domínio é estruturado enquanto distinguindo os elementos de maior interesse.
+Eles são além disso usado para quebrar e relacionar conceitos ajudando a seleccionar termos que definem a maneira de distribuir as peças do pedido e especificando a fronteira para componentes e subsistemas externos. O projeto estratégico contém peças que raramente são alterados nas fases posteriores do projeto e por isso são criadas manualmente. A linguagem partilhada suporta envolvidos os desenvolvedores e especialistas em domínio para transformar os seus
+conhecimentos em este segundo uso do modelo [Eva04].
+Por último, o desenho tático (ver secção 3.4) é criada utilizando Model-Driven Design
+(MDD) que ajuda a refletir o modelo de domínio nos sistemas " design de software. O modelo assim serve como uma ponte para a implementação. O código pode por conseguinte ser apreendidas mais facilmente como é baseado no modelo. O modelo contém os blocos de construção do sistema as peças circundantes que são objecto de alterações frequentes [Eva04]. Por conseguinte,
+sua geração automatizada como explicado nos Capítulos 5 e 6.
+Quando se olha para o último projeto de software, o design estratégico representa a distribuição
+de código, módulos e pacotes de alto nível no sistema Considerando que o desenho tático contém
+os pacotes de baixo nível real de acondicionamento diferentes classes.
+Adaptadores e portas (ver secção 3.4.7) e depois descreve como um DDD arquitetura baseada em uma
+combinação de ambas as tácticas e estratégicas como pode ser a aparência de design.
+1adaptado de [Eva14]
+10
+
+
+
+
+3.1 Modelo Domínio
+3.1 Modelo de domínio
+se o design ou alguns parte central de ti, não mapa para o " modelo de domínio conceitual, esse modelo é de pouco valor e a exactidão do
+software é suspeito.
+- Eric Evans, [Eva04] "
+quando a criação de software de negócios complexos, os problemas surgem quando uma compreensão de conceitos está ausente. Por exemplo, a fim de criar uma reserva de software, adequada das nações unidas-
+Com preendendo do domínio - o "esfera de influência ou atividade de conhecimento" [Eva14] de
+reserva - é necessária. O conhecimento do problema pode ser obtida através de inquérito de
+especialistas em domínio. Esta abordagem conduz para o problema, porém, que é necessário uma abordagem
+para abstrair o conhecimento adquirido que vai finalmente levar ao código de trabalho.
+Eric Evans sugere para criar um modelo de domínio a fim de resolver este problema, que é uma
+representação interna do domínio [Eva04]. O modelo de domínio suportes assim para a solução do problema, uma abstração da realidade. Para isso, abstração, requinte, Divisão e Agrupamento do conjunto das informações recolhidas sobre o domínio são necessários [Avr07].
+O modelo de domínio é portanto o problema destilada organizadas e estruturadas
+contendo o conhecimento do domínio de conceitos-chave [Ore14]. Ele deve ser comunicada e partilhada com todas as partes envolvidas assegurar sua integridade e apoiar um entendimento comum.
+Quando lidar com exigências de mudança, criando um modelo perfeito que abranja todos os requisitos futuros é impossível. No entanto, ele pode ser continuamente evoluiu assegurando a ser tão
+perto quanto possível do domínio [Avr07].
+3.2 onipresente linguagem
+quando trabalha com uma equipe de especialistas de várias áreas, mais um desafio se coloca: a barreira da comunicação. Como eles dependem de diferentes conceitos, especialistas de diferentes áreas enfrentam um problema de compreensão mútua (consulte a Figura 3.2). Especialistas de diferentes
+áreas são a falar na sua própria língua (por exemplo os desenvolvedores a falar de bases de dados, eventos,
+...) [Eva04]. Além disso, as pessoas tendem a ter um idioma diferente quando se comunicando
+11
+
+
+
+
+3 Domain-Driven Design
+gate localização
+agendar o estado Estado de expedição assortmentAccount retalhista BookingShipper
+???
+Dados mestre
+Figura 3.2: Barreira de comunicação entre as partes interessadas
+em texto ou discurso, eles tendem a criar uma "linguagem de leigo"2 para comunicar
+aspectos difíceis [Avr07]. Como um exemplo para este, um desenvolvedor poderia usar a linguagem pictórica de um computador da leitura e da escrita em um livro de nota ao tentar explicar as operações sobre a memória do computador. Esta comunicação barreira prova ser um enorme risco para projectos desde
+mal-entendidos reduzir drasticamente a chance de sucesso [Eva04].
+Para contornar este problema, uma linguagem ubíqua derivadas do modelo Domínio
+compartilhado por todos os participantes é necessário [Avr07; Eva04; Ore14]. Como a palavra "estados" onipresente, o idioma é utilizado pelos envolvidos peritos e (terceira) partes não só ao criar a aplicação mas também quando se comunicar uns com os outros. É importante não confundir o idioma onipresente como uma empresa global e ampla idioma. Ele se destina a ter um significado onipresente com inequívocas palavras e frases somente em uma parte específica de um domínio (ver secção 3.3.1). Na verdade, quanto maior for o limite de linguagem onipresente, maior a ambiguidade tornando mais e mais "confusas". Por conseguinte, suas fronteiras têm de ser explícita ajudando a tornar precisa e bem
+definidas [Vau13].
+Quando o desenvolvimento da linguagem, do domínio os conceitos principais são introduzidas pelo qual o da linguagem de substantivos são mapeadas a objetos e seus associados verbos se tornam parte do seu
+comportamento [Avr07].
+2 O uso de termos simples que uma pessoa sem conhecimento específico em uma área complexa pode compreender.
+12
+
+
+
+
+3.3 Design Estratégico
+durante o desenvolvimento do sistema, especialmente com mudança de requisitos, a onipresente idioma deve ser continuamente mantida e atualizada pela envolvidos peritos do domínio. Sempre que um perito de domínio pensa uma frase ou palavra soa mal, ele
+deve levantar preocupações para que a linguagem pode ser ainda melhorado [Vau13; Eva04].
+3.3 Design Estratégico
+contendo como destilar o domínio em partes distintas pequeno o suficiente para a mente humana
+para lidar com o design estratégico é importante para lidar com a complexidade.
+Esta seção aborda os principais e primeiros subdomínios (ver secção 3.3.1), particionamento
+o aplicativo com base na importância. Em um caso ideal, delimitada contextos (ver Sec Äao
+3.3.2), que serve como um serviço de utilidade pública onipresente a barreira do idioma seria diretamente mapeada. Na realidade,
+no entanto, elas podem se cruzam com um ou mais núcleos ou subdomínios. A última, módulos (ver Sec Äao
+3.3.4) são apresentados a partição de um contexto delimitada em pequenas unidades lógicas.
+3.3.1 Core e subdomínios
+a palavra domínio é muitas vezes enganosas infelizmente. Quando utilizado no contexto da DDD,
+a palavra pode conduzir à conclusão de que o objetivo é criar um modelo de saber de toda a empresa em DDD. Este não é o caso já delineados na Seção 3.2.
+Criando um modelo de DDD, o domínio é particionado naturalmente para o núcleo do domínio e
+vários subdomínios com base na sua relevância comercial. O primeiro contém o coração da
+aplicação: a principal crítica que irá obter o maior atenção na forma de recursos e desenvolvedores experientes. Ele é suportado pelo subdomínios, que pode ser dividido em
+apoiar os subdomínios e genérico subdomínios. Os subdomínios vêm nestas duas diferentes
+formas de ajudar a evitar que o núcleo do domínio para obter excessivamente complexo e, assim, mais difícil de
+apreender [Eva04; Vau13].
+Quando o particionamento, o núcleo do domínio pode ser determinado fazendo a seguinte questòes
+espec ficas [Oli09]:
+• O que torna o sistema a pena por escrito?
+13
+
+
+
+
+3 Domain-Driven Design
+• Por que não comprar fora da prateleira?
+• Por que não terceirizar?
+Apoiar os subdomínios oferecem funções de suporte para o modelo de negócios ou aspectos
+do negócio. Apoiar os subdomínios são necessárias, mas não são tão importantes como o domínio do núcleo. Por conseguinte, mais desenvolvedores inexperientes pode ser atribuído para as equipes responsáveis pelo suporte subdomínios ou eles podem às vezes mesmo ser
+terceirizada [Vau13; Eva04; Oli09]. Generic subdomínios contêm peças que não são "core"
+para o negócio mas ainda são necessárias. Eles contêm especialidades e apoiar o sistema de uma forma genérica. No entanto, eles ainda são essenciais para o funcionamento do sistema. Normalmente estas
+funções podem ser adquiridos ou terceirizados [Eva14; Eva04; Oli09].
+O sistema de TSM MERCAREON é a sua principal área de competência vendidos aos seus clientes (consulte a Figura 3.3). Como não existe um sistema comparável na Europa, ele não pode ser comprado fora da prateleira e torna o sistema a pena por escrito. Além disso, sendo mais cruciais para o negócio e MERCAREON tendo o know-how, não faz sentido terceirizar o sistema de TSM.
+Todos em todos os, é salvar para assumir o sistema de TSM é o núcleo do domínio MERCAREON.
+O gerenciamento do usuário conectado ao sistema de TSM gerencia seus usuários e por conseguinte di-
+perar suporta o core domain. Por conseguinte, Gerenciamento de usuários é um subdomínio de apoio.
+Em contraste, reporting é uma (externo) componente com que as empresas podem acessar as estatísticas das suas reservas. Também é parte do negócio mas não decisivo para o núcleo.
+Por conseguinte, reporting é um subdomínio genérico.
+3.3.2 delimitada contextos
+especialmente em grandes projectos, o domínio pode ter palavras e frases colidam uns com os
+outros fazendo o onipresente linguagem (ver secção 3.2) confusas e portanto difícil de compreender.
+Quando um quer para mesclar diferentes modelos em um grande sistema, o resultado obtém propensos a erros, é difícil de compreender e por isso difícil de manter. Para resolver esse dilema,
+a utilização de contextos delimitada é sugerido pela [Eva04]. Eles servem principalmente como o onipresente
+linguagem de limite e pode conter vários agregados [Eva14; Vau13]. Cada palavra ou frase tem de ser único dentro de um contexto delimitada. Além disso, a equipe atribuída,
+14
+
+
+
+
+3.3
+Base de código de projeto estratégico, e recursos como o banco de dados têm de ser diferenciadas pelo contexto delimitada a fim de proteger o modelo [Eva14]. Quando trabalhar com Java, por exemplo, um projecto pode ser dividida em copo separado, guerra ou arquivos ear ou criar vários
+projetos dependentes [Vau13].
+Em uma perfeita (campo verde) ambiente, Core e subdomínios pode ser mapeada para contextos delimitada de um para um. Na realidade, uma delimitada contexto pode abranger vários núcleos e subdomínios.
+Também é possível que vários contextos delimitada são parte de um núcleo ou subdomínio.
+A comunicação entre contextos delimitada se revelar difícil porque cada contexto tem a sua própria linguagem onipresente. Por conseguinte, uma camada de conversão é necessária a tradução de
+mensagens entre os contextos em suas respectivas línguas (ver secção 3.3.3).
+Exemplo 1. O sistema de TSM foi escolhido para ser um contexto de MERCAREON delimitada. Como
+visto na Figura 3.3, delimitada contextos são mapeados para core ou subdomínios.
+3.3.3 Delimitada Contexto comunicação
+compartilhada de Apoio do Kernel Core Domain subdomínio
+Customer-Supplier TSM contexto D U importados fim
+OH/PL D conformista OH/PL contexto
+ACLD U
+U D
+Reporting OH/PLAccounting
+contexto U apoio genérico conformista OH/PL subdomínio subdomínio Contexto do usuário e da empresa
+apoiar subdomínio
+Figura 3.3: MERCAREON subdomínios do e contextos delimitada
+quando dois contextos delimitada comunicar pela troca de mensagens, eles têm dois
+tipos diferentes de interação (consulte a Figura 3.3):
+em primeiro lugar, que a forma como um delimitada contextos influencia a outra é descrita. Em [Eva04], este
+é modelado como um montante (U) e a jusante (D) relação decorrentes da imagem de
+15
+
+
+
+
+3 Domain-Driven projetar
+uma cidade poluentes um rio. A cidade em si não é afectado mas afeta cidades para baixo o fluxo do rio. Logicamente, cidades a montante não pode ser afetado por cidades para baixo fluxo e, portanto, não têm nenhum incentivo directo para evitar poluir o rio. Modelo a partir de um ponto de vista, a sonda modelo fornece uma interface para a troca de informações e o modo de fluxo descendente tem de lidar com o tipo de informações que ele recebe e a forma como a
+informação é representada [Eva04].
+Em segundo lugar, a relação que existe entre dois contextos delimitada é discutida. Quando as equipes manter dois contextos delimitada deve cooperar desde ambos de seus
+contextos o sucesso ou o fracasso juntos, a contextos delimitada compartilham uma relação de parceria.
+Esta relação exige a coordenação da planificação do desenvolvimento e integração. As
+interfaces devem ser criado de uma forma que satisfaça as necessidades de ambos os contextos.
+Formando uma relação íntima, Kernel Compartilhado partilha uma parte do modelo e o
+código associado. É de importância para definir limites explícitos definindo quais pequeno subconjunto do modelo Domínio é compartilhada. Quando a parte comum é alterada, ambas as equipes responsáveis têm de ser consultados. É sugerido para definir um processo de integração contínua mantendo o
+modelo compartilhado pequenas alinhando a linguagem ubíqua das duas equipes envolvidas.
+Relações Customer-Supplier existe apenas para cima e relacionamentos a jusante. A
+sonda de sucesso da equipe é mutuamente dependentes do sucesso da equipe a jusante. A
+jusante necessidades da equipe deve ser tratada pela equipe de upstream.
+Por último mas não menos importante, o conformista relação também existe apenas para cima e a jusante
+as relações em que a sonda de equipe não tem nenhum incentivo para abordar as necessidades da equipe a jusante. A equipe tem a jusante para eliminar a complexidade da tradução utilizando
+partes do modelo criado pela equipe de upstream [Vau13].
+Existem três conceitos que permita uma comunicação regulamentado: o Open Host Service
+(EGS) como pode ser visto em contextos a montante na figura 3.3, define o protocolo para acessar os subsistemas como um conjunto de serviços. O protocolo tem de ser aberto para todas as partes que
+precisam se comunicar com o sistema.
+A publicação é necessário o idioma como a tradução (por exemplo através de Camada anti corrupção)
+requer uma linguagem comum. A linguagem comum devem ser bem documentados
+16
+
+
+
+
+3.3 Design estratégico
+e manifesta a informação de domínio necessária que permita a tradução e, quando necessário, fora do que a linguagem comum. O idioma de publicação é muitas vezes combinada com
+a abertura do serviço de acolhimento.
+Por último, a camada anti corrupção.
+Camada anti corrupção
+quando trabalhar com um modelo de domínio, especial atenção tem de ser pago que permanece puro. Tem de ser assegurado que os aplicativos e outros domain logic não vazará para ti, especialmente quando os sistemas devem se comunicar em grandes interfaces. As dificuldades no mapeamento destes
+dois sistemas" modelos podem corromper o modelo resultante [Eva14; Vau13].
+A camada anti corrupção (ACL) é o mecanismo de protecção de que o modelo de domínio. Quando estiver
+se comunicando com outro contexto delimitada ou sistemas externos tais como bancos de dados, o ACL pode ser usado como um tradutor de duas vias a tradução entre o sistema externo e do sistema actual idioma [Eva14; Vau13]. Para delimitada contextos, é utilizado quando
+tendo limitado de qualquer controlo sobre a comunicação. Em um kernel compartilhado, parceria
+ou relação Customer-Supplier a ACL traduz entre diferentes modelos de domínio.
+A camada se comunica com os outros através da sua interface de sistema que requerem pouca ou nenhuma modificação. Em seguida, internamente, a comunicação é traduzido para o modelo da coroa.
+3.3.4 Módulos
+quando criar um aplicativo complexo, delimitada contextos pode obter muito grande para apreender as relações e interações. Nesse caso, é recomendado para os dividir em
+módulos. Módulos " única finalidade é "organizar conceitos relacionados e tarefas de forma a reduzir a
+complexidade" [Avr07]. Como sendo usado na maioria dos projetos de software existentes, módulos ajudam
+a gerenciar a complexidade e melhorar a qualidade do código. Isto é conseguido através do agrupamento de classes relacionadas em módulos. Estes módulos contêm um conjunto coeso de conceitos, aumentando a
+coesão código3 e diminuindo o acoplamento4.
+Medidas 3a relação entre componentes funcionais, [SMC74].
+4a força dos relacionamentos entre os módulos, [Abr+01].
+17
+
+
+
+
+3 Domain-Driven Design
+quando decidir quais partes de uma aplicação a ser agrupadas em um módulo, é reco- mendadas para selecionar modelos que separa os conceitos de domínio de alto nível e seus respectivos código. Além disso, eles deveriam ser dado nomes a partir da linguagem ubíqua que representam
+estes [Avr07].
+Exemplo 2. O sistema de TSM MERCAREON é dividida em vários módulos diferentes
+(consulte a Figura 3.4) interagir uns com os outros no contexto delimitada.
+Agendar
+ordem solicitada Reserva Entrega
+Gate
+
+Localização do log de transações de roteamento Yardbook
+importados Fim da
+mensagem
+Recurso
+Figura 3.4: TSM Módulos do Sistema
+3.4 desenho tático
+o desenho tático contém os elementos de construção que conectam modelos para a transposiça ̃o
+. A implementação é parte de um módulo em um contexto delimitada (ver secção 3.3).
+Entidades (ver secção 3.4.1) e objetos de valor (ver secção 3.4.2) são os mais pequenos pedaços
+do desenho tático. Agregados (ver secção 3.4.3) envolver ambas as entidades e objetos de valor
+e são armazenados em repositórios (ver secção 3.4.4). Serviços (ver secção 3.4.5), por sua vez,
+espera das operações executadas no domínio de agregados e eventos (ver secção 3.4.6) informar
+sobre as alterações de estado interno ou externo.
+18
+
+
+
+
+3.4 desenho tático
+3.4.1 entidades
+entidades são objetos no DDD de-
+multado por uma identidade única (consulte a Figura 3.5) restantes da mesma através e além do
+id:224231Max o
+ciclo de vida do sistema. Eles são a Figura 3.5: Identidade exclusiva para a pessoa 'Max' não definido por seus atributos
+permitindo que várias entidades diferentes com os mesmos atributos (por exemplo pessoa entidades compartilhando
+o mesmo nome) [Avr07].
+O sistema tem de garantir a unicidade da identidade da entidade. Um banco de dados, por
+exemplo, poderia criar essas identidades únicas [Eva14].
+As identidades podem variar de entidades técnicas para entidades naturais. Por exemplo, uma
+porta de descarga entidade poderia ter alguns auto-sequencial identificador gerado ou o seu identificador
+pode ser construída a partir de um conjunto de metadados legível por humanos (por exemplo empresa - país -
+locationName - portão nome) [Vau13].
+Exemplo 3. Como um exemplo, Empresa, usuário, Papel, Reserva e tarefa são entidades no
+contexto do sistema da MERCAREON TSM.
+3.4.2 Os objetos de valor
+uma vez que muitos objetos em um sistema não têm identidade conceptual, criar entidades para cada uma dessas traria nenhum benefício. Na verdade, seria corromper o sistema introduzindo a complexidade necessária para encontrar identidades únicas para todos esses objetos. Por conseguinte Eric Evans
+sugeriu o chamado de objetos de valor. Objetos de valor não têm identidade e representam os
+objetos do sistema que não se aplicam por ser uma entidade. Tendo em nenhuma identidade que podem ser facilmente criadas e removidas que simplifica o projeto. Além disso, os objetos de valor
+são recomendadas para ser modelado como objetos imutáveis5. Esta traz a vantagem de
+compartilhamento, rosca de segurança e a ausência de efeitos colaterais. Apesar de os objetos de valor pode
+5O estado de objetos imutáveis não podem ser alterados após a criação. Por conseguinte, o objeto tem de ser substituída por uma nova instância quando seu estado é alterado.
+19
+
+
+
+
+3 Domain-Driven Design
+mantenha vários atributos, é recomendado para dividir longas listas de atributos em vários objetos de valor. Os atributos detidos por um objeto de valor deve ser toda conceitual. Por exemplo um local pode ter as coordenadas do GPS e um nome mas não deve conter as
+cores dos edifícios nele situados. [Eva14]
+Exemplo 4. Como um exemplo de pedido, número de ID da Empresa e quantidade de entrega são
+objetos de valor no sistema de TSM do MERCAREON.
+3.4.3 agrega
+uma visão muito mais útil em agregados é olhar para eles como a consistência " limites para as transacções, distribuições e simultaneidade.
+- Eric Evans, [Eva09] "
+agregados definem a propriedade de objeto e limites de consistência. Agregados reunir
+entidades e objetos de valor em grupos de aplicar a integridade de dados e cumprimento de invariante.
+Eles são globalmente identificados e acessados por um ID. Cada agregado tem uma entidade raiz (ver secção 3.4.1). É a única parte do agregado que é acessível a partir do exterior e mantém as referências a todas as outras entidades e objetos de valor do agregado. Logo que uma alteração em uma parte interna de um agregado é necessária, a raiz entidade tem de ser solicitado a aplicar essas mudanças mantendo o agregado de invariante. Outros objectos só pode conter referências a raiz. Como objetos de valor são imutáveis a entidade raiz pode decidir a expô-los a seus avaliadores. Os avaliadores de agregados assim que pagar a atenção para a referência de objetos de valor apenas temporária ou estão em perigo de trabalhar com valores desatualizados. Além disso, referências de exploração poderia levar a vazamentos de memória desde logo que a entidade raiz é excluído, todos os objetos de interior não são supostamente a ser referenciado qualquer mais e
+deve ser suprimido. [Avr07]
+um problema enfrentado quando definir agregados é que agrega tanto deve não ser demasiado grande e demasiado pequenas. Quando eles são projetados muito grande, eles provavelmente execute o mal. Especialmente quando o carregamento lento entra em jogo, uma pequena alteração a um agregado pode exigir para carregar toda a agregação em memória. Além disso, percebendo uma fronteira transacionais, modificando agregados irá bloquear todos os seus componentes [Vau13]. Uma vez que apenas agregados podem
+20
+
+
+
+
+3.4 desenho tático reserva o agregado (UN)Data de carregamento (Valor objeto)
+1
+Reserva (Entidade Raiz) 1 Est. (des)duração de carga (valor Objeto) n 1
+Propriedade expedição workOE ow (objeto de valor) (Valor objeto)
+Figura 3.6: Reserva agregado
+é obtido a partir de repositórios (ver secção 3.4.4), que funcionam como gatekeepers consistência para os dados. Uma regra importante quanto agregados é que apenas um deles pode ser modificado
+durante uma transação de cada vez.
+Exemplo 5. A reserva é representada como um agregado (consulte a Figura 3.6) com a reserva
+como sua raiz entidade que fornece a singularidade e contém vários objetos de valor.
+3.4.4 repositórios
+a questão de como instâncias de agregados (ver secção 3.4.3) podem ser obtidos obviamente
+surja enquanto trabalhando com DDD. Uma opção é desencadear a operação de criação nos dando
+uma referência à entidade de raiz de um agregado [Vau13].
+Outra opção é a entidade cruzada referências entre agregados. Para isso, uma referência
+a qualquer entidade é necessária. Repositórios pode nos dar a referência a uma entidade de raiz de um
+agregado. A partir de um ponto de vista orientada a objetos, estas entidades são recém instanciado através de dados recuperados a partir de um sistema externo (por exemplo um banco de dados). Do
+ponto de vista da DDD entidades existentes são referenciadas. Por conseguinte, esta operação é referido como
+"reconstrução" [Eva14; Vau13].
+Repositórios pode ser visto como uma camada anti corrupção (ver secção 3.3.3) em torno de bases de dados
+[Vau12] e, como regra geral, não deve ser acessado a partir de agregados [Vau13].
+
+
+
+
+
+
+Exemplo de projeto Domain-Driven 21 3 6. O Repositório de reserva permite o acesso a reserva agregados fornecendo
+acesso a sua raiz entidades.
+3.4.5 Serviços
+por exemplo, para transferir dinheiro de uma conta para outra; deve ser em função de que " o envio ou o recebimento de conta conta? Ele apenas se sente como
+descabida na quer.
+- Abel Avram, [Avr07] "
+Ao desenvolver o modelo de domínio, normalmente há comportamentos que não pode ser incor- tituídas em entidades ou objetos de valor. No entanto, elas representam importantes requisitos, e por isso não pode ser ignorado. Se esses comportamentos foram adicionados a entidades ou objetos de valor, que tornaria mais complexos do que o necessário e introduzir uma funcionalidade que não pertencem a esses objetos. Além disso, trabalhar com vários agregados seria impossível desde repositórios não deve ser chamado dentro de agregados [Avr07;
+Vau13].
+Serviços resolver este problema fornecendo funcionalidade de apátridas importante para o domínio.
+Eles podem acessar os repositórios e por conseguinte consultar vários agregados no domínio.
+Outra característica dos serviços é a de que as operações executadas em eles se referem a um conceito de domínio que, como a cotação acima já membros, eles não naturalmente pertence
+a qualquer entidade ou objeto de valor [Avr07].
+Os serviços são subdivididos em duas categorias de domínio, os serviços e os
+serviços de aplicativos.
+
+Serviços de domínio de Serviços de Domínio implementar as funcionalidades exigidas para o aplicativo. Eles requerem
+conhecimento específico do domínio para fornecer as funcionalidades. O domínio não fornece serviço de segurança ou de segurança transacional desde suas operações são demasiado refinada para
+esse efeito [Vau13].
+22
+
+
+
+
+3.4 desenho tático
+exemplo 7. Calcular a quantidade de slots de tempo para uma reserva contém a lógica de domínio
+e é por conseguinte parte do serviço de domínio.
+Serviços de aplicativos
+manter serviços de aplicativos thin, usá-los só para coordenar tarefas sobre o " modelo.
+- Vernon Vaughn, [Vau13] "
+que residem na camada de Aplicação (ver secção 3.4.7), serviços de aplicativo que não contêm nenhuma
+lógica de domínio mas se comunicar diretamente com o modelo de domínio. Serviços de aplicativos oferecem todas as possíveis operações apoiadas pelo contexto delimitada permanecendo leve.
+Serviços de aplicativos utilizam repositórios para operar sobre objetos de domínio. Em resumo, eles fornecem o ambiente de execução onde as operações são coordenadas para o modelo de domínio (incluindo o domínio serviços). Além disso, um aplicativo Service controla transac Òes e garante as transições de estado no modelo são manuseados atomicamente. É responsável pela segurança e é responsável por evento baseado em mensagens. Quando implementado, o serviço do aplicativo tenha assinaturas de método composto de tipos primitivos (por exemplo curto,
+int, flutuação, duplo, ...) e objetos de transferência de dados6, ou alternativamente usa o
+padrão Command7 [Vau13].
+Exemplo 8. Para reservar uma ordem no sistema de TSM, o serviço do aplicativo é interrogado e
+solicita o pedido de importação repositório para abrir reserva agregado. Em seguida, o aplicativo
+Service usa um agendamento agregar instância para a criação de uma nova reserva para o pedido de importação resultantes da entidade. Todo o processo é vista transacionalmente salvar que garante que apenas
+uma reserva é criado para os pedidos.
+6especialmente quando as chamadas são caras, mais dados precisam ser transferidos com uma única chamada. Este é problemático enquanto parâmetro listas não são desejadas e linguagens de programação como Java apoiar apenas um valor de retorno.
+Por conseguinte um objeto de transferência podem ser usadas para montar todos os parâmetros obrigatórios ou resultados para uma operação, [Divirta02].
+7"encapsular uma solicitação como um objeto, assim permitindo parametrizar clientes com diferentes solicitações, fila ou solicitações de registro e suporte operações nada impossível", [Gam95].
+23
+
+
+
+
+3 Domain-Driven Design
+3.4.6 Eventos
+Eventos de Domínio do domínio não foram incluídos em [Eva04]. Evans posteriormente acrescentado ao DDD devido a vantagem de os sistemas de desacoplamento e portanto apoiar a criação de sistemas de distribuiça ̃o distribuídos pela permitindo que os diferentes contextos delimitada para comunicar [Eva09]. Além disso, sistemas altamente escaláveis como software de finanças de transacção elevados podem ser criados usando o event sourc-
+ing [Vau13; Divirta05b].
+Aconteceu algo que especialistas em domínio. " - Vernon Vaughn, [Vau12] "
+Como o citar membros, eventos de domínio são criados quando algo importante - de acordo com
+especialistas do domínio aconteceu. O nível de granularidade é portanto de importância uma vez que nem todos os eventos no domínio é importante. Por exemplo, criação de um evento para cada passo de um pessoa faz pode ser de interesse no contexto de um contador de passos mas não no contexto
+de um software de navegação.
+Eventos geralmente têm um timestamp, quer quando se realizou efectivamente ou quando eles foram registrados. Eles também têm uma pessoa associada com eles, deixe de ser a pessoa que gravou ou a pessoa responsável pela criação do evento. Como objetos de valor, domínio eventos são imutáveis porque gravar algo que aconteceu no passado [Eva09;
+Eva14].
+Quando trabalhar com eventos de domínio, especial atenção tem de ser pago como sistemas pode não
+ser consistente o tempo todo [Vau13; Eva09].
+Por exemplo, a descarga de um veículo pode ser separada em cada palete que está sendo movido.
+No entanto, que podem não ser importantes para os especialistas em domínio e, portanto, apenas o início e o fim do processo são eventualmente rastreados. Logo que um destes eventos é demitido, serviços da delimitada contexto responsável pelo tratamento de descarga eventualmente notificar o interessado delimitada contextos. O usuário do sistema pode não ver a mudança diretamente após cometer o processo de descarga como a mudança ocorre de forma assíncrona e a GUI do usuário está desatualizado até que o responsável é notificada ao contexto delimitada.
+24
+
+
+
+
+3.4 desenho tático
+3.4.7 portas e
+portas de adaptadores e arquitetura de adaptadores8 utiliza a ACL e protege o modelo de domínio.
+A arquitetura é composta de três camadas onde camadas interiores são independentes a partir de
+camadas exteriores.
+• Camada de Domínio - Esta camada contém o modelo de domínio (consistindo de
+contextos, entidades delimitadas e de objetos de valor), os serviços de domínio e repositórios. [Vau13]
+• Camada de Aplicação - Esta camada envolve a camada de domínio e utiliza seus componentes
+usando serviços de aplicativos. Ela se adapta as solicitações de camada de infra-estrutura para a camada de domínio. Além disso, despacha os eventos levantadas na camada de domínio para
+fora [Vau13].
+• Camada de adaptadores - Essa camada é a camada mais externa de acondicionamento a camada de aplicação.
+Ele contém adaptadores para sistemas externos como bancos de dados, sistemas de endereçamento, descanso em- terfaces, sistemas de mensagens, mas também bibliotecas de terceiros. Esses adaptadores são ACLs habilitação do sistema para utilizar diferentes protocolos e sistemas sem corromper o domínio com o conhecimento destes sistemas. Eles as mensagens do relé a partir de e para a camada de aplicação usando a linguagem do domínio. Quando uma mensagem é recebida de fora, no porto, um adaptador converte a mensagem específica de tecnologia em um formato adequado para a camadas subjacentes. Se uma camada subjacente quer enviar uma mensagem, um adaptador apropriado transforma a mensagem para algo que o
+sistema externo pode trabalhar com e a envia em uma porta [CDC05].
+• Portas - Define a funcionalidade exposta e a exibição de aplicativos de fora.
+Na implementação mostrada na Figura 3.7, Adaptador A e B Utilização de eventos para comunicar
+(neste caso com outro sistema de adaptadores e portas), C é uma mensagem ouvinte conectado
+ao Barramento de uma mensagem, D acessa o REST API de um sistema de três camadas que e para H
+comunicar com bancos de dados externos ou memória e são representados por repositórios no
+contexto DDD.
+8 Anteriormente conhecido como Arquitetura Hexagonal [CDC05; Coc06] ou arquitetura de cebola [Pal08]
+25
+
+
+
+
+3 Domain-Driven
+Adaptador Design C
+Adaptador um Adaptador G
+Adaptador B Adaptador
+adaptador F E ADAPTADOR D
+caso
+restante da camada de apresentação
+Camada de lógica de negócios do adaptador D
+MENSAGEM
+adaptador de eventos C
+Adaptador de barramento BAdapter um
+adaptador H da camada de Aplicação
+Camada de acesso aos dados
+Adaptador Adaptador G F domínio
+Adaptador de camada de
+memória e
+Figura 3.7: Adaptadores de Portas e9
+o leitor interessado deve ter notado que a independência de camadas interiores não se encaixa com a necessidade de camadas interiores para aceder a partes das camadas exteriores. Por exemplo, uma implementação de um repositório na camada de domínio, provavelmente exige que qualquer forma de persistence-ser-no arquivo, memória ou banco de dados. Por esta razão, adaptadores de portas e alcançar o
+mínimo de acoplamento [Divirta02] utilizando o paradigma de recipientes de inversão de controle [Divirta04].
+O paradigma utiliza injeção de dependência onde camadas exteriores implementar interfaces definidas por camadas interiores. Por exemplo, a camada de domínio fornece uma interface informando que ela requer algum repositório com um determinado conjunto de funcionalidades. A implementação da infra-estrutura e então fornece estas funcionalidades através da implementação da interface.
+9 adaptado e alargado de [Vau13]
+26
+
+
+
+
+3.4 desenho tático
+esta implementação é então injetado na camada interior em tempo de execução. Olhando para as dependências, a camada de domínio é independente da camada de infra-estrutura externa na medida em que fornece as interfaces implementadas pela camada externa. Na fase de testes, partes do sistema podem ser facilmente substituídas por outras implementações devido a esta dissociação [Vau13].
+Por exemplo, para testar o aplicativo, os adaptadores comunicando a bases de dados externas
+poderia ser substituído com teste de memória em bancos de dados.
+27
+
+
+
+
+
+Trabalhos conexos4
+Este capítulo é composto de duas partes. Primeiro, modelagem (ver secção 4.1), introduz e
+compara três modelos alternativos para Domain-Driven Design para criar e refatoração de
+sistemas de informação. Segundo, Seção 4.2 introduz a investigação sobre o campo de
+bancos de dados distribuídos e compara um conceito semelhante a fragmentação da abordagem para este trabalho.
+4.1
+Domain-Driven Modelagem Design (ver capítulo 3) utiliza modelos para a criação de complexos
+sistemas de infor- mação. Esta seção discute as semelhanças diferenças, os pontos fortes e debilidades de diferentes abordagens de modelação existentes em comparação à DDD. Em primeiro lugar, a
+norma popular UML (Unified Modeling Language) (consultar a secção 4.1.1) é introduzida
+devido à sua forte ligação com o modelo de arquitetura orientada. Com base neste modelo de
+arquitetura orientada, (ver secção 4.1.2) é apresentado, que é, como DDD, uma abordagem MDE e está
+fortemente relacionada ao UML 2.0. Em geral, UML foi especialmente adaptada para se ajustar às necessidades do MDA.
+4.1.1 Unified Modeling Language
+a UML (Unified Modeling Language), introduzida pelo Grupo de gerenciamento de objeto
+(OMG) em 1994, unifica os três métodos de concepção orientada a objeto Método Booch,
+Técnica de modelagem de objeto e o método Objectory fornecendo uma notação visual comum para
+descrever software de hoje [Pet13; Tho04]. UML é dito ter sido estabelecido como standard de-facto da engenharia de software suportando uma variedade de diferentes esquemas de diagramas de pacote para diagramas de classes [OMG04]. UML é usado de forma diferente a partir de
+29
+
+
+
+
+4 trabalho relacionado com
+a empresa: alguns usam seus diagramas de classes, Alguns o utilizam para fazer um esboço rápido em um quadro branco, e alguns até mesmo utilizar para o modelo de desenvolvimento [Pet13]. Em um estudo de 2013 [Pet13], foram levantadas dúvidas se UML é realmente um padrão. Como de 50 praticando os desenvolvedores de software profissionais, 35 não usar UML. Eles arrazoavam
+que UML não seria "lhes oferecem vantagens sobre as suas práticas actuais evoluíram" e "o que
+era bom sobre UML não era novo e o que foi de novo sobre UML não era bom".
+Além disso, criticaram a falta de contexto lidar principalmente com a arquitetura de software de todo o sistema. Além disso, UML seja fundamentado a ser desnecessariamente complexo como a notação é considerado despesas gerais consideráveis e está muito perto de programação para ser legível por todas as partes interessadas envolvidas. Além disso, é alegado que a UML não tem
+"coerência, redundância, INTEGRIDADE OU QUALIDADE" verifica levando a dificuldades em manter
+grandes modelos UML do projeto.
+Em comparação com o Design Domain-Driven, algumas das críticas dirigidas a UML está alinhada com os objetivos principais da DDD como ele se concentra no contexto enquanto tentando ser simples e como seres humanos- amigável possível. Como DDD não especifica o tipo de modelos para ser usado mas apenas o conteúdo, é possível apesar de utilizar modelos semelhantes ao UML no processo de design DDD
+O uso do UML tem seus pontos fracos embora como DDD também utiliza modelos para trabalhar contextos enquanto UML é concebida como uma ferramenta para criar um modelo de problemas orientada a objetos. Por exemplo, a onipresente linguagem pode não ser razoavelmente modelado em UML como uma representação diferente,
+tais como um glossário, é necessária.
+4.1.2 Arquitetura Controlada por modelo de
+arquitetura Model-Driven (MDA) é como uma abordagem DDD MDE. Ela foi definida pelo
+grupo de gerenciamento de objeto e é uma abordagem baseada em modelo para lidar com sistemas complexos especificando estrutura, semântica e anotações de modelos [OMG14]. Além disso, possui
+um modelo de domínio comparável à DDD (ver secção 3.1), que é chamado de cálculo
+modelo independente (CIM) e especifica sistemas sem os detalhes de construção no seu núcleo.
+Modelos, que estão em conformidade com essas normas, são chamados de modelos de MDA. Estes modelos podem
+ser utilizados para a produção de documentações de geração de artefatos e sistemas de informação executável [OMG14]. UML, apesar de formalmente não ser necessário, é usado por quase todos os projectos do MDA
+30
+
+
+
+
+4.1
+como o padrão 2.0 Modelagem foi adaptada para o MDA [OMG15]. A única excepção são os projectos em
+domínios especializados que requerem um especificamente Modeling Language [OMG15].
+Utilizando meta-modelos, a fundação do MDE, MDA podem utilizar o poderoso modelo interven- ções [Tho04; MV06]. Uma meta-modelo é um modelo que define a sintaxe abstrata de modelo- ing idiomas (ex. UML, BPMN, ER) especificando o modelo de fronteiras no idioma [OMG14] e servindo como um requisito necessário para a transformação do modelo automatizado
+[MV06; OMG10].
+Um aspecto fundamental para a proposta de uma abordagem arquitetônica DDD refatoração (ver capítulo 5) é a transformação do modelo automatizado como fornecido pelo MDA. Ele é usado para gerar automaticamente DDD modelos que estão a ser sujeitas a alterações frequentes (ver secção 1.2).
+Meta-modelos são uma condição prévia para estas transformações de modelos e por isso teve que ser
+criado antes (ver capítulo 5).
+Diferente da abordagem DDD, MDA separa os modelos em três camadas distintas
+(consulte a Figura 4.1). A camada de CIM que serve como uma base para o modelo independente de plataforma
+(PIM) e a Plataforma Modelo Específico (PSM) camada [OMG01]. Abstraindo detalhes técnicos,
+PIM fornece uma plataforma independente especificações estruturais e funcionais formal [OMG01]. PSM no contrário representa a plataforma de destino, tais como capacitação JavaEE [Ora] ou .Net [Mic07] permitindo transformações de modelos de PIM para código fonte [Tho04]. Além disso,
+PSM é criticado por ser demasiado complexo, especialmente para descrever plataformas de destino contendo
+uma quantidade enorme de APIs como JavaEE ou .Net. Cálculo independente de transformação de modelo
+independente de plataforma
+Plataforma SpeciOE transformação modelo c
+código fonte de geração de código de modelo
+Figura 4.1: MDA camadas1
+Todos em todos os, MDA pode ser usado para criar e refatorar o sistemas de informação. Como DDD, ele utiliza modelos mas ao contrário DDD, ele utiliza meta-modelos para o modelo transformações. Estas transformações de modelos são usados para se adaptarem às novas exigências e permitir a implantação do sistema a diferentes plataformas de destino. Para isso, MDA requer o PSM que
+1adaptado de [SM07]
+31
+
+
+
+
+4
+descreve o trabalho relacionado com plataformas de destino. DDD em contrário é mais abstrato e o seu desenho tático componentes (como entidades e objetos de valor) pode ser implementado em qualquer linguagem de programação orientada a objetos modernos. Como modelo de transformação utilizando, o alvo as plataformas suportadas pelo MDA não estão limitados a línguas de programação orientada a objetos mas, portanto,
+tem uma complexidade acrescida.
+4.2 De bancos de dados distribuídos
+um banco de dados distribuído (DDB) sistema é um sistema composto de vários
+bancos de dados interligados que não estão compartilhando a mesma memória e que são distribuídos através de uma rede de computador. Eles têm tornado a ferramenta de gerenciamento de dados para
+sistemas de informação com uso intensivo de dados [ÖV96]. Os dados são distribuídos ao longo de vários sites de dados através da fragmentação
+e replicação. Uma fragmentação em regime de um banco de dados relacional pode ser horizontal com o
+particionamento linhas da tabela usando uma operação de selecção ou vertical ao particionar as colunas da tabela usando uma projeção operação. As vantagens de fragmentar os dados são, entre outros, para melhorar o desempenho dos sistemas de bases de dados e a reduzir o custo de transmissão colocando os dados necessários na proximidade de sua utilização. Além disso, a fragmentação pode acelerar os tempos de resposta através da redução da quantidade de relações ter de ser transformados em
+uma consulta do usuário. Uma fragmentação de replicação replica dados através de vários sites de dados. Isto
+é desejável quando os mesmos dados é acessado por vários sites e, portanto, menor tempo de resposta pode ser alcançado através da duplicação em vez de para transferir os dados a cada
+vez [ÖV96; KH10].
+Para fragmentar horizontalmente, [KH10] sugerida aCreate, ler, atualizar e excluir Matrix
+(CRUDM) Abordagem baseada em que não exige a freqüência de consultas, ao contrário dos anteriores técnicas de fragmentação horizontal. Isso é benéfico, como a freqüência de
+consultas não é disponível no estado inicial da criação do banco de dados.
+Como uma partição foi necessária para a abordagem DDD e as operações de um
+sistema de informação (ver secção 5.1.2) também pode ser subdividida em criar, ler, atualizar e excluir
+as operações de CRUD () [Divirta02], uma abordagem semelhante à fragmentação CRUDM tenha sido tomada. A abordagem também utiliza as funções de ponderada com base no acesso de CRUD de particionamento.
+32
+
+
+
+
+4.2 de bancos de dados distribuídos
+no entanto, as operações não são armazenados como uma matriz mas em um gráfico (ver secção 5.8.3).
+Da mesma forma, como um sistema de informação existente é arquitetonicamente refatorado, a frequência de acesso das operações de negócios está disponível de modo que é possível ponderação suplementar. Como a abordagem de fragmentação DDB, particionamento entidades e objetos de valor em agregados indevidamente também podem afetar o desempenho negativamente desde as operações de negócios tendo em agregados para aceder a mais do que o necessário para uma única operação. Este
+impacto negativo no desempenho é modelado com função da ponderação de negativo chamado a frequência de acesso a
+função de peso negativo (ver secção 5.8.3). Por último, como na abordagem de fragmentação DDB, a
+melhor partição é selecionada de modo a maximizar a soma das funções de peso.
+33
+
+
+
+
+
+Domain-Driven Design para um
+sistema de informação existente5 o
+Capítulo 5 descreve os principais aspectos conceituais da abordagem (consulte a Figura 5.1). Em primeiro lugar,
+este capítulo descreve o processo de refatoração (ver secção 5.1) contendo uma
+linguagem ubíqua e adequado das operações de negócio baseado na análise do modelo Domínio.
+Como mostrado na figura 5.1, as informações da onipresente linguagem e as
+operações de negócios são mescladas para criar um modelo de fonte (consulte a secção 5.7) que contém entidades, objetos de valor e módulos. O modelo da fonte é definida por um meta-modelo (ver secção 5.2)
+chamado de fonte meta-modelo e contém entidades, objetos de valor, módulos e
+operações de negócios. Utilizando diferentes regras de transformação (ver secção 5.4), o modelo da fonte
+pode ser transformada a partir da fonte de meta-modelo para um alvo de meta-modelo. O
+modelo alvo criado pode ser usado como uma fonte de transformação de modelo para o próximo. Por último, após uma ou
+mais transformações, o modelo final, tais como o modelo de agregado (ver secção 5.8.1)
+ou o modelo de serviço (ver secção 5.9) é obtido. O processo para gerar o primeiro modelo é chamado de modelo de artefato de transformação. O modelo de processos de transformação são
+chamados de modelo de transformações de modelos.
+35
+
+
+
+
+5 Domain-Driven Design para uma
+atualização de sistema de informação existente
+modelo-artefato onipresente linguagem
+Entidades de transformação e de objetos de valor
+Operações
+
+Meta-Model updateBuisiness fonte
+fonte
+modelo modelo modelo de Regra de transformação transformações
+Meta-Model alvo
+modelo alvo
+final Meta-Model
+Modelo Final
+Figura 5.1: Processo de transformação
+5.1 Processo de refatoração
+Refatoração arquitetura descreve o processo de alteração da infra-estrutura de um
+sistema existente para um novo enquanto a reutilização de informações e componentes da arquitectura antiga se é benéfica. O objetivo do Património Arquitectónico Refatoração é melhorar a
+qualidade global de software ignorando as limitações da antiga arquitetura [Ste16].
+A vantagem dessa abordagem é claramente que um não tem de escrever o sistema completamente novo mas é capaz de utilizar a estrutura do antigo sistema. No entanto, ao se projetar um sistema baseado em Design Domain-Driven, geralmente cria um novo sistema e utiliza a experiência dos especialistas em domínio para seu projeto. Foi decidido contra uma transformação directa
+36
+
+
+
+
+5.1 Processo de refatoração
+como raramente sucede na prática porque "a maioria desses sistemas têm vários
+modelos de permeio e/ou as equipas têm desenvolvimento desordenado hábitos" [Eva13]. A abordagem
+apresentada no próximo capítulo também cria um design Domain-Driven utilizando informações sobre as operações de negócios para apoiar o processo de refatoração. O "desvio" utilizando as operações de negócios de transformação foi escolhido como suas informações podem ser coletadas
+mesmo quando lidar com uma enorme bola de lama [FY97] cenário.
+O objetivo desta seção é descrever o processo de refatoração para Domain-Driven Arquitetura Design. Este processo utiliza o design estratégico e o desenho tático como sugerido por Eric Evans [Eva04]. O processo para obter o design estratégico está perto o processo original. O desenho tático no entanto utiliza o modelo automatizado transformações incorporando as operações de negócios para o processo de projeto. Depois de criar os elementos importantes do desenho tático automaticamente, os desenvolvedores podem modificar o idioma onipresente e as operações de negócios para ver o impacto da alteração na arquitetura.
+5.1.1 Idioma onipresente
+onipresente linguagem (ver secção 3.2) é o principal pilar da DDD. Deve conter os termos do núcleo e subdomínios, delimitada contextos e módulos. Como os contextos servem como uma delimitada barreira da onipresente linguagem, a linguagem tem de ser determinado para cada contexto delimitada. Além disso, facilita os termos do desenho tático
+(ver secção 3.4) e serve como base para a definição das operações de negócios.
+O glossário é usada para capturar a linguagem onipresente. Para o
+processo de refatoração arquitectónico, ele é criado a partir dos termos usados no antigo sistema. Além disso, os termos utilizados por pessoas envolvidas no domínio são recolhidos. A vantagem dessa abordagem é que ela não aliena o novo design. Termos são destiladas e aperfeiçoado por termos achado exclusivo e assim combater a redundância. Além disso, termos podem ser modificados se não aplicar o seu caso de uso. Isso pode levar a uma resistência dos trabalhadores como eles são usados para termos antigos e têm de se adaptar. Para isso, foi encontrado que o envolvimento de todas as partes para a criação da linguagem onipresente é importante. [Eva13] descreve o onipresente linguagem como uma empresa grande idioma . Se o idioma onipresente é criado localmente e apenas a uma
+pequena parte do projecto, não vai ganhar esta cobertura necessária.
+37
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+MERCAREON, por exemplo, decidiu usar o onipresente linguagem como definidos no
+Glossário como uma empresa grande língua utilizada para qualquer tipo de comunicação.
+Como mencionado antes, é importante para garantir uma actualização constante da linguagem ubíqua lan- guagem sempre que uma mudança para o modelo de domínio ocorre. As alterações podem assim a gama de novos clientes para novos requisitos. Em alguns casos, alterações podem exigir adaptações do projeto estratégico (ver secção 3.3), mas na maioria dos casos eles requerem alterações ao
+desenho tático (ver secção 3.4).
+A linguagem ubíqua é uma coleção de entradas definidas na definição 1:
+Definição 1 (onipresente linguagem).
+Seja L o onipresente linguagem com L = {e1, ..., en}, n ∈N
+então e = (prazo, delimitada contexto, módulo, identidade, tem-um, é-a) ser uma entrada do ubiqui-
+tous language (com conjuntos de entrada começando com uma letra maiúscula) onde:
+• Prazo: Prazo de entrada. Tem de ser exclusivo dentro do contexto delimitada.
+• delimitada contexto: Contexto para usar o Word em (ver secção 3.3.2).
+• Módulo: Módulo no contexto delimitada a palavra é necessária para (ver secção 3.3.4).
+• Identidade: (possivelmente vazia) conjunto de entradas identificar esta entrada. A identidade é necessário
+para as entidades de separação e de objetos de valor (ver secção 5.1.4).
+• Tem-um: (possivelmente vazia) conjunto de entradas que fazem parte desta entrada. Tem-um pode ser
+anotada com uma quantidade e é necessária para detectar a entidade raiz (ver secção 3.4.1)
+e seus componentes.
+• É-um: (possivelmente vazia) conjunto de entradas que são pais de esta entrada. É uma
+herança permite entre as entradas do idioma.
+Exemplo 9 exemplifica definição 1 com o onipresente linguagem de entrada de um reserva:
+Exemplo 9 (Reserva). • Prazo: reserva
+• delimitada contexto: sistema de TSM • Módulo: Reserva
+38
+
+
+
+
+5.1 Processo de refatoração
+• Identidade: {Empresa, número de reserva} • tem-um: {(des)Data de carregamento[1],[1]} gate • é-um: {entrega prevista}
+5.1.2 Operações Comerciais
+Transferência de informações directamente a partir da arquitetura do sistema antigo para o novo não foi destinado pela DDD. Utilizando as operações de negócios, informações sobre as operações
+que devem ser suportados são adicionados usando criar, ler, Atualizar, Excluir e entrada (CRUDI).
+Além disso, a freqüência de cada operação de anotação transmite a experiência adquirida a partir do sistema anterior ajudando a criar o desenho tático DDD modelos para cada
+contexto delimitada.
+Secção 6.1.2 exemplifica como as operações de negócios são armazenados. Para reunir as operações iniciais, especialistas em domínio e necessidade de categorizar o delimitadas as operações comerciais do contexto em criar, ler, Atualizar, Excluir e operações de entrada para cada módulo. Quando o ubíquo alterações de linguagem, as operações de negócios têm de ser actualizadas à medida que as operações de negócios são baseados na linguagem onipresente. Além disso, as operações de negócios também estão sujeitas a alterações logo que os requisitos do sistema foram alteradas.
+Manutenção do sistema portanto resulta em atualizações constantes para o glossário e as
+operações de negócio.
+A recolha das operações de negócios (BO) compreende as operações que foram categorizados
+como importante para o domínio pelos seus especialistas em domínio. Embora não seja parte do original conceito DDD, a recolha das operações de negócios foi introduzido para permitir uma análise mais potente, por exemplo o que desempenho a execução de um método e se ele requer segurança transacional. A análise é então usada para determinar as transformações de agregados (ver secção 3.4.3) e serviços (ver secção 3.4.5). Operações suportadas para cada uma das
+operações de negócio são criar, ler, atualizar e excluir (CRUD) com o ramal de
+entrada (CRUDI). A extensão de entrada permite distinguir entre a leitura de dados por
+operações de negócios ( por exemplo acessando Repositórios (ver secção 3.4.4) ) e os dados passados para a
+operação dos negócios como parâmetros.
+39
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+desde "qualquer dos casos de uso em um aplicativo corporativo são bastante aborrecido CRUD [...]
+casos de uso sobre objetos de domínio" [Divirta02], CRUDI foi escolhido para apoiar a categorização de
+elementos de dados (entidades e objetos de valor) e as operações de negócio em agregados. A
+freqüência determina quantas vezes uma operação comercial é executado, é necessária para
+a ocorrência de peso CRUDI operações e, além disso, determina o
+impacto no desempenho do negócio.
+Definição 2 apresenta os diferentes componentes das operações comerciais.
+Definição 2.
+Deixe BO ser o conjunto de operações de negócios com BO = {BO1, ..., bon}, n ∈N.
+Então bo = (nome, delimitada contexto, módulo, condição prévia, Entrada, criar, ler, Atualizar, Excluir, frequência) ser uma operação comercial onde:
+• nome: identificador exclusivo da operação de negócios.
+• delimitada contexto: contexto para usar a operação dos negócios em (consulte a secção 3.3.2).
+• Módulo: módulo no contexto delimitada o termo é necessária para (ver secção 3.3.4).
+• Condição prévia: condições que têm de realizar para a operação dos negócios para ser executado.
+• Entrada: elementos de dados passados como parâmetros.
+• Criar: operação de negócios que cria um elementos de dados.
+• Leia: operação de negócios que lê um elemento de dados existentes.
+• Atualização: operação que altera um elemento de dados existentes.
+• Excluir: remove um elemento de dados existentes.
+• Freqüência: intervalos entre "sempre" e "quase nunca" e estados quantas vezes uma
+operação comercial é executada com frequência: 1 ≤ ≤ 5, frequência ∈N
+5.1.3 Design Estratégico o
+Design Estratégico proposto no [Eva04] tem de ser determinada uma vez mediante projetando a arquitetura do sistema. Por conseguinte, foi decidido para determinar este design manualmente em vez de
+40
+
+
+
+
+5.1 Refactoring processo
+de criação de uma solução automatizada. A abordagem do projeto estratégico de arquitectura refatoração é muito semelhante à abordagem tradicional (ver secção 3.3) e portanto só
+pouco discutido a seguir.
+Core e subdomínio
+o primeiro passo na refatoração de sistemas de informação é dividir o domínio no core e subdomínios (ver secção 3.3.1). Para isso, especialistas em domínio e ter de avaliar quais as partes do
+sistema é crucial para o domínio e as que não o são.
+Esta decisão é importante para o processo de refatoração arquitetura uma vez que facilita a decisão de que partes do sistema antigo devem ser transferidos para a nova arquitetura, peças poderia permanecer na arquitectura antiga e que peças podem ser totalmente terceirizado.
+Contextos delimitada
+delimitada contextos (ver secção 3.3.2) servem principalmente como o limite para a linguagem onipresente. Sistemas herdados se comunicando com a nova arquitetura deve ser encapsu- culada com delimitada contextos. O mesmo é válido para os componentes terceirizados. Em um
+cenário perfeito, um contexto delimitada deve ser compatibilizada com um único núcleo e subdomínio.
+Especialistas em domínio pode criar um mapa de contextos delimitada mostrando o mapeamento para core e subdomínios e a estratégia de comunicação entre diferentes contextos. A figura 3.3 mostra o mapa criado para a empresa MERCAREON. Um ponto importante a ser observado durante a criação de um mapa de contexto é que delimitada contextos também dica como distribuir as diferentes equipas. Por conseguinte, deve ser tido em consideração que a distribuição da
+arquitetura do sistema antigo também influencia a equipe de distribuição.
+Como discutido na seção 3.3.3, a contextos delimitada, tendo em diferentes idioma onipresente, podem exigir uma camada de conversão. Além disso, delimitada contextos pode ser encapsulado com
+as portas e os adaptadores (ver secção 3.4.7) arquitetura para comunicar com bases de dados,
+bibliotecas de terceiros e outros sistemas externos.
+41
+
+
+
+
+5 Domain-Driven Design para um
+Módulo de Sistema de Informação existente
+logo delimitada contextos têm sido designados, eles podem ser subdivididos em pequenas unidades lógicas de módulos. Eles são usados para reduzir a complexidade e podem ser criados a partir de conceitos de domínio de alto nível. Os módulos são criados por especialistas em domínio responsável pela
+delimitada contexto os módulos estão localizados em.
+Quando a antiga arquitectura tem ainda não degradadas para uma enorme bola de lama, módulos podem ser
+parcialmente extrapolados. Tendo em módulos suporta o processo de desenvolvimento familiar como os desenvolvedores
+podem conjecturas a funcionalidade dos módulos.
+5.1.4 desenho tático
+desenho tático é afetado por cada mudança para a operação dos negócios e seu
+glossário subjacente. Para enfrentar este desafio, foi decidido que o desenho tático será gerado automaticamente usando um protótipo de Java (ver capítulo 6). Além disso, o protótipo ajuda na criação inicial e seguintes Designs Domain-Driven validando o glossário e as operações de negócio. Além disso, fornece uma visão geral gráfica do desenho tático. Isto pode ajudar a avaliar os aspectos positivos e negativos do projeto atual. Além disso, como o protótipo pode lidar com qualquer mudança para o negócio de operações envolvidas os desenvolvedores podem experimentar diferentes variantes obter feedback imediato como
+o desenho tático é alterado.
+Entidades e objetos de valor
+as entradas em um serviço de utilidade pública onipresente linguagem que possuem uma identidade ou que são crianças de uma entidade
+com uma identidade são entidades (ver definição 3 e a secção 3.4.1).
+Definição 3 (entidade).
+Deixe que o conjunto de todas as entidades no idioma onipresente L,
+42
+
+
+
+
+5.1 Processo de refatoração
+e = {e1, ..., pt | ≤ n,
+Identidade(e) 6= ∅ ∧ Identidade(e) ⊂ L
+é-um(e) 6= ∅ ∧ Identidade(e) = ∅ hasIdentity( (Identidade(e) = ∅ ∨ Identidade(e)* L) ∧ é-um(e) = ∅
+Entradas na linguagem ubíqua que não têm nem uma identidade nem são crianças de uma entidade
+hasIdentity (e, L) = 1} k ∈N, K
+1hasIdentity(é-um(e), L) e, L) =0
+tendo uma identidade são objetos de valor (ver definição 4 e a secção 3.4.2).
+Definição 4 (objeto de valor).
+Para a linguagem ubíqua L e o conjunto de entidades e,
+V = {e1, ..., pt | hasIdentity(e, L) = 0} k ∈N, k ≤ n é o conjunto de todos os objetos de valor de L.
+exemplo 10 apresenta a diferença entre entidades e objetos de valor no caso de
+a reserva entrada:
+Exemplo 10 (reserva Entrada entidade). A reserva entrada de exemplo 9 é uma entidade porque
+tem a identidade da empresa e número de reserva. Se a Comissão não tinha ainda pode ser uma entidade
+se um dos seus pais conectado a ele através de uma é de uma relação é uma entidade. No caso de a reserva,
+a data de entrega prevista é uma entidade. Caso contrário seria um objeto de valor.
+Exemplo 11 apresenta a operação dos negócios que está sendo usado para criar uma reserva no MERCAREON empresa. As reservas são criadas quando alocações são atribuídos a uma
+empresa transportadora.
+Exemplo 11 (Criar reserva).
+A operação dos negócios entrada utilizada para criar reserva operação:
+• nome: Criar reserva • delimitada contexto: sistema de TSM • Módulo: Agendar • Condição prévia: ∅ • Entrada: {gate, data, hora, valores de propriedade, transportadora id}
+43
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+• Criar: {reserva, entrada do log de transação} • Leia: {agendar} • Atualização: ∅ • Excluir: ∅ • Freqüência: 2
+agrega
+o modelo agregado (consulte a Seção 5.8) é criado a partir do modelo de fonte usando o modelo sensibilizadas- trução de transformações de modelos utilizando regras de transformação (ver secção 5.4).
+O modelo gerado ajuda os desenvolvedores para ver a propriedade de objeto e transacionais fronteiras. Quando uma mudança para o modelo da fonte ocorre, ele afeta o criado dos agregados e das suas congéneres manual. Os desenvolvedores são avisados se sua definição manual se torna obsoleta e se eles têm de rever a agregados gerados. Como o modelo da fonte, a visualização gerada suporta os desenvolvedores para obter uma visão geral de como a
+mudança afeta a propriedade e fronteiras.
+Além disso, como os agregados são obtidos a partir de repositórios, o modelo agregado lança luz sobre os repositórios que existe. Usando um modelo de artefato de transformação, é possível
+criar o método stubs para os repositórios necessários a criação de agregados.
+Serviços
+por criar o modelo de serviço (ver secção 5.9) utilizando um modelo de modelo de transformação, o protótipo suporta os desenvolvedores para categorizar as operações de negócios em métodos de objeto
+e serviços. Esta categorização é especialmente importante para evitar anemia modelos de domínio.
+Os modelos de domínio anêmicos [Eva04; Divirta03] é um anti-padrão onde praticamente qualquer comportamento
+reside dentro dos objetos tornando-os "pouco mais de sacos de getters e setters" [Divirta03].
+Anêmicos modelos de domínio são especialmente problemático como eles se assemelham a implementações de modelo de domínio válido. Com o protótipo da criação de uma representação visual, os desenvolvedores podem
+imediatamente identificar potenciais anêmicos desenhos para cada contexto delimitada.
+44
+
+
+
+
+5.2 Definição de Línguas de modelagem usando
+Modelagem Meta-Model 5.2 Definir idiomas usando Meta-Model
+a melhor forma de definir uma linguagem de modelagem é utilizando um meta-modelos. Uma meta-
+modelo, no entanto, também está sendo definido por uma linguagem de modelagem em si [OMG14].
+A meta, como pode ser visto na Figura 5.1, é estabelecer o modelo a modelo transformações
+aplicando uma transformação especificação consistindo de várias regras de transformação
+[OMG10].
+5.3 Rede Semântica Meta-Model
+o conceito de redes semântica (sNets) modelo é definido como segue:
+[Modelo] é um conjunto de nós. Qualquer nó sNet pertence a um modelo []. A sNet " nó não pode pertencer a muitos modelos []. [Modelos] trazer a modularidade a
+sNets.
+- Universidade de Nantes, [Nan98] "
+O sNets meta-modelo (consulte a Figura 5.2) permite a elaborar modelos que representam as relações semânticas entre os conceitos [Nan98]. Dentro de um modelo sNets, um modelo é criar de vários nós. Como mostrado na figura 5.3, um nó tem um tipo que é um subtipo de o
+nó raiz. Este facto é ilustrado por um meta relação entre um nó e o nó da raiz.
+Esta relação representa uma é de uma relação que deve ser distinguida da
+operação de negócios é de um relacionamento (ver definição 2). Para além disso um nó tem um nome
+representado por uma seqüência de caracteres. Cada nó é parte de um modelo (originalmente universo).
+Cada modelo é descrito por um meta-modelo (originalmente Universo semântico). Nós raiz são
+parte da meta-modelo que está ligado ao modelo do nó filho da raiz por uma
+relação semântica (MEV). O meta-modelo em sNets é um subtipo de um modelo consistindo de
+nó e nós de ligação. Cada modelo deve ser ligada à sua meta-modelo por uma sem link. Uma vez que
+um modelo é também um nó raiz no sNets nidificação de modelos é também possível (consulte a Figura 5.2)
+[CST00; Lem98a].
+O sNets modelos foram estendido para suportar as bordas ponderado necessário para modelagem tem-um
+as relações e as operações de negócio" frequências de acesso: um meta-modelo em sNets pode conter
+45
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente a
+parteda 1 ٭ ٭
+
+٭ Raiz meta modelo
+MEV
+1 nó Meta-Model 1
+Figura 5.2: sNets representação UML1
+Meta Peçado Modelo Raiz nó
+sem
+modelo parteda
+meta de
+caracteres de nome de seqüência de nó
+Figura 5.3: Nó sNets2
+Link٭ Nós que representam um link ponderada. O peso pode ser qualquer valor numérico número, +
+para zero ou mais. ٭ para um ou mais e
+para criar modelos sNets mais facilmente, [Lem98b] propôs uma notação simplificada como mostrado na
+Figura 5.4. Nesta notação, o modelo e a meta-modelo são representados por quadrados com
+bordas arredondadas. O modelo tem uma sem relação à sua meta-modelo. Os nós são exibidos como
+círculos metade expondo o tipo na parte superior e o nome na parte inferior. A PEÇADO
+link é modelado pelo nó que está sendo elaborado dentro de um modelo. É importante que esta
+é apenas outra representação gráfica e, embora não na figura, o nome
+e a parteda links ainda existem e que por conseguinte pode ser acessado por regras de transformação
+(ver secção 5.4).
+Por exemplo 12 mostra como uma reserva de entrada do sistema de TSM é representado em sNets.
+Por exemplo 12 (reserva). Figura 5.5 é uma representação do exemplo simplificado sNets 9.
+Ele mostra como as entidades e os objetos de valor são definidos e também como a definição das bordas
+1adaptado de [CST00]
+2adaptado de [Lem98b]
+46
+
+
+
+
+5.3 Rede Semântica Meta-Model
+Meta-Model
+nó raiz
+meta semModel
+nó raiz
+Figura 5.4: notação sNets simplificado3
+entre eles são modelados. Além disso, ela exemplifica como modelos são aninhadas por nesting o módulo de reserva no contexto do sistema de TSM. Além disso, o exemplo é uma
+versão simplificada da realidade uma vez que contém entidades sem um identificador de correspondência.
+3adaptado de [Lem98b]
+47
+
+
+
+
+5 Domain-Driven Design para um
+Módulo de Sistema de Informação existente Meta-Model Link
+é um
+
+nó de saída saída recebidas
+Entidade Link de
+
+saída
+e de entrada m m t
+e uma identidade recebida
+um t
+t a a
+t e
+e
+m
+m
+Contexto Meta-Model recebidas Link٭
+Nó de saída meta tem-um
+módulo de entrada do nó
+em um objeto de valor
+e t e
+m meta
+m
+sem
+tempo sem gerenciamento de Slot systemBooking
+entidade esperada é de uma
+entidade de entrega de identidade de entidade
+empresa reserva identidade entidade
+tem-a1
+-gate tem um objeto de valor 1
+reserva
+número de objeto de valor
+(UN)Data de carregamento
+Figura 5.5: Sistema de Gestão de Time Slot sNets exemplo
+48
+
+
+
+
+5.4 Regras de transformação
+5.4 Regras de transformação
+como [Lem98b] explica, uma transformação entre modelos de dois modelos diferentes de meta-
+pode ser Obtidos através da aplicação de um conjunto de regras.
+As regras de transformação são definidos em EBNF [Lem98b]. Em primeiro lugar, cada
+regra de transformação contém a fonte e alvo de meta-modelo. Em segundo lugar, uma transformação regra contém
+um conjunto de declarações. Este último é executado até que a declaração não é aplicável qualquer mais e, portanto, a transformação é concluído. Uma declaração pode ter múltiplas variáveis vinculadas a nós ou bordas. Demonstrações financeiras não pode ser aplicada várias vezes com a mesma variável com a qual cada delimitada delimitada variável não pode ser vinculado a um
+nó já vinculado ou edge. A transformação da regras EBNF definição foi adaptada para atender às necessidades de
+transformar modelos DDD.
+A regra de transformação EBNF é definido como segue:
+;) hConclusionsi ::= ( "("hConclusioni ")" ) | ( hConclusioni {"∧"hConclusioni} ;) hConditionsi ::= ( "("hConditionsi ")" ) | ( hConditioni {("∧"|"∨") hConditionsi} ; hTransformationRulei ::= hHeaderi ":"{hStatementi}; hHeaderi ::= hSourceMetaModeli → hTargetMetaModeli; hStatementi ::= [ "Prioridade " hPriorityi ":"] hConditionsi → hConclusionsi ";"
+tal como definido na EBNF, transformação regras têm uma hHeaderi e um conjunto de hStatementsi.
+A seção a seguir explica 5.5 o cabeçalho de uma regra de transformação. Posteriormente Sec Äao
+5.6 discute os diferentes hConclusionsi hConditionsi e disponíveis em uma hStatementi.
+5.5 Regra de transformação - Plataforma
+a plataforma de uma regra de transformação descreve a fonte de meta-modelo e o alvo meta- modelo para que as declarações da regra de transformação são aplicáveis [Lem98b]. Um
+modelo pode ser transferida a partir da fonte de meta-modelo para um alvo de meta-modelo aplicando
+as demonstrações financeiras definidas pela regra de transformação.
+49
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+5.6 Regra de transformação - Declaração
+um hStatementi define um conjunto de condições de positivo ou negativo (ver secção 5.6.1), que se
+satisfeito, resultará no cumprimento da conclusão (ver secção 5.6.2), que cria
+um conjunto de novos nós e links [Lem98b].
+Definição 5 define o modelo sNets matematicamente e é utilizado para definir as diferentes
+condições e conclusões disponíveis na transformação da declaração da regra.
+Definição 5 (rede semântica).
+• G ∈ {SourceMetaModel, SourceModel, TargetMetaModel, TargetModel} • V (G) são vértices do gráfico G • E(G) são as bordas do gráfico G • Cada borda e ∈ E(G) tem um tipo(e) e cada nó n ∈ V (G) tem um tipo(n).
+• VVT(G) := {v ∈ V (G) | tipo(v) = V T } são os vértices do tipo V T . O conjunto de V T
+é definida de acordo com o meta-modelo.
+• O sistema IIT(G) := {e ∈ E(G) | tipo(e) = ET } são as bordas do tipo et . O conjunto de ET é
+definido de acordo com o meta-modelo.
+• Cada nó n ∈ V (G) tem uma seqüência de caracteres nome(e).
+• Cada borda e ∈ ELink٭(G) tem um número natural w(e), chamado seu peso.
+Nota: na definição, o modelo sNets é chamado um gráfico G. sNets nós são chamados vértices
+enquanto sNets links são chamados de bordas.
+Prioridade (Extensão)
+hPriorityi é usado para dar as declarações de uma regra de transformação de uma ordem de execução.
+A prioridade é um número natural. Demonstrações financeiras com uma prioridade mais alta será executado antes de os com uma prioridade inferior. Demonstrações financeiras com a mesma prioridade serão executados
+em uma ordem aleatória. Se nenhum hPriorityi for especificado, o comando pode ser executado de forma aleatória
+e portanto se comporta como as declarações que foram sugeridas por [Lem98b].
+50
+
+
+
+
+5.6 Regra de transformação - Declaração
+Declaração 5.6.1 - Condições
+formalmente, uma condição limitações o tipo de uma variável ou requer uma ligação entre duas
+variáveis. As condições tenham sido estendido para suportar ligações ponderada e aritmética
+fórmulas.
+Uma condição, portanto, é definida do seguinte modo:
+hConditioni ::= hLinkConstrainti hTypeConstrainti | | | | hFormulai hWeightedLinkConstrainti hTempLinki
+as seções a seguir introduzir os diferentes condicionalismos de uma declaração disponível con-
+dition. Para isso, a negação ramal está em primeiro lugar apresentado como cada condicionalismo tem também uma
+variante de negativo.
+Negação (Extensão)
+especialmente com a média aritmética formulars e laços temporários, existe a necessidade de
+negação. A negação é expressa com uma negação lógica (€) símbolo. Ele permite que as
+declarações mais poderosas como, por exemplo, filtro para todos os nós do modelo de fonte sem
+um link para um determinado nó diferentes no modelo da fonte.
+Restrição de tipo
+A são utilizados hTypeConstrainti em declarações para filtrar uma variável para nós de um determinado
+tipo de nó.
+Um hTypeConstrainti tem a seguinte forma:
+hTypeConstrainti ::= ["¬"] ["target_"]hTypei "("hNodei")"
+no caso de a condição hTypeConstrainti não começa com "alvo_", a condição é
+verdadeira iff o nó do modelo de fonte especificado pelo hNodei tem uma meta link para um nó com
+51
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+do tipo hTypei na fonte meta-modelo.
+Isto é equivalente a:
+∀ ∈ Nó V (SourceModel) ∃ t ∈ V (SourceMetaModel) :
+(Nó, t) ∈ {Emeta(G) | Nome(t) = Tipo}
+no caso de a condição hTypeConstrainti começa com "alvo_", a condição é verdadeira iff o nó do modelo alvo especificado pelo hNodei tem uma meta link para um nó com o tipo
+hTypei no alvo de meta-modelo.
+Isto é equivalente a:
+∀ ∈ Nó V (TargetModel) ∃ t ∈ V (TargetMetaModel) :
+(Nó, t) ∈ {Emeta(G) | Nome(t) = Tipo}
+em volta, a variante negada é verdadeiro iff o nó não tem meta link para um nó com o nome
+hTypei nos respectivos modelos:
+Nó ∀@ t : (Nó, t) ∈ {Emeta(G) | Nome(t) = Tipo}
+constrangimento
+hLinkConstrainti Link ::= ["¬"] ["target_"]hLinkTypei hFromNodei "(" "," hToNodei ")"
+no caso de a condição hLinkConstrainti não começa com "alvo_", a condição é
+verdadeira iff existem ligações com o tipo hLinkT ypei entre os nós hFromNodei
+hToNodei e do modelo da fonte.
+Isto é equivalente a:
+FromNode ∀ ∈ V (SourceModel) ∀ ∈ ToNode V (SourceModel) :
+(FromNode, ToNode) ∈ ELinkType(G)
+No caso de o hLinkConstrainti condição não começar com "alvo_", a condição é
+verdadeira iff existem ligações com o tipo hLinkT hFromNodei ypei entre os nós e
+do modelo alvo hTargetNodei.
+52
+
+
+
+
+5.6 Regra de transformação - Declaração
+Este é equivalente a:
+FromNode ∀ ∈ V (TargetModel) ∀ ∈ ToNode V (TargetModel) :
+(FromNode, ToNode) ∈ ELinkType(G)
+a variante negada é verdade, iff nenhum link do tipo hLinkT ypei existem entre hFromNodei
+hToNodei e nos respectivos modelos:
+∀ FromNode, ToNode : (FromNode, ToNode ELinkType ∈)/(G)
+Link temporário condicionalismo
+laços temporários iniciar com um caractere de sublinhado (_), com o fim de os distinguir dos links normal. O link temporário condicionante é verdadeiro iff existem laços temporários do
+tipo hLinkT ypei entre os nós e hToNodei hFromNodei.
+Laços temporários são definidos do seguinte modo:
+hTempLinki ::= ["¬"] "_" hLinkTypei hFromNodei "(" "," hToNodei ")"
+a definição formal é equivalente à definição de normal link limitações (ver secção 5.6.1 - Restrição de link). Laços temporários são usados para associar os nós criados
+no modelo alvo com nós fora do modelo da fonte. Por exemplo, quando criar uma
+tabela do tipo nó no modelo alvo a partir de um nó no modelo da fonte. Para
+adicionar novos nós e os conecte a tabela nó para cada nó conectado ao nó
+do modelo de fonte, um link temporário entre esses dois nós é necessário. Sem
+o link temporário, a criação do nó conectado no modelo alvo seriam difíceis
+como a associação ao nó no modelo da fonte é perdida. Além disso,
+laços temporários podem ser usadas para indicar a execução anterior de uma declaração de declarações executada
+mais tarde.
+Como o nome já indica, laços temporários são removidos após a execução da
+regra de transformação concluindo um modelo de transformação.
+Link ponderada condicionalismo (Extensão)
+para suportar a adição de links ponderada (Link٭), a seguinte restrição foi adicionado.
+53
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+hWeightedLinkConstrainti ::= ["¬"] hLinkTypei "("hToNodei hFromNodei "", "", hWeighti ")"
+a condição for TRUE iff existem links do tipo hLinkT ypei entre os nós
+e hToNodei hFromNodei. Além disso, hW eighti tem de corresponder ao link de peso.
+Isto é equivalente a:
+FromNode ∀ ∈ V (SourceModel) ∀ ∈ ToNode V (SourceModel) seja
+x := (FromNode, ToNode) ∈ ELinkType(G) Onde ∃ y ∈ {VLink٭(SourceMetaModel) | tipo(x) = nome(y)} e
+peso(x) = W oito
+a variante negada é verdade, iff não existem ligações em todos ou apenas links com um
+peso diferente entre FromNode
+FromNode ToNode: ∀ e ∈ V (SourceModel) ∀ ∈ ToNode V (SourceModel) seja
+x := (FromNode, ToNode) ∈ ELinkType(G), onde @ y ∈ {VLink٭(SourceMetaModel) | tipo(x) = nome(y)} ou
+peso(x) 6= W oito
+Link ponderada temporária condicionalismo (Extensão)
+A restrição temporária link ponderada iniciar com um caractere de sublinhado (_), com o fim
+de os distinguir dos links ponderada normal. Ele se comporta como o link temporário (ver secção 5.6.1 - Link temporário limitação) com a adição de um link peso (consulte a Secção 5.6.1 - Link ponderada condicionalismo (Extensão)). Por conseguinte, a
+ponderada temporária link é também removido quando a transformação estiver concluída.
+hWeightedLinkConstrainti ::= ["¬"] "_"hLinkTypei "("hToNodei hFromNodei "", "", hWeighti
+")"
+funções (Extensão)
+Um inconveniente do formalismo sNets é que não há nenhuma opção para restringir a indús- baseado em sofisticadas fórmulas matemáticas. Por exemplo, um só transforma
+54
+
+
+
+
+5.6 Regra de transformação - Declaração
+se o rendimento do trabalhador é superior a 1000 euros. Uma vez que o agregado a detecção é baseada na heurística, foi necessário adicionar uma maneira de realizar o cálculo em indús- regras. Além disso, helper funções poderia ser definido para atravessar o gráfico e, por
+exemplo para obter o nó raiz de uma estrutura baseada em árvore.
+Uma condição hFunctioni começa com um hash (#) caractere e é expressa como segue:
+")" ٭ hFunctioni ::= ["¬"] "#"hFunctionNamei "("hParameteri ( ",")
+Permitem Parameteri hParameteri ∈ V (SourceModel) ∪ E(SourceModel), i ∈N. O hFunctioni condição
+é verdadeira iff o resultado da função é maior que zero para todas as permutações parâmetro:
+∀ ∈ Parâmetro p11 ... ∀ ∈ pn Parametern : fFunctionName(p1, . . . pn) &gt; 0
+a variante negada é verdadeiro iff o resultado da função é inferior ou igual a zero:
+∀p1 ∈ Parâmetro1 ... ∀pn ∈ Parametern : fFunctionName(p1, . . . pn) ≤ 0
+5.6.2 Declaração - Conclusões
+uma conclusão pode ser a criação de novos nós ou a criação de um link (temporário)
+entre duas variáveis de limite. Uma conclusão, portanto, é definida do seguinte modo:
+hConclusioni ::= hLinkCreationi hNodeCreationi | | |
+nó hTempLinkCreationi hWeightedLinkCreationi criação
+nós são criadas no modelo alvo usando uma conclusão.
+hNodeCreationi hNodeCreationi ::= hTypeNamei "("hVariablei")"
+o nó criado tem o nome especificado pelo ariablei hV e é do tipo hTypeNamei.
+Por conseguinte, ele tem uma meta link para o nó do tipo correspondente no meta-modelo.
+55
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+é equivalente a:
+Nó ∃ ∈ V (TargetModel), t ∈ V (TargetMetaModel) :
+(Nó, t) ∈ {Emeta(G) | Nome(t) = Tipo de
+criação de link}
+Links são criados entre dois nós do modelo alvo usando uma
+conclusão.
+hLinkCreationi hLinkCreationi ::= hLinkTypei "(" hSourceVariablei hTargetVariablei ","")"
+A conclusão hLinkCreationi cria um link do tipo hLinkT ypei entre os nós e hToNodei hFromNodei.
+Isto é equivalente a:
+FromNode ∃ ∈ V (TargetModel)∃ ToNode ∈ V (TargetModel) :
+(FromNode, ToNode) ∈ ELinkType(g)
+Criação de Link ponderada (Extensão)
+Como estendido sNets meta-modelos suportam links ponderada (Link٭), a criação de
+links ponderada entre dois nós do modelo alvo foi adicionada a declaração de
+conclusões.
+hWeightedLinkCreationi ::= hLinkTypei "("hTargetVariablei hSourceVariablei "", "",
+(hWeighti ["+"hWeight2i]) | (hFunctioni) ")"
+hW eightedLinkCreationi conclusão cria um link ponderado do tipo hLinkT ypei
+com o hardware de peso entre os nós hSourceV eighti ariablei e hTargetV ariablei.
+hWeight2i é definido para zero se não especificado. Alternativamente o resultado de um hFunctioni pode ser
+usado para definir o peso do link.
+56
+
+
+
+
+5.6 Regra de transformação - Declaração
+Este é equivalente a:
+FromNode ∃ ∈ V (TargetModel) ToNode ∃ ∈ V (TargetModel) com
+x := (FromNode, ToNode) ∈ ELinkType(G) Onde ∃ y ∈ {VLink٭(SourceMetaModel) | tipo(x) = nome(y)} e ((peso(x) = peso + Peso2) ou (peso(x) = fFunctionName(p1, ... pn)
+Link temporário criação
+laços temporários podem ser normais links criados entre dois nós. A diferença entre laços temporários e uma criação de link normal é que laços temporários podem ser criados no modelo de fonte, o modelo alvo ou até mesmo spanning tanto a origem e o
+destino Modelos (consulte a Secção 5.6.1 - Link temporário limitação).
+hTempLinkCreationi ::= "_" hLinkTypei hSourceVariablei "(" "," hTargetVariablei ")" a
+criação de link ponderada temporária
+temporária da criação de link ponderada é semelhante a uma criação de link ponderada normal (consulte a Secção 5.6.2 - Criação de Link ponderada (extensão). A diferença entre laços temporários e uma criação de link normal é que laços temporários podem ser criados no modelo de fonte, o modelo alvo ou até mesmo spanning tanto a origem e o destino Modelos (consulte a
+Secção 5.6.1 - Link ponderada temporária condicionalismo (Extensão)).
+hTempWeightedLinkCreationi ::= "_"hLinkTypei "("hTargetVariablei hSourceVariablei "", "",
+hWeighti ["+"hWeight2i] ")"
+5.6.3 Exemplos
+Os exemplos a seguir demonstram a EBNF para diferentes condições e a conclusão.
+Exemplo 13 (declaração condições).
+57
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+• Entidade(e) é verdadeira para todos os nós do tipo "Entidade" • Entidade(e) ∧ Identidade(e,v) ∧ Entidade(v) é verdadeira para todos os "Entidade" nós conectados com um
+"Identidade" edge para um nó de tipo "entidade".
+Exemplo 14 (declaração Conclusões).
+• Entidade(e) ∧ nome(e,"reserva") cria um nó do tipo "Entidade" com o nome de
+"reserva".
+• tem-um(a,b) cria um tem-um link entre os nós a e b .
+5.7 Modelo da fonte
+o DDD modelo de fonte é directamente convertida usando um artefato modelo de transformação
+(consulte a Figura 5.1) sobre o ubíquo o idioma e a operações de negócios.
+Como exigido pelo serviço de agregado e determinação, a origem inicial de meta-modelo
+pode ser visto na Figura 5.6 e contém entidades e objetos de valor com as suas relações e a categorização por módulos. Eles estão sendo acessados por operações de negócios também
+pertencente ao módulo. O modelo da fonte é criado para cada delimitada contexto da
+DDD aderindo à fonte de meta-modelo. Além disso, tal como explicado na secção 5.1.2, as operações de negócios acessa (representado como bordas dos tipos correspondentes no
+modelo da fonte) as entidades e objetos de valor com um dos criar, ler, Atualizar, Excluir
+e operações de entrada.
+O objetivo do modelo de fonte não é apenas para ser capaz de determinar agregados e serviços, mas também para validar o onipresente linguagem graficamente e as operações de negócios. Para
+criar este modelo, um artefato modelo de transformação [OMG10] é realizada para transformar
+tanto as informações da onipresente linguagem e as operações de negócios para o modelo da fonte. Além disso, desde a distribuição em módulos para avaliar o
+contexto das fronteiras delimitadas, o modelo da fonte também ajuda a avaliar as decisões de projeto estratégico.
+58
+
+
+
+
+
+Meta-Model
+5.7 Modelo da fonte
+Link incomming
+Criar
+incomming Link
+incomming
+saída Leia incomming
+Nó de saída
+Entidade Link a entrada é uma
+saída saída
+entrada entrada
+
+saída
+
+saída Link Nó receptivo a
+operação de atualização de negócios de
+entrada saída saída
+saída link
+
+Link Excluir٭
+٭ link Link do objeto de valor tem-um
+
+
+nó de entrada de saída de identidade
+Freq Entrada
+Entrada Link
+meta
+Contexto
+Módulo de nó
+Figura 5.6: Fonte Meta-Model
+59
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+5.8 Modelos agregados
+agregados estão sendo determinado por duas etapas de transformação do modelo do modelo (ver Fig
+impossibil- 5.1). Em primeiro lugar, um modelo de fonte é gerado. Este modelo é então transformada em
+potencial modelo alvo de agregados contendo todos os candidatos dos agregados pela recor-
+dade de uma regra de transformação. Em seguida, por reutilizar o modelo alvo criado como um modelo de fonte para a próxima regra de transformação, o potencial fonte de agregado modelo é transformado
+em agregado final modelo contendo agregados reais. Em primeiro lugar, os três modelos
+(ver secção 5.8.1) e depois a transformação regras (ver secção 5.8.2) são apresentados.
+5.8.1 Modelos
+Esta seção descreve os diferentes modelos envolvidos na transformação para
+finalmente determinar agregados.
+Modelo de agregado potencial
+o potencial modelo agregado (consulte a Figura 5.7 para a meta-modelo) contém todas as
+datas de aplicação- buídas por ser um agregado no modelo agregado final agrupados por potenciais
+modelos agregada. Neste modelo de várias possibilidades de agregar os nós podem conter as mesmas entidades que têm o mesmo valor de objetos. Desde sNets suportam apenas um nó sendo em um modelo com um tempo, entidades e objetos de valor em potencial de diferentes agregados são
+representados por diferentes nós consequentemente. Além disso, é de uma relação do
+modelo da fonte é substituído pelo Herdando todas as relações tem-um do pai.
+Por exemplo, se uma reserva é uma entrega e entrega tem uma data de entrega, o livro- ing herda essa data. As operações de negócios são deixadas de fora do modelo como parte
+de um serviço,uma entidade ou um objeto de valor que estão sendo analisados pelo Serviço Mod-
+els (consulte a secção 5.9).
+Potencial dos agregados são transformada a partir do modelo da fonte. A primeira parte é transformado
+por criar a transitividade encerramento ao longo do tem-um relações no modelo da fonte e em seguida
+uma caminhada através de cada nó a adição de ti e seus filhos para o modelo.
+60
+
+
+
+
+5.8 Modelos agregada agregado potencial Meta-Model Nó de saída
+Entidade Link a entrada é de um
+
+
+potencial de entrada de entrada de saída saída agregados Meta-Model Nó meta Link٭ Link agregado potencial tem uma identidade de
+entrada saída
+
+entrada saída
+Link٭ Nó
+AccessFreq recebidas objeto de valor
+Figura 5.7: Potencial Meta-Model agregada
+na segunda parte, os nós acessado em conjunto por operações de negócios no
+modelo de fonte também são adicionados ao potencial agrega uma vez que é provável que eles compartilham o mesmo
+limite de transações.
+Modelo
+agregado agregado final modelo (consulte a Figura 5.8 para a meta-modelo) contém os agregados seleccionados a
+partir do modelo agregado potencial. É obtido através da aplicação da indús-
+Regras sobre o potencial do modelo agregado reduzindo o conjunto de potenciais agregados
+até que todas as entidades ocorrem uma vez no modelo global. Isso resulta em agregados potencial a
+ser deixada de fora uma vez que uma de suas entidades foi parte de um potencial agregado que foi escolhido
+antes por uma regra de transformação para ser parte do modelo global. A principal diferença para
+o potencial de agregar meta-modelo é a ausência de link a frequência que era apenas
+necessário٭ para transformação (ver secção 5.8.3)
+61
+
+
+
+
+5 Domain-Driven Design para uma informação existente SystemAggregate Meta-Model Nó de saída
+Entidade Link a entrada é uma
+entrada saída saída
+
+Nó Meta-Model agregados de entrada meta Link٭ Link agregado tem-um
+
+
+nó de entrada de saída de identidade
+objeto de valor de entrada
+Figura 5.8: Agregar Meta-Model
+5.8.2 Regras de transformação total
+Esta seção descreve a transformação de dois passos do modelo de fonte para o potencial de
+agregar modelo e depois do último para o modelo agregado final.
+A partir de modelo de fonte potencial para agregar
+as duas primeiras declarações modelo criar uma transitividade encerramento em o modelo da fonte sobre o tem-um
+arestas, com bordas tem-um temporária. A primeira declaração, chamado htempHasAi, cria as
+bordas tem-um temporário para cada um tem uma borda e tem a prioridade mais alta (consulte a secção 5.6 - Prioridade (extensão). Esta etapa simplifica a outras declarações porque como temporário tem-um bordas são criados mais tarde, as declarações não necessidade de fazer a distinção entre o normal
+e bordas temporária.
+A segunda declaração, htransitiveClosurei cria uma margem temporária uma→ C se um (-
+ficiem) borda existe a partir entre A → B e de B → C, portanto, depois de todas as declarações
+são executados, um encerramento transitivos existe no gráfico.
+62
+
+
+
+
+5.8 Modelos agregada a entidade tem-um
+1
+Entidade B tem uma
+
+entidade 1 C
+Figura 5.9: tem-uma constelação
+para criar o potencial entidade agregada permutações, passos intermédios da
+transformação a um encerramento transitivos são necessários. Por conseguinte, a hnewPotAggregatei
+e hhasA1i declarações têm uma prioridade mais elevada do que a declaração htransitiveClosurei.
+Isso resulta em copiar os nós de origem para o de destino modelo logo que uma nova
+borda tem-um temporária foi criada. A declaração hnewPotAggregatei cria o
+novo agregado potencial com apenas uma entidade. Em seguida, o hhasA1i declaração cópias de todas as
+entidades ligadas a esta entidade. Esta abordagem garante que todas as permutações tem-um no
+modelo a partir de um único tem-um nó para seu tem-um childrens e seus filhos.
+Na Figura 5.9, a abordagem resultaria em combinações {{A}, {A, B}, {A,B,C}, {B},
+{B, C}, {C}}. Por último, a declaração cria todos sensitiva2 tem-um regular de enlaces de conhecimen-
+tos limites agregados. Estes são necessários para a função sensitiva externo (ver Sec Äao 5.8.3).
+htempHasAi ::= Prioridade 4 : Entidade(e) ∧ tem-um(e,v) → _tem-um(e,v); htransitiveClosurei ::= Prioridade 1 :
+Entidade(e) ∧ _tem-um(e,v) ∧ _tem-um(v,w) → _tem-um(e,w);
+hnewPotAggregatei ::= Prioridade 2 :
+Entidade(e) ∧ nome(e,eName) ∧ Entidade(v) ∧ _tem-um(e,v)
+63
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+→ Enitiy(raiz) ∧ nome(raiz,eName) ∧ PotentialAggregate(p) ∧ PEÇADO(raiz,p) ∧
+_createdFrom(e,raiz);
+hhasA1i ::= Prioridade 3 : _fonte(e,v) ∧ _tem-um(e,n) ∧ nome(n,NNOME) ∧target_PEÇADO(v,p)
+→ Enitiy(novo) ∧ nome(novo,NNOME) ∧ tem-um(v,novo) ∧ PEÇADO(novo,p) ∧
+_fonte(n,novo);
+hhasA2i ::= Prioridade 1 : _fonte(e,v) ∧ _fonte(f,w) ∧ tem-um(e,f) → tem-um(v,novo);
+a declaração hmovei contas de operações de negócios e adiciona potencial agregados
+para várias entidades sendo modificado ou acessados por operações de negócios. Note que com
+estas declarações, duplicado agregados potencial poderia ser criado. Isso não conduz a uma
+posterior multiplicação agregada porque se um dos agregados potencial semelhante é escolhido
+na transformação para o modelo agregado, as duplicatas são marcados com uma
+margem temporária e, por conseguinte, ignorado pelas declarações executadas posteriormente.
+hmovei ::= Prioridade 1 : BusinessOperation(bo) ∧ Entidade(e) ∧ (Criar(bo,e) ∨ Ler(bo,e)
+∨ Update(bo,e) ∨ Excluir(bo,e) ∨ Entrada(bo,e)) ∧ nome(e,eName) → Enitiy(newE) ∧ nome(newE,eName) ∧ PotentialAggregate(p) ∧ PEÇADO(novo, p) ∧
+_fonte(v,novo); e por
+último, a declaração haccessFreqi fornece informações quantas vezes uma entidade é acessado por
+uma operação de negócios é exigido pela frequência de acesso a função de peso positivo (ver Sec Äao
+5.8.3). A informação é armazenada em uma borda ponderada sobre o potencial agregado
+contendo a soma de todas as freqüências das operações de negócios que o acesso de todas as entidades do
+potencial agregado.
+haccessFreqi ::= Prioridade 1 :
+¬target_Entidade(te) ∧ ¬target_PEÇADO(te,p) ∧ target_PotentialAggregate(p) ∧
+BusinessOperation(bo) ∧ ( euros Criar(bo,e) ∧ ¬Ler(bo,e) ∧ Atualização de euros(bo,e) ∧
+¬Excluir(bo,e) ∧ ¬Entrada(bo,e)) ∧ _fonte(se,te) ∧ freq(bo,bo,f) ∧
+target_accessFrequency(p,p,dobra)
+→ target_accessFrequency(p,p,dobre+f);
+64
+
+
+
+
+5.8 Modelos de
+declaração haccessFreqi agregado pode ser lida da seguinte forma: quando não houver nenhuma entidade no
+modelo alvo que é parte do potencial agregar p que não está sendo acessado
+pela empresa CRUDI operação b, adicione o valor da freq a operação dos negócios b para o
+accessFrequency do potencial
+do agregado agregada p. Potencial de modelo Para o modelo final
+de todos os Agregados primeiro, pesos para potenciais agregados estão sendo calculado pela declaração hweighti
+para ser capaz de determinar a ordem em que as potenciais agregados são transformadas para
+agregados. Por conseguinte uma borda com o peso da função weightPotentialAggregate
+(ver secção 5.8.3) é criado e auto referenciar o potencial aggreagte. Observe que embora
+a declaração não tem a prioridade mais alta é executado antes das outras declarações.
+Isto é porque as outras afirmações não podem ser executadas antes da fase instrução for
+executada.
+hweighti ::= Prioridade 2 : PotentialAggregate(e) → _peso(e,e,#fweightPotentialAggregate(e));
+após a ponderação de todos os possíveis agregados (assegurada por uma menor prioridade do que a
+declaração de peso), o agregado que não foi ainda concluído e tem o maior peso é
+determinado e encenado para transferência para um recém criado agregado do
+modelo agregado final pela declaração.
+hstagei hstagei ::= Prioridade 1 : PotentialAggregate(e) ∧ PotentialAggregate(v) ∧ _peso(e,e,nós)
+∧ ¬_peso(v,V,wv)∧ #fhigher(wv, nós) ∧ ¬ _terminado(e,e) → Agregar(a) ∧_stage(e,a);
+a declaração hstagei pode ser lida da seguinte forma: Não há potencial agregado v com um
+peso superior ao peso do agregado potencial e.
+A função é assim definido como segue:
+&gt; b fhigher(a, b
+fhigher1 ) = 0 caso contrário
+quando um potencial agregado foi encenado para transferência, todos os potenciais agregados contendo
+um nó entidade criada a partir da mesma entidade do modelo de fonte são marcados como Concluído.
+65
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+a selecção do mesmo nó é baseado nos nós dos nomes. Daí os nomes tem
+que ser exclusivo em DDD dentro de um único contexto delimitada. Para isso, o hmarkDuplicatei
+afirmação encontra as marcas e os nomes de entidade duplicados.
+hmarkDuplicatesi ::= Prioridade 3 : Entidade(e) ∧ _stage(p,a) ∧ PEÇADO(e,p)(v) Entidade ∧ ∧
+¬ PEÇADO(e,v) ∧ nome(e,aName) ∧ nome(v,aName) ∧ PotentialAggregate(p2) ∧
+PEÇADO(v,p2)
+→ _terminado(p2,p2);
+com a mesma prioridade, as entidades são copiadas por thehmoveEntitiesi declaração do
+agregado para o modelo do potencial agregado final modelo. Além disso, um createdOf
+link temporário é criado ajudando a identificar qual a entidade foi criada pela entidade que no
+modelo da fonte.
+hmoveEntitiesi ::= Prioridade 3 : Entidade(e) ∧ _stage(p,a) ∧ PEÇADO(e,p) ∧ nome(e,eName)
+→ Entidade(novo) ∧ nome(novo,eName) ∧ PEÇADO(e,a) ∧ _createdOf(novo,e);
+após as entidades terem sido copiados para o modelo agregado final, tem-um relações têm de
+ser transferidos como bem. O primeiro comando copia o objeto de valor para cada entidade criada e cria um tem-se uma relação entre as entidades e seus objetos de valor. A segunda
+declaração cria tem-um relações entre entidades do mesmo agregado.
+hmoveValueObjectsi ::= Prioridade 2 :
+_createdOf(novo,e) ∧ PEÇADO(e,a) ∧ tem-um(e,v) ∧ ValueObject(v) ∧ nome(v,vName)
+→ ValueObject(newV) ∧ nome(newV,vName) ∧ PEÇADO(v,a) ∧ tem-um(e,v);
+hrestoreEntityHasAi ::= Prioridade 1 :
+_createdOf(ae1,pe1) ∧ tem-um(PE1,pe2) ∧_createdOf(ae2,pe2)
+→ tem-um (ae1,ae2);
+5.8.3 Peso potencial função agregada
+a fweightPotentialAggregate(e) função calcula a soma de seis diferentes funções peso
+retornando positivo ou negativo infinito, ou um valor no intervalo de - 4, ... 0, ..., +4. Zero é
+retornado quando a decisão não pode ser feita com base no potencial avaliada agregado.
+66
+
+
+
+
+5.8 Modelos agregado
+menos infinito é retornado quando é absoluta certeza de que o avaliado potencial agregado pode não ser um agregado e sobrepõe outros valores decimais. Por último, plus infinity é retornado quando é absoluta certeza de que o potencial agregado é um agregado real
+também ignorar outros valores decimais.
+Preferem Entidade única função de Cluster
+a preferir entidade única função cluster agregados baseados em taxas o montante envolvido
+de entidade de clusters no potencial de um agregado. Uma entidade cluster é um conjunto de entidades onde uma entidade entidade é a raiz do cluster atingindo todas as outras entidades do cluster ao longo de um conjunto de links tem-um. Clusters de entidade podem se sobrepor, mas eles não podem conter cada entidade raiz do outro.
+O preferem única entidade cluster função retorna um número positivo fixo iff apenas um cluster
+existe e um número negativo para potenciais agregados com mais do que uma entidade cluster.
+Isso reflete que os agregados com vários clusters não pode ser totalmente obtidos usando
+um repositório único de acesso.
+Frequência de acesso a função de peso positivo
+a frequência de acesso a função de peso positivo pela soma dos pesos vezes entidades
+do agregado potencial foram acessados por operações de negócios. Isto é devido ao fato de que as entidades que são acessados freqüentemente juntos, são mais susceptíveis de ser parte de uma mesma
+transacção e, por conseguinte, pertencem ao mesmo agregado.
+Frequência de acesso a função de peso negativo
+em contraste com a versão positiva, a frequência de acesso peso negativo função calcula
+um peso negativo com base em diferentes operações de negócios alterando entidades ou objetos de valor
+agregado potencial avaliados enquanto também alterando o potencial de diferentes agregados. A
+frequência de acesso peso negativo função foi criada como estas operações violaria
+a declaração não modificar vários agregados em um momento (ver secção 3.4.3). Além disso,
+a função atua como um contrapeso para a versão positivas acima mencionadas.
+67
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+Função de peso sensitiva
+a função de peso sensitiva atravessa tem-um relacionamentos de entidades e multiplica o seu
+peso. Quanto maior o peso menor o resultado da função. O objectivo desta função surge a partir do inconveniente de ter alta tem uma relação de contagens em um agregado. A alta tem-um relacionamentos resulta em muitas entidades terem de ser carregados quando estiver recuperando o agregado do seu repositório. Além disso, o limite transacional é aumentada como mais entidades têm de ser bloqueado. O desempenho do agregado por conseguinte diminui
+com cada entidade [Vau13].
+Preferimos pequenos função agregada
+a função de agregação preferimos pequenos retorna um resultado positivo se o agregado contém apenas
+algumas entidades e, em volta de um resultado negativo, se o agregado contém muitas entidades. Esta
+função pode ser considerada como uma extensão para a função de peso sensitiva acima mencionados
+que se baseia apenas no peso entre entidades e não na quantidade de diferentes
+entidades.
+
+Se a função sensitiva externo o potencial agregado tem uma entidade com nenhuma chamada recebida tem-um bordas, mas cada outra
+entidade pode ser alcançado a partir desta entidade, é considerada como a entidade raiz do agregado
+(ver secção 3.4.3). Se a raiz da raiz agregada entidade não pode ser determinado ou não está
+referenciada a partir do exterior, a função sensitiva externo retornará zero. Ela retornará
+um número positivo se as entidades de fora do agregado tem-um bordas para a
+entidade raiz e um número negativo se eles referência outras entidades que não o agregado raiz.
+5.9 Modelos de Serviço
+figura 5.10 mostra serviço final meta-modelo para o modelo modelo de transformação
+(ver secção 5.4) da fonte de meta-modelo. Ao contrário dos modelos de agregado (ver sec-
+68
+
+
+
+
+5.9 Modelos de serviço
+mento 5.8), a determinação do modelo de serviço podem ser alcançadas em um modelo único modelo de
+transformação.
+Como as operações da empresa podem residir como serviços fora ou como objeto métodos dentro da
+entidades, o meta-modelo permite a nidificação das operações de negócios em entidades.
+Comparando a fonte meta-modelo para o serviço de meta-modelo, a principal diferença, terras de entidades tendo em métodos de objeto, é que, ao contrário do que as operações de negócios, serviços têm apenas um link de leitura e gravação levando a um esquema mais simples. Além disso, regras de transformação são mais curtos que não tenham de lidar com cada um dos links CRUDI.
+5.9.1 Regras de Transformação de serviço
+como serviço de meta-modelo e fonte de meta-modelo são altamente comparáveis, o primeiro conjunto de demonstrações financeiras de entidades de cópia, objetos de valor e as suas relações a partir da fonte para o
+serviço de meta-modelo.
+hmoveEntitiesi ::= Prioridade 12 : Entidade(e) ∧ nome(e,eName)
+→ Entidade(novo) ∧ nome(novo,eName) ∧ _createdOf(novo,e);
+hmoveValueObjectsi ::= Prioridade 11 :
+_createdOf(novo,e) ∧ tem-um(e,v) ∧ ValueObject(v) ∧ nome(v,vName)
+→ ValueObject(newV) ∧ nome(newV,vName) ∧ tem-um(e,v);
+hrestoreEntityHasAi ::= Prioridade 10 : _createdOf(alvo_e1,source_E1)
+∧ tem-um(fonte_e1,source_E2) ∧ _createdOf(alvo_e2,source_E2) → tem-um (target_e1,target_E2);
+logo que o procedimento de cópia for concluída, as declarações para a criação dos serviços
+e métodos de objeto são executados.
+A primeira declaração, nomeadamente hcreateService1i, cria um serviço para operações de negócios
+que apenas exclui entidades como estas operações de negócios requerem repositórios (que
+não são acessíveis a partir do objeto métodos). A segunda declaração, hcreateService2i,
+lida com as operações de negócios a criação de entidades. A terceira declaração, como pode ser visto
+na hcreateService3i, lida com as operações de negócios atualizando duas ou mais entidades.
+69
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+hcreateService1i ::= Prioridade 9 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_) ∧
+nome(bo,boName) ∧ excluir(bo,_) ∧ ¬criar(bo,_) ¬update(bo,_)
+→ Serviço(Versão) ∧ nome(Versão,boName) ∧ _createdOf(Versão,bo);
+hcreateService2i ::= Prioridade 8 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_) ∧
+nome(bo,boName) ∧ criar(bo,_) ∧ ¬excluir(bo,_) ¬update(bo,_)
+→ Serviço(Versão) ∧ nome(Versão,boName) ∧ _createdOf(Versão,bo);
+hcreateService3i ::= Prioridade 7 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_) ∧
+nome(bo,boName) ∧ update(bo,x) ∧ update(bo,y) ∧ ¬excluir(bo,_) ¬criar(bo,_)
+→ Serviço(Versão) ∧ nome(Versão,boName) ∧ _createdOf(Versão,bo);
+em seguida vem a hcreateObjectMethod1i declaração que cria métodos de objeto. Em primeiro lugar, as
+operações de negócios que apenas ler exactamente uma entidade são transformadas para um método do objeto da entidade como eles precisam apenas de entidades informações. Esta declaração utiliza a aplicação que múltiplas variáveis pode ser vinculado ao mesmo elemento de uma vez
+(ver secção 5.4).
+hcreateObjectMethod1i ::= Prioridade 6 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_)
+∧ nome(bo,boName) ∧ ler(bo,source_e) ∧ ¬ler(bo,v) ∧ ¬update(bo,_) ∧ _createdOf(alvo_e,source_e) ∧ ¬update(bo,_) ∧ ¬excluir(bo,_) ¬criar(bo,_) → ObjectMethod(newMethod) ∧ nome(newMethod,boName) ∧
+parte de(newMethod,target_e) ∧ _createdOf(newMethod,bo);
+a outra maneira ao redor, operações de negócios leitura várias entidades são representadas como um
+objeto de serviço porque métodos não têm acesso a outros repositórios.
+hcreateObjectMethod2i ::= Prioridade 5 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_)
+∧ nome(bo,boName) ∧ ler(bo,source_e) ∧ ler(bo,v) ∧ ¬update(bo,_) ∧
+_createdOf(alvo_e,source_e) ∧ ¬update(bo,_) ∧ ¬excluir(bo,_) ¬criar(bo,_)
+→ Serviço(Versão) ∧ nome(Versão,boName) ∧
+parte de(Versão,target_e) ∧ _createdOf(Versão,bo);
+As seguintes hcreateObjectMethod3i declaração abrange as operações de negócios atualização
+70
+
+
+
+
+5.9 Modelos de Serviço
+exatamente uma entidade. As declarações utiliza o fato de que as atualizações, de dois ou mais elementos
+já foram processadas por declarações com uma prioridade mais elevada.
+hcreateObjectMethod3i ::= Prioridade 4 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_)
+∧ nome(bo,boName) ∧ update(bo,source_e) ∧ _createdOf(alvo_e,source_e) ∧ ¬excluir(bo,_) ∧ ¬criar(bo,_) → ObjectMethod(Versão) ∧ nome(Versão, boName) ∧
+parte de(Versão,target_e) ∧ _createdOf(Versão,bo);
+um caso especial são os métodos a atualização exatamente uma entidade, mas também modificar outros. Estes métodos são criados como métodos de objeto mas também requerem o suporte de um serviço externo.
+Por conseguinte, eles são modelados como um conjunto separado de objeto métodos chamados
+métodos de objeto suportado. A declaração seguinte mostra como elas são criadas.
+hsupportedObjectMethodsi ::= Prioridade 3 : BusinessOperation(bo) ∧ ¬_createdOf(bo,_)
+∧ nome(bo,boName) ∧ update(bo,source_e) ∧ _createdOf(alvo_e,source_e) → SupportedObjectMethod(Versão) ∧ nome(Versão,boName) ∧ parte de(Versão,target_e) ∧ _createdOf(Versão,bo); em
+seguida, hcreateT empLinksi é usada para cobrir as operações de negócios modificando várias
+entidades (por exemplo, criação de uma entidade e atualizar outro). Este tipo de operações de negócios
+são serviços que utilizam eventos de domínio (ver secção 3.4.6) ou de partes do mesmo
+agregado. A fim de evitar a enumeração de permutações, a
+declaração empLinksi hcreateT cria laços temporários (consulte a Secção 5.6.1 - Link temporário limitação) para
+criar, atualizar e excluir operações. A declaração é então executado hcreateMultii para
+operações de negócios com mais de dois laços temporários.
+hcreateTempLinksi ::= Prioridade 2 :
+BusinessOperation(bo) ∧ ( criar(bo,e) ∨ update(bo,e) ∨ excluir(bo,e) )
+→ _writeLink(bo,e);
+hcreateMultii ::= Prioridade 2 : BusinessOperation(bo) ∧ _writeLink(bo,a) ∧_writeLink(bo,b)
+→ Multi(mult) ∧ nome(mult,boName) ∧ _createdOf(mult,bo);
+71
+
+
+
+
+5 Domain-Driven Design para um sistema de informação existente
+operações comerciais que não correspondem a nenhuma das anteriores declarações, são transformados em categorizado nós. A prioridade baixa garante que todas as outras declarações de categorização
+são executados antes de esta declaração entra em jogo.
+hcreateUncategorizedi ::= Prioridade 1 :
+BusinessOperation(bo) ∧ ¬_createdOf(bo,_) ∧ nome(bo,boName)
+→ categorizado(CCT) ∧ nome(CCT,boName) ∧ _createdOf(CCT,bo); por
+último mas não menos importante, depois de todas as operações e serviços são determinados,
+os operadores de acesso de leitura e gravação são inseridos.
+hcreateReadLinksi ::= Prioridade 0 : BusinessOperation(bo) ∧ _createdOf(service,bo) ∧
+(leitura(bo,e) ∨ entrada(bo,e)) ∧ Entidade(fonte_e) ∧ _createdOf(alvo_e, source_e)
+→ ler(alvo_e,serviço);
+hcreateWriteLinksi ::= Prioridade 0 : BusinessOperation(bo) ∧ _createdOf(service,bo) ∧
+(write(bo,e) ∨ excluir(bo,e)) ∧ Entidade(fonte_e) ∧ _createdOf(alvo_e, source_e)
+→ escrever(service,target_e);
+72
+
+
+
+
+5.9 Modelos de serviço
+Serviço Meta-Model Entidade
+
+meta SupportedObject te m o
+método de serviço de método do objeto de
+um serviço sem meta
+Nó Meta-Model Link
+Entidade saída
+
+saída
+entrada entrada entrada ler link
+Link de gravação٭
+
+Nó de saída tem-um
+
+nó de entrada de saída de serviço
+meta categorizado
+nó node Multi objeto de valor
+Figura 5.10: Serviço Final Meta-Model
+73
+
+
+
+
+
+Protótipo6
+na figura 6.1, a prova de conceito é introduzido a execução do modelo-artefato, modelo- modelo e modelo de artefato transformações. Para começar com a estrutura do artefatos (nomeadamente as operações de negócios e o glossário) utilizado na primeira transformação é
+explicado na secção 6.1.
+Utilizando esses artefatos, o artefato modelo de transformação (ver secção 6.2) cria o
+modelo da fonte, uma táctica de modelo DDD com módulos contendo entidades, objetos de valor e
+suas relações. Na implementação java, o modelo DDD é armazenado por meio de um objeto gráfico. Analisando este modelo (ver secção 6.2.4), as informações adicionais de acesso a
+freqüência para o DDD tipos de dados são coletados e adicionados ao modelo.
+Tal como descrito na Secção 6.3, modelo múltiplo de transformações de modelos são então aplicados. Este modelo de fonte traduzir as transformações criadas pelo modelo de artefato de transformação para o modelo agregado (ver secção 6.3.1) e o modelo de serviço (ver secção 6.3.6).
+Usando modelos criados, o modelo de transformação de artefatos podem ser executados (ver Sec Äao 6.4). Esta última etapa de transformação transfere os diferentes modelos de artefatos tais como
+as exportações de media wiki (ver secção 6.4.2), diferentes visualizações do modelo (ver Sec Äao
+6.4.1), e além disso, gera código fonte utilizando um modelo de motor(ver Sec Äao
+6.4.3).
+75
+
+
+
+
+6
+atualização de protótipo
+onipresente linguagem de negócios atualizações atualizações de Operações Glossário
+glossário planilha planilha BO Parser
+deOE nições BO Parser
+módulos de identidades cria
+tem-um é um modelo da fonte
+Validator Analyzer
+Tradutor Artifact-Model Media Wiki Tabela
+Visualiser Visualizações
+fonte .GML gráficos regras de transformação
+.GML Modelo agregado agregada Visualiser
+Serviços Gráfico modelo de serviço .GML Visualiser
+Model-Model Gráfico
+Template Engine classes Java
+Model-Artifact
+Figura 6.1: Arquitetura do protótipo
+6.1 artefatos
+um artefato é um pedaço de informação que é usado ou produzido por um sistema " processo de desenvolvimento, ou pela implantação e operação de um sistema.
+- OMG Architecture Board [OMG10] "
+no contexto do protótipo, artefatos são informações armazenadas em diferentes formatos como xlsx (planilha do Excel), texto, gml, ou mensagens de log. Eles servem como uma entrada para o
+protótipo ou são criados pela TI como uma saída.
+76
+
+
+
+
+6.1 artefatos
+o protótipo recebe dois artefatos como entrada, o glossário (consulte a secção 6.1.1) e as
+operações de negócios (consulte a secção 6.1.2) contendo a linguagem ubíqua e as
+operações de negócios. Depois de várias etapas de transformação a entrada é finalmente convertidos para diferentes tipos de saída de artefatos (ver secção 6.4). Esses artefatos representam um
+conhecimento destilada representações de artefatos de entrada.
+6.1.1 Glossário
+glossário é um artefato utilizado para compreender a linguagem ubíqua (ver secções 3.2
+e 5.1.1) Tal como sugerido no [Eva04]. Em primeiro lugar, apenas o termos significativos, suas definições,
+e desaprovado alternativas foram coletados e armazenados em um documento de texto simples. Enquanto
+o glossário havia crescido, vários problemas com esta solução foram identificados:
+em primeiro lugar, o glossário tem de ser coerente em si. Por exemplo, quando a palavra "gate" definida, todos os usos dos conceitos de portões devem consultar a esta definição. Este LED para o problema que as alterações aplicadas a um termo no documento exigiria que o documento completo é editado manualmente. Em segundo lugar, como processadores de texto utilizados têm a tendência para inserir caracteres especiais (por exemplo, diferentes espaços inquebráveis caracteres hífen,... ), analisar o documento revelou desafiador. Por último, como o número de termos
+cresceu, o documento se tornou cada vez mais complexa e confusa.
+Para lidar com isso, um látex (LaTeX) documento foi avaliado como palavras poderiam ser definidos em
+macros. Presente desde a capacidade de reutilizar em descrições de outros termos. Além disso, se usado corretamente, não permite refatorar termos facilmente sempre que um documento de grande
+coerência. Usando o pacote hyperref látex, links de termos para suas definições
+podem ser automaticamente integrados no documento de PDF resultante. Além disso, o látex processadores de texto normalmente não inclui caracteres especiais no documento. Como o látex armazena suas informações em arquivos de texto, é facilmente analisado tanto com o tradicional e o moderno e linguagens de programação, é facilmente implementável em várias plataformas de destino e pode
+ser naturalmente compartilhado usando sistemas de controle de versão.
+No entanto, há um problema com o uso de látex MERCAREON. Como MERCAREON depende
+do Microsoft OfficeTM produtos e existem muitas do látex não é instalado em
+computadores pessoais por padrão, o uso de luvas de látex para toda a empresa definição do idioma revelou
+77
+
+
+
+
+6 Protótipo
+difícil. Além disso, o látex tem uma sintaxe complexa, é mais difícil escrever para o domínio envolvidos peritos. Isso poria em perigo a sua empresa necessária ampla aceitação.
+Por conseguinte, planilhas baseadas no Microsoft ExcelTM tiver sido selecionado como uma empresa mais
+compatível do tipo de documento. Com as planilhas" layout tabular, oferece uma melhor representação do glossário legível. A desvantagem é que como planilhas não foram realizados por representações de texto, referências cruzadas eram difíceis de realizar e ainda mais difíceis de
+manter.
+No total, três planilhas foram utilizados para cada delimitada contexto onde cada planilha contém dados de uma tabela. A primeira planilha contém um resumo das outras duas
+planilhas criado por uma macro1. A segunda folha pode parcialmente ser visto no exemplo 15 e
+é especificado na definição 1. Ele contém termos, o módulo dos termos, identificadores opcional, descrições, tem-um de relações e é-um relações. A terceira tabela contém termos preterido,
+seus módulos e suas descrições.
+Exemplo 15 (Excerto da segunda planilha).
+Módulo de identidade tem prazo de uma
+porta é-um grupo de porta local, reserva cond{٭}, -
+nome agendar cond{٭}
+empresa de autenticação de usuário{1}, -
+e a função de login{٭}
+
+encomenda número de autorização ativado, - importados encomenda
+propriedades,
+núme-
+ro de ativação
+6.1.2 Operações de negócios
+com base na definição 2, a operação dos negócios planilha contém as seguintes colunas:
+o nome da operação, o módulo da operação, a condição prévia para a execução do
+1a macro em primeiro lugar cópias completas para a segunda planilha e então adiciona uma alternativa termos coluna para cada termo da segunda planilha. Esta coluna adicional contém as palavras alternativas recolhidas a partir da terceira planilha.
+78
+
+
+
+
+6.2 Artifact-Model
+operação de transformação, a frequência da execução entre zero e cinco e a coluna para cada operação CRUDI respectivamente. Exemplo 16 mostra um trecho da operação de negócios planilha. A operação dos negócios planilha é definido para cada contexto delimitada.
+Exemplo 16 (Excerto da operação de negócios planilha).
+Módulo de operações":
+Nome da ordem de entrada Freq lê cria atualizações exclui
+ativar ativação 4 importados ativado - -
+critérios de ordem de encomenda excluir 2 ativado - - - ativado
+ativado para encomenda
+
+6.2 Artifact-Model Transformação
+o artefato modelo de transformação (consulte a Figura 6.2) cria o modelo da fonte, representada
+por um objeto Java gráfico, do mencionado anteriormente planilhas (consulte a secção 6.1). Glossário
+glossário planilha planilha BO Parser
+deOE nições BO Parser
+módulos de identidades cria
+tem-um é um modelo de fonte
+Analisador Validator Artifact-Model
+Figura 6.2: Artifact-Model Transformação
+a transformação é efectuada em duas etapas: primeiro, Glossário Planilhas Parser (ver Sec Äao
+6.2.1) analisa o glossário entradas em uma estrutura de dados Java. Em seguida, a
+operação dos negócios Parser (consulte a secção 6.2.2) é executada criando o objeto gráfico baseado em DDD
+e assim constrói módulos (consultar a secção 3.3.4), Entidades (ver secção 3.4.1), Valor ob-
+rejeita (ver secção 3.4.2), e suas relações uns com os outros. Além disso, o gráfico contém
+79
+
+
+
+
+6 Protótipo
+as operações de negócios (ver secção 5.1.2), que não são especificados pela DDD mod-
+els mas necessária para executar transformações Model-Model (ver secção 6.3). Como esta
+transformação exige meta-modelos, o objeto gráfico criado a partir do modelo de artefato
+transformação adere à fonte de meta-modelo como definido na secção 5.7.
+6.2.1 Glossário Planilhas Parser
+para ativar o artefato modelo de transformação, o glossário planilha tem de ser analisada em um formato adequado para esta tarefa. Por isso, primeiro, as planilhas" mesas foram analisados a fila por fila criando um Hashmap contendo o nome da coluna para o mapeamento de
+dados da coluna. Este mapa é então passada para o construtor da classe GlossaryEntry (ver lista-
+ing 6.1) criando uma instância com colunas de equiparação a partir do mapa. Como algumas colunas na
+planilha não são obrigatórios, eles podem ser definido como nulo. A identidade que é re-
+necessária para identificar entidades, não é usado para identificar os objetos do glossário como objetos de valor não tenham tais informações. Em vez disso, a combinação de módulo e termo foi escolhido para a identidade de objeto. Como o protótipo é destinado a ser executado em cada contexto separadamente, delimitada
+GlossaryEntry classe não delimitada contexto afiliação entrada. Por último, o deprecatedTerms
+mapa é preenchido para permitir a exportação de termos preteridos em outros formatos como o Media
+Wiki (ver secção 6.4.2).
+1 public class GlossaryEntry implementa
+HasID <ElementIdentifier>{
+2 @NotNull private final String módulo;
+3 @NotNull private final String prazo;
+4 @Anulável String privado identidade;
+5 @Anulável private final String descrição;
+6 @NotNull private final String[] sensitiva;
+7 @NotNull private final String[] isA;
+8 @NotNull privado de Mapa <String,DeprecatedTerm>
+DeprecatedTerms;
+9 @Override
+80
+
+
+
+
+6.2 Artifact-Model transformação
+10 ElementIdentifier público getID() {
+11 ElementIdentifier retorno.do módulo(prazo);
+12 }
+13 }
+Lista 6.1: Excerto da
+operação comercial GlossaryEntry classe 6.2.2 Parser
+o módulo analisador usa GlossaryEntry instâncias criadas pelo glossário Planilhas
+Parser (consulte a secção 6.2.1) para criar entidades e objetos de valor conectado pelo isA e relações sensitiva. Para isso, as operações de negócios CRUDI do acessos de elementos de dados e
+sua sensitiva e isA recursivamente as relações são atravessados para criar as respectivas entidades ou
+objetos de valor. A decisão sobre a questão de saber se um elemento de dados é considerada como uma entidade ou um
+objeto de valor, é baseado na coluna de identificação (objetos de valor não têm identidades únicas).
+Lista 6.3 mostra a super classe MethodImpl das entidades e objetos de valor. A implementaçäao
+difere significativamente da entidade e representações de objeto de valor utilizados no
+código fonte artefato criado por a geração de código de unidade (ver secção 6.4.3). Esta
+diferença decorre a execução no protótipo pretende representar diferentes
+nós em um gráfico onde cada nó precisa ser diferenciada e portanto possui um
+ID do nó Objetos de valor, como usado posteriormente em artefatos, não exigir uma tal ID do nó como sendo parte integrante de
+uma entidade.
+Em seguida, o módulo de operações de negócios são criados usando o construtor padrão [Gam95]
+adicionando sua CRUDI acessos a dados a entidades e objetos de valor. Como pode ser visto na lista- ing 6.2, a classe que representa as operações de negócios detém: uma referência ao
+módulo da operação de negócios, uma lista das bordas encapsulando o acesso às entidades e objetos de valor
+fornecendo as informações do tipo de acesso a frequência com que a
+operação dos negócios é executado, e o nome da operação. O campo condição está ausente no
+exemplo dado que não era necessário para a posterior realizada modelo modelos de interven-
+ções.
+81
+
+
+
+
+6 Protótipo
+1 classe implementa o método MethodImpl {
+2 @NotNull private final módulo Módulo;
+3 @NotNull Lista final privado <Edge>AccessMap;
+4 @NotNull private final AccessFrequency frequência;
+5 @NotNull private final String nome;
+6 }
+Lista 6.2: Excerto Classe representando uma operação comercial
+1 classe pública DataElementImpl implementa dado {
+2 @NotNull protegidos ElementIdentifier id;
+3 @NotNull protegidos String name;
+4 @NotNull protegidos Mapa <DataElement, HasAFreq>Sensitiva;
+5 @NotNull conjunto protegido <DataElement>HasAChildOf;
+6
+7 @NotNull conjunto protegido <DataElement>IsA;
+8 @NotNull conjunto protegido <DataElement>IsAParentOf;
+9 }
+Lista 6.3: Excerto das entidades e dos objetos de valor" Superclasse
+6.2.3 Artefato Validação
+a validação dos artefatos é realizada em duas etapas distintas. Em primeiro lugar, ao analisar os dados para um modelo de objeto (ver secção 6.2), a validade das relações (isA, sensitiva) é verificado. Uma vez que as operações de negócios são baseados no glossário, também é verificado
+se a cada operação é baseado em um glossário real entrada.
+Logo que o modelo da fonte foi criado, é canalizada através de
+etapas de validação adicional. Este segundo a validação é baseado no padrão Decorator [Gam95]. Permitindo que
+os programadores para estender as rotinas de validação conforme necessário. O programa de validação simples no núcleo do padrão verifica se o analisador criou uma saída válida para que todos os campos obrigatórios estão definidos. Esta validação é então decorados com mais sofisticados
+82
+
+
+
+
+6.2 Artifact-Model
+validadores de transformação verificar se existem elementos de dados que estão sendo escritos, mas não ler e se
+existem ciclos é-um no objeto gráfico.
+Lista 6.4 mostra o código fonte do ciclo detecção decorador. Tem um relacionamento de
+ciclos são detectados e o usuário do protótipo é avisado como "circular são complicadas-
+taram" [Eva04].
+1 classe NoCycleValidator estende ValidatorDecorator {
+2 ModuleValidator NoCycleValidator pública(pai) {
+3 super(pai);
+4 }
+5 @Override
+6 Booleanos validar(Definir público <Module>Módulos) {
+7 boolean parentResult = super.validar(módulos);
+8 se (!parentResult)
+9 return false; // Ignorar se a falha na validação anterior
+10 // iterar todos os elementos de dados existentes (entidades ou
+objetos de valor) procurando ciclos
+11 ciclo booleano=false;
+12 para módulo de módulo(:módulos){
+13 para (dado dado :
+módulo.getDataElements(DataElementType.TODOS)) {
+14 ciclo = ciclo || cycleDetection(Dado);
+15 }
+16 }
+17 voltar !ciclo;
+18 }
+19 // ...
+20 }
+Lista 6.4: tem um ciclo de detecção
+83
+
+
+
+
+6 Protótipo
+6.2.4 Analyzer
+depois de os documentos tenham sido transferidos com êxito em um objeto DDD gráfico (consulte a sec Äao
+6.2) e passou o artefato de validação (consulte a secção 6.2.3), o gráfico é analisado.
+Entidades e objetos de valor são marcadas com a frequência de acesso métrico dizendo quantas vezes eles estão sendo acessados. Esta informação é importante para a posterior detecção de teles- portas. Agregados, que contêm muitos elementos freqüentemente acessado, execute pior a partir de um ponto de vista transacional de agregados que são acessados com menos freqüência. Dinamar- quês, como esta informação também é visualizada (ver secção 6.4.1), ele pode ser usado para
+determinar quais os elementos de dados são importantes para o domínio.
+6.3 Model-Model Transformações
+o modelo de transformações de modelos (consulte a Figura 6.3) utilizam meta-relacio- nados modelos e regras (ver capítulo 5). O objectivo é transformar a partir do modelo de fonte criada pelo modelo de artefato de transformação (ver secção 6.2) a um agregado modelo contendo os modelos de domínio agregados (ver secção 3.4.3) e um modelo de serviço contendo os
+serviços (ver secção 3.4.5). Modelo de fonte de
+
+Transformação do Analisador de Regras
+
+Modelo de Serviço Modelo agregado
+Model-Model
+Figura 6.3: Model-Model transformação
+84
+
+
+
+
+6.3 Model-Model transformações
+6.3.1 Agregados
+o agregado determinação algoritmo é baseado no modelo de transformação do modelo conforme
+definido na transformação global regras (consultar a secção 5.8.2). Como descrito, agregados
+são determinados em duas etapas de transformação: em primeiro lugar, potenciais agregados são gerados (ver secção 6.3.2) e ponderados (ver secção 6.3.3). Em segundo lugar, com base na ponderação, um conjunto de potenciais agregados é selecionado e convertido em agregados (ver secção 6.3.4).
+Secção 6.4.1 mostra o resultado do modelo de transformação do modelo exportado a partir de Pintado-
+uma ferramenta de visualização de gráfico baseado em Java.
+6.3.2 gerando potenciais agregados
+a primeira etapa descrita por regras de transformação global (ver secção 5.8.2) é
+transformar a partir do modelo de fonte para um potencial de agregados (ver secção 5.8.1)
+modelo de objeto. Durante o processo de determinação do potencial dos agregados são coletados em um mapa
+com as entidades contidas HashSet como chave e a instância PotentialAggregate como valor.
+O HashSet, tem uma aplicação especializada para o cálculo do código hash apenas uma vez sobre a
+criação e não a cada vez acessada. Como o mapa invocar o código hash método várias
+vezes, a proposta de implementação é mais rápido como HashSet não para iteração todas as
+entidades contidas para cada acesso.
+Tal como descrito na secção 5.8.1, o potencial dos agregados determinação algoritmo consiste
+de várias etapas diferentes.
+Para resumir: em primeiro lugar, tem-um relações são herdadas sobre o é a relações. Em seguida, a entidade raiz (ver secções 3.4.3 e 5.8.3) é determinado no módulo fronteira. Começando a partir da raiz da entidade a transitividade encerramento ao longo do tem uma relação é determinada e o potencial dos agregados são criados. O processo é descrito na seção 5.8.2 pelo
+htansitiveClosurei regra. Por último, entidades acessados juntos por operações de negócios também são
+agrupados em potencial de agregados. Quando o conjunto de entidades já existe como um potencial agregado, o novo potencial agregado é (ao contrário na secção 5.8.2) não um duplicado mas é mesclado com o existente como torna a recolha de frequências para o acesso de potenciais
+agregados mais fácil.
+85
+
+
+
+
+6 Protótipo
+6.3.3 Ponderação agregados potencial
+o processo de pesagem, conforme descrito na secção 5.8.3, é implementado como um conjunto de classes
+implementando a heurística classe (consulte a listagem de 6,5). Cada classe de heurística' calcAggregate-
+Probabilidade método é executado. Os parâmetros de execução são as entidades do
+potencial agregado, métodos acessando a todo o conjunto de entidade (também contendo a frequência de acesso), e invariante representando um grupos de entidades e devem ser protegidos por um agregado (ver secção 3.4.3). Os métodos de retorno de finalmente uma probabilidade enum variando de "impossível" sobre "improvável", "talvez" e "provavelmente" 'andata decididamente um". Após a probabilidade
+está sendo calculado, é convertido em um valor numérico de -∞ sobre valores de -4
+a +4 para ∞(consultar a secção 5.8.3). Este valores são então ponderadas usando o resultado do peso do método() (geralmente 1,0) e em seguida recolhido. Quando todos os resultados ponderados
+são reunidos o potencial agregado é simplesmente marcados com a soma de todos os resultados positivos ou negativos. A soma permite zero probabilidades indicando que o método não poderia decidir a favor ou contra o potencial agregado. Escolhendo uma função média em vez de agregados com um menor potencial de segurança global possa ser escolhido, como a sua média é
+maior.
+1 públicos classe abstrata heurística {
+2 Resumo público probabilidade calcAggregateLikelihood(
+3 @NotNull definido <Entity>Entidades,
+4 @NotNull HashSet <Method>AccessingMethods,
+5 @anulável HashMap&lt;dado, lista <Invariant>&gt;
+invariantMap);
+6 público resumo peso duplo();
+7
+8 \\...
+9 }
+Lista 6.5: Abstract heurística Classe
+86
+
+
+
+
+6.3 Model-Model transformações
+6.3.4 Criar Agregados
+à conclusão do modelo de transformação do modelo agregado, agregados são criadas a partir do conjunto de potenciais ponderado de agregados (ver secção 5.8.2). Para este potencial, agregados são ordenados primeiro pelo seu peso e segundo pelo seu tamanho (preferindo agregados menores (ver secção 3.4.3). Então o potencial agregado com maior peso é elaborado e convertidas para um agregado. O processo é repetido enquanto potencial existem agregados
+com nenhuma entidade em um já criado agregado.
+Como etapa final, objetos de valor são adicionados ao agregado. Vários agregados pode manter o mesmo valor de objetos. Isto leva ao problema de que os elementos estejam a ser distinguido com o uso de Java objeto da igualdade. Dois diferentes objetos de valor seria pintado como um nó como
+eles compartilham o mesmo código hash e são iguais. Assim, o ElementIdentifier, conforme descrito na
+secção 6.2.2, contém um identificador universalmente único Java padrão que permite a criação
+de cópias de identificador randomizados quando necessário.
+6.3.5 manualmente a definição de agregados
+como a heurística para a determinação dos agregados não são perfeitos e por vezes mesmo ter de escolher entre as variantes que têm o mesmo peso, um recurso foi construir em
+agregados para definir manualmente.
+Para isso, uma linha podem ser adicionados a um arquivo de propriedade Java (consulte a listagem 6.6, linha 2 e 3) con- tendo o nome do agregado e suas entidades. Um agregado é gerado a partir dessa definição e suas entidades são excluídos da transformação ulterior etapas. É possível deixar o protótipo nome o agregado pela adição de "auto_" como um prefixo ao
+nome do agregado.
+1 #AggregateAssignment.properties
+2 auto_location = localização,gate grupo
+3 empresa = empresa
+listagem 6.6: Definição de agregado Manual
+87
+
+
+
+
+6 Protótipo
+6.3.6 Serviços
+Serviços (ver secção 3.4.5) são obtidos utilizando um modelo de modelo de transformação que traduz o modelo da fonte para o modelo de serviço. Para isso, regras de transformação (ver Sec Äao 5.9.1) são aplicadas ao modelo da fonte. Ao contrário da determinação agregada, o modelo modelo de transformação pode ser realizada em uma única etapa. Este e o fato de que a necessária transformação regras são simples simplificar o processo de transformação.
+O protótipo contém um loop simples para a transformação a iteração todas as operações de negócios e verificar quais declaração se aplica. Logo que uma declaração correspondente for encontrado, a operação dos negócios é convertido para um serviço ou um objeto método de continuar
+com o próximo loop iteração (consulte a listagem 6.7).
+1 // Criar sem atualizar ou excluir
+2 se (criado &gt; 0 &amp;&amp; deletedOrUpdated == 0) {
+3 serviceMethods.add(método);
+4 continuar;
+5 }
+Lista 6.7: Excerto de loop de Transformação de serviço
+6.4 Model-Artifact Transformação
+a última etapa do Protótipo utiliza um modelo de artefato de transformação para criar artefatos de diferentes modelos criados (consulte a Figura 6.4). O primeiro tipo de artefatos (ver Sec Äao 6.4.1) são arquivos de gráfico utilizado para visualizar os diferentes modelos criados por modelo de transformações de modelos (agregados e modelos de serviço) e o artefato modelo de fonte de transformação (modelo). O segundo tipo de artefato, nomeadamente uma media wiki tabela (ver secção 6.4.2), é uma simples representação do modelo da fonte. Ele contém as informações idênticas como o glossário e é utilizado para comunicar o onipresente linguagem. O terceiro e último artefato é o código fonte gerado a partir de agregado e modelos de serviço. Secção 6.4.3 mostra como FreeMake, um modelo gerador, pode ser utilizado para criar este código artefato.
+88
+
+
+
+
+6.4 Model-Artifact
+modelo de fonte de transformação
+
+Tradutor Analisador Media Wiki Tabela Visualiser Visualizações
+fonte .GML gráficos
+.GML Modelo agregado agregada Visualiser
+Serviços gráfico .GML Visualizador do modelo de serviço do
+motor de modelo de gráfico de classes Java
+Model-Artifact
+Figura 6.4: Transformação Model-Artifact
+6.4.1 Visualização
+para criar uma representação amigável humana, pintado (ver secção 6.4.1) foi escolhido como o sup-
+portas ferramentas amigáveis de usuário para interagir com o gráfico e tem vários mecanismos layouting.
+Para poder utilizar um pintado Gráfico Java personalizados Modeling Language (GML) exportador tem
+sido escrito (explicado a seguir). Por último, esta seção apresenta o resultado da trans-
+formando o objeto gráfico criado no Artifact-Model transformação (ver secção 6.2)
+a um amigável representação visual gráfico.
+Pintado
+desde a versão gratuita do pintado [yWo] oferece um bom algoritmo de layout, ele foi escolhido como o
+programa de escolha para exibir os gráficos. Para exportar o gráfico para pintado, [Ele GML97] para a
+função de exportação da biblioteca Java jgraphT [Nav+] foi escolhido. Por conseguinte, o
+objecto criado gráfico é transformado num jgraphT gráfico e, de lá, no formato GML.
+Desde o da jgraphT GMLWriter só oferece suporte limitado para o formato GML como utilizado pelo pintado, um escritor GML personalizado foi criado com suporte a diferentes tipos de nó, fronteiras, cores,
+tipos de borda, rotulado bordas, setas e grupos que podem conter vários nós.
+89
+
+
+
+
+6
+Lista de protótipo 6.8 mostra a interface criada para definir o layout de um gráfico para o escritor GML personalizado. Para cada nó V, edge E e (se existir) grupo G, o método correspondente é
+chamado quando a definição de formatação para o elemento gráfico é criado e devolvidos.
+1 YedGmlGraphicsProvider interface pública <V, E, G>{
+2 NodeGraphicDefinition getVertexGraphics(V);
+3 vertex EdgeGraphicDefinition getEdgeGraphics(E borda,
+4 V edgeTarget edgeSource, V);
+5 @anulável NodeGraphicDefinition getGroupGraphics(G grupo,
+Conjunto de 6 <V>GroupElements);
+7 }
+Lista 6.8:
+Exemplo de Provedor de gráficos 17 (Entidade Personalizada estilo). Lista 6.9 mostra uma implementação pintura de cada
+entidade nó branco, com um contorno tracejada e uma fonte vermelha do tamanho 18. Uma simples declaração se
+verifica para entidades no getVertexGraphics(V) método vertex. Quando a declaração se
+mantém imutável NodeGraphicDefinition é devolvido com os respectivos parâmetros, caso contrário um NodeGraphicDefinition padrão é retornado.
+1
+2 @Override NodeGraphicDefinition público getVertexGraphics(GraphNode
+vértex) {
+3 se(vértice instanceof entidade){
+4 retorna o novo NodeGraphicDefinition.Builder(
+5 Cor.branco,GraphicDefinition.Tipo.tracejado)
+6 .setLabelColor(Cor.vermelho)
+7 .setFontSize(18)
+8 .construir();
+9 }else{
+10 Retornar novo NodeGraphicDefinition.Builder().construir();
+11 }
+12 }
+90
+
+
+
+
+6.4 Model-Artifact
+Listagem de transformação 6.9: Entidade
+Fonte de estilo personalizado Visualização Modelo
+Figura 6.5 mostra o resultado da conversão do modelo da fonte ao GML. O GML representação foi então carregado em pintado onde o layout de orgânicos foi aplicado. O gráfico mostra os módulos diferentes, por exemplo, Pedido, Localização, Empresa. Cada modelo contém entidades como círculos, objetos de valor como círculos tracejada e operações de negócios como quadrados amarelos. Entidades e objetos de valor são coloridas em uma escala de verde para vermelho de acordo com a frequência de acesso (consulte a secção 6.2.4). Além disso, tem-um bordas são representados por linhas com setas pretas que são anotadas com o peso do relacionamento. É-um
+relacionamentos são desenhadas com linhas tracejadas e setas brancas.
+Este gráfico inicial ajuda a obter uma visão geral do modelo de domínio. Ele também ajuda a validar o glossário criado graficamente e operações de negócios. Além disso, como nós acessados com freqüência são desenhadas em uma cor vermelha, a visualização dá uma indicação que os dados são acessados freqüentemente. Além disso, as operações de negócios acessando muitos diferentes elementos de dados podem
+ser identificados pela análise de bordas de saída.
+A figura 6.6 mostra uma visualização de dependências de módulo. Cada vez que um método lê, grava ou cria entidades ou objetos de valor, uma borda de dependência direcionada é criado. As bordas de dependência entre os módulos doloridas como quadrados amarelos. Além disso, tem-um ou é de uma relação entre os elementos de dados dos módulos também resulta em desenho de uma borda de dependência. Essa visualização ajuda a obter uma visão geral sobre as dependências no sistema numa fase precoce do processo de refatoração. Com isso, dependências indesejados (que existem em parte na figura) pode ser removido com mais facilidade. Especialmente quando se comparou a um modelo de dependência de auto elaborado, dependências indesejados podem ser encontrados e rastreados por olhando para o módulo de cruz acessa (consulte a Figura 6.5). Para isso, percebendo o gráfico no pintado é útil como módulos pode ser movido livremente. Para comparar os acessos de dois módulos, eles
+podem simplesmente ser movido próximos uns aos outros no modelo da fonte de visualização.
+91
+
+
+
+
+6 Protótipo
+Figura 6.5: modelo de fonte Visualização
+92
+
+
+
+
+6.4 Model-Artifact
+Visualização agregada de transformação
+a visualização agregada pode ser visto na Figura 6.7. Agregados são representados como cinza tracejada caixas contendo entidades e seus objetos de valor. O nome de cada agregado é determinado pela sua entidade raiz. O número atrás do nome representa a confiança
+calculado a partir dos resultados de resumir os métodos de ponderação.
+Visualização de serviço
+o serviço visualização (consulte a Figura 6.8) mostra as operações de negócios convertido para objeto métodos ou a serviços. Quando convertidos para métodos de objeto, eles residem em uma entidade estabelecida como um círculo verde. Caso contrário, eles são visualizados como círculos amarelos que representam serviços. Objetos de valor também são desenhados como círculos verdes mas com uma linha tracejada.
+Uma linha pontilhada em um objeto método indica o apoio de um serviço para a sua função.
+Por exemplo, o objeto uncombine método combinado ordem na ordem concluída requer
+um serviço para excluir a ordem entidade combinada. Serviços com as linhas pontilhadas representam aqueles que
+acessam várias entidades de uma forma que essas entidades devem ser parte de um agregado
+ou ser mantidos utilizando os eventos de domínio (ver secção 3.4.6). Por último mas não menos importante, cinza
+círculos representam as operações de negócios para que o algoritmo não poderia decidir a sua
+categoria.
+6.4.2 Media Wiki
+com as planilhas definido como o tipo de documento preferido para gerenciar o onipresente linguagem, o desejo se levantou para comunicar o conteúdo das planilhas ao longo de toda a empresa Wiki. Isto foi conseguido por transformar o modelo da fonte (ver Sec Òes 5.7 e 6.2) para um arquivo de texto de artefato. Listando 6.10 mostra um trecho do arquivo de texto exportado. A exportação em si é muito básico: Estrutura do objeto são iterados usando 'para'-loops e os dados necessários strings são concatenados incluindo separadores como "||" e "!!".
+O documento começa com uma definição de classe que define o design para exibir os dados como HTML. O início de cada linha é anotada com ""|- Qual a primeira linha é tratada como
+93
+
+
+
+
+6 Protótipo
+o cabeçalho da tabela.
+1 {| class="wikitable"
+2 |-
+3 ! Prazo (pt) !! Prazo (de) !!
+Módulo !! Identidade !!
+Descrição !! Tem-um !! É-um
+4 |-
+5 | Empresa || Firma ||
+Empresa || ID da empresa || assosiation externo. || relação{٭} ||
+| 6-
+7 | Empresa || Firmen id id ||
+Empresa || || Empresas
+identificador exclusivo. || ||
+8 |
+9 | Relação || Beziehung ||
+Empresa || || Ligação entre duas empresas. || ||
+10 |-
+11 | Relação tipo || Beziehungstyp ||
+Empresa || || tipo de relação
+entre empresas a definição de suas funções.
+|| ||
+12 |}
+Lista 6.10: Media Wiki Exportação
+6.4.3 Geração de Código
+para gerar código fonte a partir do agregado criado anteriormente e modelos de serviço,
+Apache FreeMaker [Fou] foi escolhido como uma ferramenta de escolha. FreeMaker é um modelo motor
+94
+
+
+
+
+6.4 Model-Artifact Transformação
+implementada como uma biblioteca Java. Ele permite a criação de arquivos de texto baseados em modelos
+combinados com os dados acessíveis por um aplicativo Java.
+Modelos
+FreeMaker modelos podem ser usados para gerar o Java a sourcecode. Para isso, os modelos podem ser
+criados para os elementos do desenho tático (ver secção 3.4). Estes modelos contêm
+directivas especiais anotada com ${...} para ser substituído com dados a partir de um modelo de dados Java.
+Listando 6.11 mostra um modelo que é usado para criar classes de entidades. No topo de linha (1 a 7), existe uma definição de função que converte o espaço de nomes separados das entidades
+e objetos de valor em um formato CamelCase. Esta função é usada pela primeira vez para definir o
+identificador de Java da classe. Na classe, referências a objetos de valor (linha 8 para 12), Entidades (linha 14 a 17) e métodos do objeto linha (21 a 25) são criados. Como algumas informações é desconhecido, tais como o método funciona, o desenvolvedor tem de preencher a
+informação em falta após a criação do a sourcecode.
+1 função &lt;#CamelCase palavra&gt; &lt;#atribuir resultado = ""&gt;
+2 &lt;#lista ${palavra?split(" ")} como w&gt;
+3 &lt;#atribuir resultado = resultado + w?cap_first&gt;
+4 </#list>
+5 &lt;#resultado do retorno&gt;
+6 </#function>
+7 public class ${CamelCase(Entity.name)} implementa a entidade {
+8 // objetos de valor
+9 &lt;#valueObjects lista como valueObject&gt;
+10 &lt;#atribuir valueObj = valueObject.name?&gt; CamelCase(
+11 particulares ${valueObj} ${valueObj?destampar_first};
+12 </#list>
+13 // entidades
+14 &lt;#lista entidades como entidade&gt;
+15 &lt;#atribuir ent = entity.name?&gt; CamelCase(
+95
+
+
+
+
+6 Protótipo
+16 privado de ${ent} ${ent?destampar_first};
+17 </#list>
+18 público ${Entity.name}() { // todo o implemento construtor
+19 }
+20 // Métodos de objeto
+21 &lt;#objectMethods lista como método de
+método do objeto público&gt; 22(&lt;#método lista.entradas como
+parâmetro&gt;${parâmetro}, </#list>){
+23 retornar null; //afazeres implementar
+24 }
+25 </#list>
+26 //...
+27 }
+Lista 6.11: Modelo para uma classe de entidades
+96
+
+
+
+
+6.4 Model-Artifact Transformação
+Figura 6.6: a dependência do módulo de visualização
+97
+
+
+
+
+6 Protótipo
+98
+Figura 6.7: agrega
+
+
+
+
+6.4 Model-Artifact Transformação
+Figura 6.8: Serviços
+99
+
+
+
+
+6 protótipo
+6.5 Refatoração realização
+como a equipa de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
+continuamente expandida até chegar a uma verdadeira arquitectura refatoração.
+A finalidade do Yardview viver é agir como um cronograma de aplainar a ferramenta de recursos para o retalhista
+onde os recursos têm várias tarefas. O recurso representa uma capacidade individual para a
+descarga. A tarefa representa uma entrega que está planejada para ser executada por um recurso.
+A entrega é uma tarefa de descarga expressa por um fluxo de trabalho composta por uma série de
+estados de expedição. O Estado de expedição ativo declara o atual status do descarregamento de uma
+entrega.
+Por exemplo, quando os bens são entregues, recursos tais como empilhadeiras ou mais abstractas portões
+podem ser atribuídos à tarefa (UN)o carregamento das mercadorias. O progresso de uma tarefa de carga (UN)
+é reflectida por uma mudança para o Estado de expedição ativo.
+Tal como descrito no capítulo 5, para a criação de um design para a Live Domain-Driven Yardview, a recolha da onipresente linguagem e as operações de negócio é requerido para utilizar o modelo de transformações de modelos. Por conseguinte, o desenvolvimento começou com a recolher o glossário e as operações comerciais do contexto do sistema de TSM delimitada. A coleta passou por várias iterações em cooperação com a gestão da MERCAREON.
+Eles são obrigados a passar por iteração adicional no futuro como sendo mantida pela
+equipe MERCAREON.
+Em seguida, o projeto estratégico foi determinado para a arquitetura de sistemas existentes por seguir os conselhos do ing- [Eva04] e [Vau13] para conversar com os especialistas em domínio envolvido. Depois que o design estratégico tinham chegado a um estado aceitável, o desenho tático foi criado pelo ganho- ing insights as visualizações criadas pela modelo-artefato transformações. Além disso,
+utilizando estas visualizações diferentes componentes envolvidos foram validados.
+100
+
+
+
+
+6.5 Refatoração realização
+quando o glossário para o onipresente linguagem e as operações de negócios são coletados e a concepção estratégica e tática é criada, surgiu a questão como para o fusível do
+sistema de TSM com o existente refatorado arquitetura baseada em DDD. Para isso, o Bubble contexto
+abordagem foi escolhida.
+O globo contexto abordagem sugerida pela [Eva13] é utilizado para a criação de sistemas
+que estão a ser DDD rodeado por sistemas legados. Para isso, um pequeno, limpo delimitada contexto, conforme exigido pela DDD, é criado. Esta pequena bolha isola o trabalho da equipe do sistema antigo existente. Além disso, o globo contexto estratégia não exigem um grande
+empenho à DDD. Ele permite que uma pequena equipa para criar um grupo de design DDD.
+Como podem ser obtidas da figura 6.9, o Bubble contexto utilizado para o Live Yardview que
+utiliza Ports e adaptadores (ver secção 3.4.7) e o princípio de inversão de dependência.
+A camada de domínio do Yardview Live contém as interfaces para repositórios (R1,...,RN)
+e serviços (S1,...,Sn) que estão sendo implementados na camada de aplicação. Os
+repositórios acessa a camada de persistência do sistema de TSM sobre sua interface DAO.
+Os serviços acessa a camada lógica do sistema de TSM sobre sua interface de serviço. A
+tradução entre os dois diferentes onipresente linguagem do TSM e o sistema Live Yardview delimitada contextos é realizado no repositório e implementações de serviço.
+Essas implementações agir como uma ACL para proteger o recém criado delimitada
+contexto.
+O objetivo é em última análise a evoluir o globo constantemente pela importação de operações de negócios existente do sistema de TSM delimitada do contexto para alcançar a desejada de refatoração arquitetura. Para isso, o LCA tem de ser adaptado e mantido para lidar com a crescente delimitada contexto. Além disso, o globo, em algum ponto, requer o seu próprio
+armazenamento de dados se tornar uma bolha autónoma [Eva13] e assim resolver suas dependências
+ao legado de peças.
+Criando o globo contexto, a equipe de desenvolvimento da MERCAREON obteve a necessária experiência para criar designs Domain-Driven ainda mais com o mínimo de custo e risco [Eva13]. Além disso, partes do globo como o glossário continuará a melhorar a experiência dentro da empresa. Além disso, os desenvolvedores de MERCAREON vai obter
+uma visão melhor no domínio melhorar os desenvolvimentos contínuos.
+101
+
+
+
+
+6 Protótipo
+Legacy PartsPersistance DAO usa o Application Layer
+R1 ... Camada de domínio
+Rn Interface Repositório Logic Service usa a interface de serviço
+S1 ... Sn
+GUI GUI Adaptador
+Adaptador de repouso
+Figura 6.9: Arquitetura de sistema de TSM
+102
+
+
+
+
+
+Conclusão e trabalho futuro7
+Domain-Driven Design (DDD) não foi concebido para ser utilizado de arquitectura refatoração. Em [Eva13] foi ainda afirmou que o modelo antigo pode ser considerado, mas transformação do modelo não conseguem frequentemente na prática como a maioria dos sistemas têm várias e modelos de permeio. Utilizando a criar, ler, Atualizar, Excluir e operações de negócios baseado em frequência de abstração, a abordagem sugerida foi capaz de contornar esses problemas fornecendo um gráfico Abordagem de transformação não diretamente acoplados aos modelos do
+sistema antigo.
+O gráfico Abordagem de transformação, que foi concebido a partir da abordagem Model-Driven Architec- ture, utiliza o modelo de artefato, modelo-modelo e modelo de artefato transformações a fim de apoiar a criação do DDD. Foi criado um protótipo que utiliza estas etapas de transformação para gerar representações visuais de a DDD desenho tático de planilhas contendo o onipresente linguagem e as operações de negócios. Além do mais, baseado na arquitetura Model-Driven Abordagem de transformação, o protótipo
+exibiu como código fonte Java pode ser gerado a partir de modelos DDD.
+A abordagem arquitetônica refatoração foi então realizada pela empresa MERCAREON.
+Para isso, um pequeno novo módulo foi criado pela equipe de desenvolvimento-o Live Yardview.
+O novo módulo foi criado com uma arquitetura baseada em DDD refatorado, que comuni- cados com o legado de arquitetura de três camadas. O projeto utiliza as portas e arquitetura de adaptadores para proteger o modelo de domínio. A comunicação com o sistema legado é realizado com contextos bolha [Eva13] em mente qual repositórios e serviços são
+utilizados como uma camada anti corrupção.
+A arquitetura baseada em DDD criado provavelmente irá ser alargada no futuro próximo. A funcionalidade dos sistemas antigos de TSM sistema está planejado para ser transferida de passo a passo para o novo
+103
+
+
+
+
+7 Conclusão e trabalho futuro
+arquitetura. Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser
+avaliado.
+Outro aspecto que pode ser revisto no futuro, é a de saber se a criação do projeto estratégico poderia ser ainda apoiada. Atualmente o projeto estratégico só pode ser avaliada após a sua criação, utilizando o desenho tático criado automaticamente artefatos.
+Como para o desenho tático, a selecção de agregados a partir do conjunto de potenciais agregados utiliza uma abordagem gananciosos. Esta abordagem gananciosos certamente tem algumas limitações, como a seleção de um determinado agregado podem bloquear vários outros. A escolha errada do fronteiras agregada poderia levar a uma solução subótima. Abordagens alternativas para
+resolver este problema deve ser investigado.
+Todos em todos os, foi observado que a abordagem arquitetônica refatoração apresentada com base no modelo transformações como sugerido pela arquitetura Model-Driven é promissora mas também tem alguns inconvenientes. Estas desvantagens têm de ser abordadas quando se trata de sistemas
+que não têm um modelo claro para trabalhar com.
+104
+
+
+
+
+acrónimos
+ACL Camada anti corrupção. 17, 25, 101, 103 API Application Programming Interface. 31
+BO operação de negócios. 39
+CIM cálculo modelo independente. 30, 31 CRUD criar, ler, atualizar e excluir. 32, 39 CRUDI criar, ler, Atualizar, Excluir e entrada. 39, 40, 65, 69, 79, 81 CRUDM criar, ler, atualizar e excluir a matriz. 32
+DDB banco de dados distribuído. 32, 33 DDD Domain-Driven Design. 2, 5, 7, 9, 10, 13, 19, 21, 24, 25, 29-32, 36, 37, 39, 42,
+49, 58, 66, 75, 79, 80, 84, 100, 101, 103, 104, 111
+GML Gráfico Linguagem de Modelagem. 90, 91 GUI graphical user interface. 24
+MDA Model-Driven arquitetura. 30-32, 103, 104 MDD Model-Driven Design. 10 MDE Model-Driven Engenharia. 9, 29-31
+OHS Open Host Service. 16
+PIM modelo independente de plataforma. 31 Plataforma PSM modelo específico. 31
+sNets redes semântica. 45-48, 50, 54, 56, 60, 111
+105
+
+
+
+
+Acrônimos
+sistema TSM Time Slot Management System. 5 7, 14, 15, 18-20, 23, 38, 43, 46, 47,
+100-103, 111, 112
+UML Unified Modeling Language. 29-31
+106
+
+
+
+
+Bibliografia
+[Abr+01] Alain Pediátrica da ABRAN et al . Guia para o corpo de conhecimentos de engenharia de software
+SWEBOK-. IEEE Press, 2001
+[Avr07] Abel Avram. Design orientado para o domínio rapidamente. Lulu, 2007 [BRI16] Encyclopaedia Britannica. Sistema de Informação. Por Zwass Vladimir. 2016. URL:
+Http://global.britannica.com/topic/information-system (visitado em
+15/02/2016)
+[Ore14] Philip Brown. O que é o modelo de domínio em Design orientado para o domínio? 2014.
+URL: design Http://culttt.com/2014/11/12/domain-model-domain-driven-/ (visitado em 26/03/2016)
+[CDC05] Alistair Cockburn. Arquitetura hexagonal. 2005. URL: Http://alistair.
+cockburn.us/arquitetura Hexagonal+(visitou em 11/23/2015)
+[CDC06] Alistair Cockburn. Os adaptadores de portas e arquitetura. 2006. URL: Http://c2.
+com/cgi/wiki?PortsAndAdaptersArchitecture (visitado em 02/02/2016)
+[CST00] W. Cazzola, R.J. Stroud, e F. Tisato. A reflexão e a Engenharia de Software.
+Anotações da palestra em Ciência da Computação. Springer, 2000
+[Eva04] Eric Evans. Design Domain-Driven: abordar a complexidade no coração do Software.
+Editora Addison-Wesley Professional, 2004
+[Eva09] Eric Evans. O que eu aprendi sobre DDD desde o livro. NYC Domain-Driven
+Design Grupo de Usuários. 2009. URL: Http://www.dddcommunity.org/library/
+evans_2009_2/ (visitado em 11/13/2015)
+[Eva13] Eric Evans. Livro branco: DDD rodeado por Software herdado. Tech. rep.
+Idioma de domínio, Inc, 2013
+[Eva14] Eric Evans. Referência de Design Domain-Driven: Definições padrão e resumos.
+Dog Ear Publishing, LLC, 2014
+[Fou] Apache Software Foundation. FreeMarker. URL: Http://freemarker.org
+(visitado em 16/04/2016)
+107
+
+
+
+
+Bibliografia
+[Divirta02] Martin Fowler. Padrões de arquitetura de aplicativo corporativo. Editora Addison-Wesley
+Longman Publishing Co. Inc., 2002
+[Divirta03] Martin Fowler. Caso Sourcing. 2003. URL: Http://www.martinfowler.com/
+bliki/AnemicDomainModel.html (visitado em 19/04/2016)
+[Divirta04] Martin Fowler. Inversão de Controle de contentores e a injeção de dependências
+padrão. 2004. URL: Http://www.martinfowler.com/articles/injection.
+html (visitado em 23/02/2016)
+[Divirta05a] Martin Fowler. Como Código de documentação. 2005. URL: Http://martinfowler.
+com/bliki/CodeAsDocumentation.html (visitado em 11/03/2016)
+[Divirta05b] Martin Fowler. Caso Sourcing. 2005. URL: http://martinfowler.com/
+eaaDev/EventSourcing.html (visitado em 23/02/2016)
+[FY97] Brian Foote e Joseph Yoder. "enorme bola de lama". Em:pattern línguas da
+concepção do programa 4 (1997), p. 654-692
+[Gam95] Erich Gamma. Padrões de Projeto: Elementos de Software Orientado a Objetos reutilizáveis.
+Pearson Education Índia, 1995
+[Git Vladimir Gitlevich07]. O que é o Projeto Domain-Driven? 2007. URL: http://
+Dddcommunity.org/learning-ddd/what_is_ddd/ (visitou em 04/04/2016)
+[Ele] Michael Himsolt97. GML: Um formato de arquivo gráfico portátil. Tech. rep. Universität
+Passau, 1997
+[Joh02] Ralph Johnson. Arquitetura. 2002. URL: Https://groups.yahoo.com/neo/
+extremeprogramming/grupos/conversas/mensagens/49656 (visitou
+em 17/02/2016)
+[KH10] Shahidul Islam Khan e a ASML Hoque. "Uma nova técnica para banco de
+fragmentação em sistemas distribuídos". Em: internacional oficial de
+aplicativos de computador 5.9 (2010), p. 20-24
+[Lem98a] Richard Lemesle. "Meta-modelagem e modularidade: comparação entre o
+MOF, CDIF e sNets formalisms". Em: OOPSLA98 Workshop# 25: Modelo de
+Engenharia, métodos e ferramentas de integração com CDIF. Vancouver, Canadá:
+Citeseer, 1998
+108
+
+
+
+
+Bibliografia
+[Lem98b] Richard Lemesle. "Transformação regras baseadas em meta-modelagem". Em: Segunda
+Empresa Internacional Workshop de Computação Distribuída de Objetos,EDOC. La
+Jolla, CA, EUA: IEEE, nov. 1998, págs. 113-122
+[Mic07] Microsoft. .NET Framework. 2007. URL: Https://www.microsoft.com/net/
+(visitado em 27/04/2016)
+[MV06] Tom Mens e Pieter Van Gorp. "uma taxonomia da transformação do modelo". Em:
+Notas Eletrônicas no computador teórico ciência 152 (2006), p. 125-142
+[Nan98] Universidade Nantes. sNets formalismo. Tech. rep. Universidade de Nantes, 1998 [Nav+] Naveh Barak et al . JGraphT. URL: Http://jgrapht.sourceforge.net
+(visitado em 02/02/2016)
+[Oli09] Jonathan Oliver. DDD: Design estratégico: Core, Suporte e Genérico subdomínios.
+2009. URL: Http://blog.jonathanoliver.com/ddd-strategic-design-
+core-apoiar-e-generic-subdomínios/ (visitado em 19/01/2016)
+[OMG01] OMG - Architecture Board ORMSC. Modelo de arquitetura orientada (MDA). Tech.
+rep. (PROJECTO) ormsc-01-07-01. Grupo de gerenciamento de objeto (OMG), 2001
+[OMG04] Grupo de gerenciamento de objeto (OMG). 2.0 Superestrutura especificação. Tech.
+rep. Grupo de gerenciamento de objeto (OMG), 2004
+[OMG10] OMG - Architecture Board ORMSC. Modelo de fundação do MDA. Tech. rep. (PROJECTO)
+ormsc-10-09-06. Grupo de gerenciamento de objeto (OMG), 2010
+[OMG14] OMG - Architecture Board ORMSC. Guia do MDA. Tech. rep. Versão 2.0 ormsc-
+14-06-01. Grupo de gerenciamento de objeto (OMG), 2014
+[OMG15] OMG - Architecture Board ORMSC. Modelo de arquitetura orientada (MDA). 2015.
+URL: Http://www.omg.org/mda/ (visitou em 04/05/2016)
+[Ora] Oracle. Java EE num ápice. URL: Http://www.oracle.com/technetwork/
+java/javaee/visão geral/index.html (visitado em 01/05/2016)
+[ÖV96] M Tamer Özsu e Patrick Valduriez. "distribuído e
+sistemas de banco de dados paralelo". Em pesquisas de computação: ACM (CSUR) 28,1 (1996), p. 125-128
+[Pal08] Jeffrey Palermo. A arquitetura de cebola. 2008. URL:Http://jeffreypalermo.
+com/blog/a-arquitectura de cebola-Parte 1/ (visitado em 02/02/2016)
+109
+
+
+
+
+Bibliografia
+[Pet13] Marian Petre. "UML na prática". No Processo do 2013:
+Conferência Internacional sobre engenharia de software. Cisp indica " 13. San Francisco, CA, EUA: IEEE
+Press, 2013, págs. 722-731
+[SK03] Shane Tdo e Wojtek Kozaczynski. Transformação do modelo a
+alma e o coração do modelo de desenvolvimento de software orientado por. Tech. rep. Universidade de Helsínquia da
+Tecnologia, 2003
+[SM07] Pankaj saariana e Carlos Martinez. "Service-Oriented e modelo de
+arquiteturas orientada". 2007
+[SMC74] W.P. Stevens, G.J. Myers e L.L. Constantino. "design estruturado". Em: O IBM
+Systems Oficial 13,2 (1974), p. 115-139
+[Sta07] Michael Stal. Refatoração arquitetura. 2007. URL: Http://stal.blogspot.
+de/2007/01/arquitetura de refatoração.html (visitou em 17/02/2016)
+[Ste16] Martin Stefano Di. Código refatoração Arquitetura Refatoração vs. 2016. URL:
+Http://www.refactoringideas.com/code-refactoring-versus-architecture-
+refatoração/ (visitou em 04/20/2016)
+[Tho04] David Thomas. "MDA: vingança dos modeladores ou UML Utopia?" Em: Software,
+IEEE 21,3 (2004), p. 15-17
+[Vau12] Vernon Vaughn. Design agregado eficaz Parte 3. DDD Meetup. 2012. URL:
+Http://www.dddcommunity.org/library/vernon_2012/ (visitado em
+11/13/2015)
+[Vau13] Vernon Vaughn.Execução Domain-Driven Design. Editora Addison-Wesley Professional,
+2013
+[yWo] yWorks. pintado. URL: Https://www.yworks.com/products/yed (visitado em
+02/02/2016)
+[Zim15] Olaf Zimmermann. "Architectural Refatoração: UM Task-Centric vista sobre
+Evolução do Software". Em: IEEE Software 2 (2015), p. 26-29
+110
+
+
+
+
+Lista de figuras
+1.1 Metodologia . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2.1 Ambiente do Sistema de Gestão de time slots . . . . . . . . . . . . . . 6 2.2 Custos de manutenção versus a complexidade da lógica de domínio . . . . . . . . . . . . .
+Visão geral do design Domain-Driven 8 3.1 . . . . . . . . . . . . . . . . . . . . . . . 9 3.2 a barreira de comunicação entre as partes interessadas . . . . . . . . . . . . . . . . 12 3.3 da MERCAREON subdomínios e delimitada contextos . . . . . . . . . . . . . 15 3.4 TSM módulos do sistema . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18 3.5 identidade exclusiva para a pessoa 'Max' . . . . . . . . . . . . . . . . . . . . . 19 3.6 Reserva Agregar . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21 3.7 Portos e adaptadores . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+4.1 Camadas do MDA . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+5.1 Processo de Transformação . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36 5.2 sNets representação UML . . . . . . . . . . . . . . . . . . . . . . . . . . . 46 5.3 sNets nó . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46 5.4 notação sNets simplificado . . . . . . . . . . . . . . . . . . . . . . . . . . . 47 5.5 Sistema de Gestão sNets Time Slot Exemplo . . . . . . . . . . . . . . . . 48 5.6 Meta-Model Fonte . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59 5.7 Potencial Meta-Model agregado . . . . . . . . . . . . . . . . . . . . . . . . 61 5.8 Meta-Model agregado . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62 5.9 Tem-Um Constellation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 63 5.10 Serviço Final Meta-Model . . . . . . . . . . . . . . . . . . . . . . . . . . . 73
+6.1 A arquitetura do protótipo . . . . . . . . . . . . . . . . . . . . . . . . . . . . 76 6.2 Artifact-Model Transformação . . . . . . . . . . . . . . . . . . . . . . . . . 79 6.3 Model-Model Transformação . . . . . . . . . . . . . . . . . . . . . . . . . 84 6.4 Model-Artifact Transformação . . . . . . . . . . . . . . . . . . . . . . . . . 89 6.5 Modelo de fonte Visualização . . . . . . . . . . . . . . . . . . . . . . . . . . 92
+111
+
+
+
+
+Lista de Figuras
+6.6 a dependência do módulo de visualização . . . . . . . . . . . . . . . . . . . . . . . 97 6.7 agregados . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98 6.8 Serviços . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99 6.9 TSM arquitetura do sistema . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+112
+
+
+
+
+Nome: Hayato Hess Student ID: 698230
+Declaração
+declaro que tenho desenvolvido e escrito o assinaladas Dissertação de Mestrado por mim e não tenham fontes utilizadas ou meios sem declaração no texto. Esta tese de Mestrado nunca foi usado na mesma ou em uma versão semelhante para alcançar uma classificação acadêmica ou foi publicado em outro lugar. Além disso, declaro que gomoso ursos podem ter perderam
+as suas vidas para a criação desta tese.
+Ulm, 2 de Maio de 2016 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+Hayato Hess
+
+
+
+

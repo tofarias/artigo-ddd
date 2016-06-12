@@ -3,48 +3,50 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: sbc-template.aux
 The style file: sbc.bst
 Database file #1: sbc-template.bib
+Warning--empty year in cakephpmvc
+Warning--empty year in oquecronotacografo
 Warning--empty journal in millett2015patterns
 Warning--empty year in vlahovicimplications
 Warning--empty journal in vlahovicimplications
 You've used 12 entries,
             1935 wiz_defined-function locations,
-            530 strings with 5089 characters,
-and the built_in function-call counts, 3354 in all, are:
+            529 strings with 5073 characters,
+and the built_in function-call counts, 3334 in all, are:
 = -- 312
 > -- 96
-< -- 13
+< -- 12
 + -- 28
 - -- 28
-* -- 219
-:= -- 631
+* -- 212
+:= -- 629
 add.period$ -- 34
 call.type$ -- 12
-change.case$ -- 67
+change.case$ -- 68
 chr.to.int$ -- 12
-cite$ -- 15
-duplicate$ -- 160
-empty$ -- 257
+cite$ -- 17
+duplicate$ -- 159
+empty$ -- 254
 format.name$ -- 44
-if$ -- 644
+if$ -- 639
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 18
+missing$ -- 17
 newline$ -- 61
 num.names$ -- 36
-pop$ -- 83
+pop$ -- 85
 preamble$ -- 1
 purify$ -- 74
 quote$ -- 0
-skip$ -- 124
+skip$ -- 120
 stack$ -- 0
 substring$ -- 144
-swap$ -- 10
-text.length$ -- 1
+swap$ -- 9
+text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 58
-warning$ -- 3
+type$ -- 60
+warning$ -- 5
 while$ -- 24
 width$ -- 0
-write$ -- 144
-(There were 3 warnings)
+write$ -- 141
+(There were 5 warnings)
