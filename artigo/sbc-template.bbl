@@ -34,10 +34,35 @@ Haywood, D. (2009).
 \newblock {\em Domain-driven design using naked objects}.
 \newblock Pragmatic Bookshelf.
 
+\bibitem[Hess 2016]{hess2016evaluating}
+Hess, H. (2016).
+\newblock {\em Evaluating Domain-Driven Design for Refactoring Existing
+  Information Systems}.
+\newblock PhD thesis, Ulm University.
+
+\bibitem[Hoffmann 2009]{DesigningIidentityProvider}
+Hoffmann, K.~B. (2009).
+\newblock Domain-driven design in action: Design an identity provider.
+\newblock Master's thesis, University of Copenhagen.
+
 \bibitem[Inmetro ]{oquecronotacografo}
 Inmetro.
 \newblock http://cronotacografo.rbmlq.gov.br/o-que-e-cronotacografo.
 \newblock {\em Acesso em 20/05/2016}.
+
+\bibitem[Landre et~al. 2006]{landre2006architectural}
+Landre, E., Wesenberg, H., and R{\o}nneberg, H. (2006).
+\newblock Architectural improvement by use of strategic level domain-driven
+  design.
+\newblock In {\em Companion to the 21st ACM SIGPLAN symposium on
+  Object-oriented programming systems, languages, and applications}, pages
+  809--814. ACM.
+
+\bibitem[Macedo ]{macedodiretrizes}
+Macedo, O. A.~C.
+\newblock {\em Diretrizes para desenvolvimento de linhas de produtos de
+  software com base em Domain-Driven Design e m{\'e}todos {\'a}geis}.
+\newblock PhD thesis, Universidade de S{\~a}o Paulo.
 
 \bibitem[Michaelis 2011]{michaelis2011disponivel}
 Michaelis, D. (2011).

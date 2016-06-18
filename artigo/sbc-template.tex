@@ -10,7 +10,7 @@
      
 \sloppy
 
-\title{Aplicação de \textit{Domain-Driven Design} no gerenciamento de GRU de Cronotacógrafo no Inmetro/RS}
+\title{Aplicação de \textit{Domain-Driven Design} no Gerenciamento de GRU de Cronotacógrafo no Inmetro/RS}
 
 \author{Tiago O. de Farias\inst{1}}
 
@@ -25,7 +25,7 @@
 \maketitle
 
 \begin{abstract}
-Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles with a gross weight exceeding 4536 kilograms and passengers with more than 10 seats must have tachograph. From 2009, the instruments should also be checked periodically by Inmetro (National Institute of Metrology, Quality and Technology), which increases the reliability of the measurements. All the tachograph verification process is managed through a web system, this system is used a framework that provides an architecture based on the MVC architecture. This paper presents a proposal for restructuring the current architecture according to the techniques of \ textit {Domain-Driven Design}. Throughout this work is done a study on the concept of Domain-driven design and how it helps in the field of identification, as well as the delegation of the architectural point of view responsibilities, beyond the case study of the organization of GRU module tachograph.
+Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles with a gross weight exceeding 4536 kilograms and passengers with more than 10 seats must have tachograph. From 2009, the instruments should also be checked periodically by Inmetro (National Institute of Metrology, Quality and Technology), which increases the reliability of the measurements. All the tachograph verification process is managed through a web system, this system is used a framework that provides an architecture based on the MVC architecture. This paper presents a proposal for restructuring the current architecture according to the techniques of \textit {Domain-Driven Design}. Throughout this work is done a study on the concept of Domain-driven design and how it helps in the field of identification, as well as the delegation of the architectural point of view responsibilities, beyond the case study of the organization of GRU module tachograph.
 \end{abstract}
      
 \begin{resumo} 
@@ -46,7 +46,7 @@ O sistema web de gerenciamento de verificação do cronotacógrafo existe há pelo m
 
 No dia 01 de janeiro de 2016 houve uma grande mudança no processo de emissão de GRU, atualmente os postos de selagem e de ensaio (PAC) emitem a GRU, e  semelhante a um plano pré-pago de celular, o posto compra créditos para cada GRU emitida, cada crédito permite ao posto acessar o site do Cronotacógrafo e registrar os dados do serviço realizado, seja serviço de selagem ou de ensaio metrológico.
 
-Essa alteração afetou diretamente a codificação no sistema, o código e a arquitetura que antes já eram complicados, ficou maior e mais complexo, pois as regras antigas deveriam ser mantidas sem alteração, e o sistema teve que comportar muitas regras novas, os desenvolvedores tiveram que adquirir conhecimento das novas regras de negócio e que algumas vezes na hora de serem implementadas se confundiam com regras antigas.
+Essa alteração afetou diretamente a codificação no sistema, o código e a arquitetura que antes já eram complicados, ficou maior e mais complexo, pois as regras antigas deveriam ser mantidas sem alteração, e o sistema teve que comportar muitas regras novas, os desenvolvedores tiveram que adquirir conhecimento das novas regras de negócio e que algumas vezes ao serem implementadas se confundiam com regras antigas.
 
 O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
 
@@ -67,7 +67,7 @@ A solução está em resolver o problema do domínio, focado no domínio do problema,
 De acordo com o conceito do DDD o mais importante em um software não é somente o código, não é somente a arquitetura, tampouco a tecnologia sobre o qual foi desenvolvido, mas sim o problema que o mesmo se propõe a resolver, a regra de negócio. Ela é a razão do software existir. 
 DDD é sobre o desenvolvimento de conhecimento em torno do negócio e de utilizar a tecnologia para fornecer valor \cite{DDDinPHP}.
 
-Ainda segundo \cite{DDDinPHP} Domain-Driven Design não é uma bala de prata, como tudo em software, depende do contexto. Como regra geral, deve ser utilizado para simplificar o domínio, nunca para adicionar mais complexidade.
+Ainda segundo \cite{DDDinPHP} \textit{Domain-Driven design} não é uma bala de prata, como tudo em software, depende do contexto. Como regra geral, deve ser utilizado para simplificar o domínio, nunca para adicionar mais complexidade.
 DDD é mais do que tecnologia ou metodologia, ou até mesmo um \textit{framework}. É uma maneira de pensar, é um conjunto de prioridades que visa acelerar projetos de software que têm de lidar com domínios complicados \cite{vlahovicimplications}.
 
 Pensar nos problemas de forma técnica não é ruim, o único problema é que, às vezes, pensar menos tecnicamente é melhor. A fim pensar em comportamentos de objetos precisa-se pensar na Linguagem universal em primeiro lugar \cite{DDDinPHP}.
@@ -231,12 +231,7 @@ Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxim
 	
 	Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente  \cite{DDDinPHP}.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.5\textwidth]{imagens/modules.png}
-\caption{agrupando o domínio em módulos}
-\label{fig:exampleFig1}
-\end{figure}
+
 
 Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua e seus nomes devem refletir uma visão sobre o domínio \cite{Evans:2003:DDT:861502}.
 
@@ -288,9 +283,6 @@ A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao
 O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
 
 Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe.
-\\
-\textit{comparar com o artigo atual}
-\\
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
 \url{http://dbis.eprints.uni-ulm.de/1373/1/Masterarbeit%20Herbert%20Hayato%20Hess.pdf}
@@ -304,9 +296,6 @@ Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON
 O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubiqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
 
 Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
-
-\textit{comparar com o artigo atual}
-\\
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 \url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part1.pdf}
@@ -325,8 +314,6 @@ Um mapa de contexto é um desenho que documenta contextos de modelagem e suas rel
 O autor ainda afirma que mapa de contexto representa o primeiro ítem no nível estratégico \textit{Domain-Driven design}. Para o autor ficou a percepção de que a utilização do mapa de contexto e o seu papel na melhoria da arquitetura foi bem compreendido pela equipe, e que o sistema \textit{Digital Cargo File (DCF)} foi refatorado em 2006 para corresponder as recomendações sugeridas.
 
 A empresa Statoil também adotou formalmente o uso de mapas de contexto como um artefato da arquitetura. O autor finaliza afirmando que o uso de camadas de responsabilidade parece reduzir a complexidade percebida.
-
-No presente artigo sobre o gerenciamento de GRU de Cronotacógrafo, este sistema representa apenas um núcleo de todo o ecossistema que envolve o processo de verificação de cronotaógrafo. A GRU participa de vários contextos durante o processo de verificação de cronotacógrafo. Dentre estes contextos, a GRU possui responsablidades diferentes dependendo do cenário onde se encontra ao realizar selagem, realizar ensaio, subsituir selos, cancelamento de GRU, emissão de relatórios de ensaio, etc.
 
 \subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
 \url{http://www.teses.usp.br/teses/disponiveis/55/55134/tde-24032009-192923/publico/dissertacao.pdf}
@@ -384,9 +371,33 @@ das no contexto de cada produto sejam diferentes.
 Como a equipe de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
 continuamente expandida até chegar a uma verdadeira arquitectura refatoração.
 
-Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser avaliado.
+Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser avaliado.mail
+
+\subsection{ Quadro Comparativo }
+
+A tabela 1 apresenta um quadro comparativo baseado nos artigos desta seção, e que resume o ponto central de cada artigo na solução do problema do domínio segundo o \textit{Domain-Driven design}.
+
+\begin{table}[ht]
+\centering
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|}
+\hline
+ & Linguagem Ubíqua & Mapa de Contexto & Arquitetura \\ \hline
+ \cite{DesigningIidentityProvider} & \multicolumn{1}{c|}{X}                &                  &             \\ \hline
+ \cite{vlahovicimplications} & \multicolumn{1}{c|}{X}                &                  &             \\ \hline
+ \cite{hess2016evaluating} & \multicolumn{1}{c|}{X}                & \multicolumn{1}{c|}{X}                &             \\ \hline
+ \cite{landre2006architectural} & \multicolumn{1}{c|}{X}                &                  & \multicolumn{1}{c|}{X}           \\ \hline
+ \cite{macedodiretrizes} & \multicolumn{1}{c|}{X}                 & \multicolumn{1}{c|}{X}                  & \multicolumn{1}{c|}{X}            \\ \hline
+ Cronotacógrafo & \multicolumn{1}{c|}{X}                & \multicolumn{1}{c|}{X}                 & \multicolumn{1}{c|}{X}           \\ \hline
+\end{tabular}
+\end{table}
+
+%\clearpage
 
 \section{Solução Implementada}
+
+%\clearpage
 
 \begin{figure}[ht]
 \centering
@@ -408,6 +419,25 @@ Afim de auxiliar a comunicação entre os analistas e o cliente, o sistema e suas 
 \caption{Padrões para auxiliar a modelagem de objetos}
 \label{fig:diagram-use-case}
 \end{figure}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso Emitir Gru de Selagem}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Emitir Gru de Selagem  \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de selagem.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado \\ \hline
+Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para \\ cada GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
 
 \begin{table}[ht]
 \centering
@@ -530,17 +560,32 @@ Restrições/Validações                                                           
 
 \subsection{Arquitetura da Aplicação}
 
+A figura 7 representa através de um diagrama de pacotes estrutura hierarquica dentro da aplicação relacionandos os conceitos do DDD.
+
+Todas as camandas tem como dependência a camada Domain, foco no dom?io do negócio como é proposto pelo DDD, as outras camandas não conseguem agir sem o domínio do negócio. A interface precisa acessar coisas do dominio comunicar com a plaicação e da infraestrutura para ser montada. A Aplicação precisa da infraestrutura a intereface e aplicação se aplicação se comunicam o tempo todo. A aplicação tem por responsabilidade capturar as requsiçãoes, conecta a interface com o restante da aplicação.
+
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth, height=0.5\textheight]{imagens/pck-diagram-system.png}
-\caption{Padrões para auxiliar a modelagem de objetos}
+\caption{Representação resumida da arquitetura através do diagrama de pacotes}
 \label{fig:diagram-use-case}
 \end{figure}
+
+
+A camada de intereface camada mais externa da aplicação.
+
+Aplicaao liga a interface com o restante da aplicação, aplication services que são responsaveis por fazer a regra de negócio acontecer.
+
+Na camada de dominio concentra-se todo o conceito de DDD
+
+Na infraestrutura temos acesso a dados, configuração de serviço da aplicação, de bibliotecas de terceiros.
+
+
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth, height=0.6\textheight]{imagens/pck-diagram-detail.png}
-\caption{Padrões para auxiliar a modelagem de objetos}
+\caption{Representação detalhada de cada camada}
 \label{fig:diagram-use-case}
 \end{figure}
 
