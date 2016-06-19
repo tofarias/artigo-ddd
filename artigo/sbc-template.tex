@@ -50,7 +50,7 @@ Essa alteração afetou diretamente a codificação no sistema, o código e a arquite
 
 O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
 
-Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando DDD.
+Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Drive design}.
 
 \section{Referencial Teórico} \label{sec:firstpage}
 
@@ -240,9 +240,7 @@ Módulos não separam o código mas separam o significado conceitual \cite{DDDinPHP
 \section{Estado da Arte}
 
 \subsection{Domain-driven design in action: designing an identity provider}
-\url{http://www.diku.dk/forskning/performance-engineering/Klaus/speciale.pdf}
-\\
-\\
+
 Nesta tese de mestrado, os princípios de \textit{Domain-Driven Design} são usados para modelar um problema de negócio do mundo real, um provedor de identidade extensível (PDI). O trabalho mostra que a aplicação de \textit{Domain-Driven Design} é uma boa abordagem para a modelagem de um domínio complexo.
 O projeto do trabalho é desenvolvido na empresa Safewhere e tem como interessados além do autor do trabalho também o diretor técnico e o CEO da Safewhere.
 
@@ -266,9 +264,7 @@ aplica os conceitos de \textit{Domain-Driven Design} para tentar normalizar o pr
 O maior valor do sistema de gerenciamento de GRU está no foco no negócio principal da empresa. As telas que serão apresentadas ao usuário final terão mais relação com a operação de negócio. 
     
 \subsection{Implications of Domain-driven Design in Complex Software Value Estimation and Maintenance using DSL Platform}
-\url{http://www.inase.org/library/2015/zakynthos/bypaper/COMPUTERS/COMPUTERS-35.pdf}
-\\
-\\
+
 Neste artigo é apresentado e analisado a ferramenta DSL. Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio. O objetivo deste artigo é analisar as implicações do uso do DDD através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
 
 O objetivo deste trabalho é investigar possíveis benefícios da adopção de \textit{Domain-Driven Design} no gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. Inevitavelmente estas considerações irá reflectir sobre o valor do ativo de software e assim uma abordagem validada estimatida de ativos de software é chamado para implementar as principais características do objeto. Usando \textit{Domain-Driven Design} pode ser utilizado para criar uma plataforma unificada para de desenvolvimento e evolução de sistemas de software complexos.
@@ -285,7 +281,6 @@ O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Desig
 Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe.
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
-\url{http://dbis.eprints.uni-ulm.de/1373/1/Masterarbeit%20Herbert%20Hayato%20Hess.pdf}
 
 Esta tese de mestrado descreve a utilização de \textit{Domain-Drive Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
 
@@ -298,7 +293,6 @@ O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicio
 Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
-\url{http://dddcommunity.org/wp-content/uploads/files/practitioner_reports/landre_einar_2006_part1.pdf}
 
 Neste artigo é apresentado a utilização de \textit{Domain-Drive Design} na empresa de petróleo Statoil ASA situada na Noruega, com foco nos conceitos do nível estratégico. O objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente de empresarial para melhorar a arquitetura de software de um grande sistema corporativo.
 
@@ -316,7 +310,6 @@ O autor ainda afirma que mapa de contexto representa o primeiro ítem no nível es
 A empresa Statoil também adotou formalmente o uso de mapas de contexto como um artefato da arquitetura. O autor finaliza afirmando que o uso de camadas de responsabilidade parece reduzir a complexidade percebida.
 
 \subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
-\url{http://www.teses.usp.br/teses/disponiveis/55/55134/tde-24032009-192923/publico/dissertacao.pdf}
 
 Esta dissertação de mestrado tem como principal objetivo demonstrar através de um estudo de caso a aplicação de DDD (Domain-Driven Design) e métodos ágeis no desenvolvimento de linhas de produtos de software, a fim de analisar as principais vantagens em relação aos métodos tradicionais.
 
@@ -331,27 +324,16 @@ O estudao de caso considera que as regras para transporte urbano variam de cidad
 Foi priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o DDD o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
 A camada de aplicação é composta por classes de serviço que coordenam outros serviços ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
 
-Além disso, a prática de modelagem adotada parte do pressuposto de que não é vantajoso
-tentar prever possíveis cenários futuros no modelo enquanto eles não forem necessários. Por isso,
-a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
-O projeto foi realizado com quatro 
+Por isso, a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
 Ao contrário de métodos tradicionais onde é encorajado criar o modelo completo de todo o projeto logo no início, baseado nas \textit{features} que são as funcionalidades previstas para o sistema crescem a cada iteração.
 
 De modo geral, o processo utilizado começa com um entendimento superficial do domínio,
-seus principais conceitos e regras. Neste ponto, o conhecimento obtido não é suficiente para pre-
-ver todos os desafios que o projeto apresentará. No entanto, esse contato inicial é de extrema
-importância. A partir dele, o conhecimento pode ser refinado, de modo a dar origem a um modelo
-de domínio iterativo.
+seus principais conceitos e regras. Neste ponto, o conhecimento obtido não é suficiente para prever todos os desafios que o projeto apresentará. No entanto, esse contato inicial é de extrema importância. A partir dele, o conhecimento pode ser refinado, de modo a dar origem a um modelo de domínio iterativo.
 Tendo esse conhecimento superficial sobre o domínio, os desenvolvedores podem começar a
-planejar a primeira iteração. É importante que a implementação comece o mais cedo possível,
-porque a existência de software funcionando (mesmo que incompleto e sem interface amigável,
-por exemplo) é o que dá chance ao cliente ou especialista no domínio de dar uma resposta e guiar
-os desenvolvedores no caminho correto. Assim, quaisquer erros ou não-conformidades podem ser
-detectados tão logo sejam criados.
+planejar a primeira iteração. É importante que a implementação comece o mais cedo possível, porque a existência de software funcionando (mesmo que incompleto e sem interface amigável, por exemplo) é o que dá chance ao cliente ou especialista no domínio de dar uma resposta e guiar os desenvolvedores no caminho correto. Assim, quaisquer erros ou não-conformidades podem ser detectados tão logo sejam criados.
 
 O estudo de caso sugere que é possível construir linhas de produtos fundamentadas em um
-modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A ex-
-pressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de
+modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A expressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de
 produtos e, conseqüentemente, na sua evolução. Com isso, a adaptabilidade a mudanças ao longo
 do tempo é bem maior. Além disso, um modelo de domínio expresso diretamente no código da
 aplicação reduz a necessidade de documentação não executável, como diagramas UML e docu-
@@ -368,18 +350,17 @@ Em algumas situações, o uso de uma linguagem ubíqua pode trazer problemas, embor
 não tenham sido experimentados neste trabalho. Trata-se dos casos em que as linguagens utiliza-
 das no contexto de cada produto sejam diferentes.
 
-Como a equipe de desenvolvimento não tinham experiência anterior com o DDD e ainda tem de manter o actual sistema de TSM foi decidido contra a arquitectura refactoring do todo o sistema de TSM. Por esta razão, MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, é criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável bem. Este módulo vai coexiste com o actual sistema de TSM. Quando concluído, o módulo delimitada contexto é ser
-continuamente expandida até chegar a uma verdadeira arquitectura refatoração.
-
-Isto é possível porque a DDD é baseado em um modelo adaptável que por sua vez é adaptada às novas necessidades utilizando o protótipo. Como um trabalho futuro, os benefícios da arquitetura refatoração contínua rumo ao novo sistema de informação DDD pode ser avaliado.mail
+Como a equipe de desenvolvimento não tinham experiência anterior com o \textit{Domain-Driven design} e ainda tem de manter o atual sistema de TSM a MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, foi criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável. Este módulo vai coexistir com o atual sistema de TSM. Quando concluído, o módulo a partir do limite do contexto deverá ser continuamente expandido até chegar a uma verdadeira arquitectura de refatoração.
 
 \subsection{ Quadro Comparativo }
 
-A tabela 1 apresenta um quadro comparativo baseado nos artigos desta seção, e que resume o ponto central de cada artigo na solução do problema do domínio segundo o \textit{Domain-Driven design}.
+A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apresentados nesta seção, e que resume a conceito central utilizado em cada artigo na solução do problema do domínio segundo o \textit{Domain-Driven design}.
+
+\newpage
 
 \begin{table}[ht]
 \centering
-\caption{My caption}
+\caption{?}
 \label{my-label}
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -389,26 +370,16 @@ A tabela 1 apresenta um quadro comparativo baseado nos artigos desta seção, e qu
  \cite{hess2016evaluating} & \multicolumn{1}{c|}{X}                & \multicolumn{1}{c|}{X}                &             \\ \hline
  \cite{landre2006architectural} & \multicolumn{1}{c|}{X}                &                  & \multicolumn{1}{c|}{X}           \\ \hline
  \cite{macedodiretrizes} & \multicolumn{1}{c|}{X}                 & \multicolumn{1}{c|}{X}                  & \multicolumn{1}{c|}{X}            \\ \hline
- Cronotacógrafo & \multicolumn{1}{c|}{X}                & \multicolumn{1}{c|}{X}                 & \multicolumn{1}{c|}{X}           \\ \hline
+ Gerenciamento de GRU & \multicolumn{1}{c|}{X}                & \multicolumn{1}{c|}{X}                 & \multicolumn{1}{c|}{X}           \\ \hline
 \end{tabular}
 \end{table}
 
 %\clearpage
 
+
 \section{Solução Implementada}
 
-%\clearpage
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=1\textwidth, height=0.65\textheight]{imagens/context-mapping.png}
-\caption{Padrões para auxiliar a modelagem de objetos}
-\label{fig:diagram-use-case}
-\end{figure}
-
-
-
-\subsection{Modelando a Aplicação}
+\subsection{Diagramas de Casos de Uso}
 
 Afim de auxiliar a comunicação entre os analistas e o cliente, o sistema e suas funcionalidades são apresentados conforme figura 5.
 
@@ -419,6 +390,8 @@ Afim de auxiliar a comunicação entre os analistas e o cliente, o sistema e suas 
 \caption{Padrões para auxiliar a modelagem de objetos}
 \label{fig:diagram-use-case}
 \end{figure}
+
+%\clearpage
 
 \begin{table}[ht]
 \centering
@@ -434,8 +407,97 @@ Resumo                                                                          
 Pré­-condições                                                                                       & Usuário autenticado \\ \hline
 Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
 \multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
 \begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para \\ cada GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
 Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Informar Selagem}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Informar Selagem  \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar selagem.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado; Gru Paga \\ \hline
+Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a GRU \\ 2. Informar  o veículo \end{tabular} & \begin{tabular}[c]{@{}l@{}}3. Informar os dados da selagem\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC \\ 2. Validar veículo \\ 3. Validar GRU \end{tabular} 
+
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso Informar Substituição de Selos}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Informar Subsituição de Selos \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar Subsituição de selos.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado; Gru Paga; Deve existir uma selagem realizada \\ \hline
+Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar a GRU \\ 2. Informar  o veículo \end{tabular} & \begin{tabular}[c]{@{}l@{}}3. Informar os dados da selagem\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC \\ 2. Validar veículo \\ 3. Validar GRU \end{tabular} 
+
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Emitir GRU de Ensaio}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Emitir GRU de Ensaio \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar ensaio com GRU emitida até 2015.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado; Nº de protocolo gerado na selagem\\ \hline
+Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar o nº do protocolo\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Gerar GRU\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um \\ posto PAC \\ 3. Validar GRU \end{tabular} 
+
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Documentação do Caso de Uso Informar Ensaio}
+\label{my-label}
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Informar Ensaio \\ \hline
+Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
+Ator Principal& Posto                                                                                                                    \\ \hline
+Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar ensaio com GRU emitida a partir de 2016.                           \\ \hline
+Pré­-condições                                                                                       & Usuário autenticado; Nº de protocolo gerado na selagem\\ \hline
+Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
+\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar o nº do protocolo\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Gerar GRU\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um \\ posto PAC \\ 3. Validar GRU \end{tabular} 
+
+\\ \hline
 \end{tabular}
 \end{table}
 
@@ -449,12 +511,12 @@ Restrições/Validações                                                           
 Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
 Ator Principal& Posto                                                                                                                    \\ \hline
 Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para emitir uma GRU de selagem.                           \\ \hline
+Resumo                                                                                               & Este caso de uso descreve as etapas para uma GRU ser considerada suspensa.                           \\ \hline
 Pré­-condições                                                                                       & Usuário autenticado \\ \hline
 Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
 \multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para \\ cada GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Informar Selagem ou Ensaio\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Suspender a GRU dois meses antes da \\ data de término do contrato do posto.\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Verificar a data de término do contrato\end{tabular} \\ \hline
 \end{tabular}
 \end{table}
 
@@ -472,10 +534,11 @@ Ator Principal& Posto                                                           
 Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
 Resumo                                                                                               & Este caso de  \\ \hline
 Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+Pós-condições                                                                                        & Informar o motivo do cancelamento \\ \hline
 \multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Consultar a GRU\end{tabular} \\ 2. Informar o motivo do cancelamento & \begin{tabular}[c]{@{}l@{}}3. Cancelar a GRU\end{tabular}                                                \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser SURRS \\ 2. Se possui ensaio/selagem não pode ser \\ cancelada. \end{tabular} \\ \hline
 \end{tabular}
 \end{table}
 
@@ -495,68 +558,25 @@ Resumo                                                                          
 Pré­-condições                                                                                       & Usuário autenticado \\ \hline
 Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
 \multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
-\end{tabular}
-\end{table}
-
-
-
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Informar Selagem}
-\label{my-label}
-\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
+\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
+\begin{tabular}[c]{@{}l@{}}1. Consultar a GRU\end{tabular} \\ 2. Informar o motivo do cancelamento & \begin{tabular}[c]{@{}l@{}}3. Cancelar o pagamento\end{tabular}                                                 \\ \hline
+Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser SURRS \\ 2. Identificar pagamento duplicado \\ 3. Identificar pagamento inferior ao \\ contratado na GRU\end{tabular} \\ \hline
 \end{tabular}
 \end{table}
 
 \clearpage
 
-\begin{table}[ht]
+
+\subsection{Mapa de Contexto}
+
+\begin{figure}[ht]
 \centering
-\caption{Documentação do Caso de Uso Informar Substituição}
-\label{my-label}
-\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de  \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
-\end{tabular}
-\end{table}
+\includegraphics[width=1\textwidth, height=0.65\textheight]{imagens/context-mapping.png}
+\caption{Padrões para auxiliar a modelagem de objetos}
+\label{fig:diagram-use-case}
+\end{figure}
 
-%\clearpage
-
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Informar Ensaio}
-\label{my-label}
-\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de  \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a quantidade de créditos para cada \\ GRU emitida\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Calcular o valor a ser pago\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou posto de Ensaio\end{tabular} \\ \hline
-\end{tabular}
-\end{table}
-
-
-\clearpage
+\newpage
 
 \subsection{Arquitetura da Aplicação}
 
