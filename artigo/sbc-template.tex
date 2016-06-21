@@ -186,7 +186,7 @@ Muitos objetos não são fundamentalmente definidos por seus atributos, mas sim po
 Um objeto deve ser distinguido por sua identidade, ao invés de seus atributos. Esse objeto, que é definido por sua identidade, é chamado de entidade. O modelo deve definir o que significa ser a mesma coisa. Suas identidades devem ser definidas de modo que possam ser efetivamente controladas. 
 Normalmente existem 4 maneiras de definir a identidade de uma entidade: Um cliente fornece a identidade, o próprio aplicativo fornece uma identidade, o mecanismo de persistência fornece a identidade ou outro contexto limitado fornece uma identidade \cite{DDDinPHP}.
 
-Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclos de vida que podem mudar sua forma e conteúdo, mas sua continuidade deve ser mantida. Suas definições de responsabilidades, atributos e associações devem girar em torno de quem elas são mais do que sobre os atributos que elas carregam. Entidades são objetos importantes de um modelo de domínio, e elas deve ser considerada a partir do começo da modelagem processo. É também importante para determinar se um objeto precisa de ser uma entidade ou não. \cite{avram2007domain}
+Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclos de vida que podem mudar sua forma e conteúdo, mas sua continuidade deve ser mantida. Suas definições de responsabilidades, atributos e associações devem girar em torno de quem elas são mais do que sobre os atributos que elas carregam \cite{vernon2013implementing}. Entidades são objetos importantes de um modelo de domínio, e elas deve ser considerada a partir do começo da modelagem processo. É também importante para determinar se um objeto precisa de ser uma entidade ou não. \cite{avram2007domain}
 
 \subsection{Objetos de Valor}
 Um objeto que representa um aspecto descritivo do domínio sem identidade conceitual é chamado de Objeto de Valor e entidades de implementação em software significa criar
@@ -200,23 +200,23 @@ Em banco de dados utiliza-se chave primária (PK), para tal identificação. Objeto
 Quando um objeto de valor é do tipo imutável no projeto, os desenvolvedores são livres para tomar decisões sobre questões como a cópia e compartilhamento em uma base puramente técnica, com a certeza de que a aplicação não depende de determinadas instâncias dos objetos \cite{Evans:2003:DDT:861502}.
 	
 \subsection{Serviços}
-Alguns conceitos do domínio não são naturais para modelar como objetos. Forçar a funcionalidade de domínio necessário para ser da responsabilidade de uma entidade ou valor ou distorce a definição de um objeto baseado em modelo ou adiciona objetos artificiais sem sentido (Evans, Eric 2003).
+Alguns conceitos do domínio não são naturais para modelar como objetos \cite{vernon2013implementing}. Forçar a funcionalidade de domínio necessário para ser da responsabilidade de uma entidade ou valor ou distorce a definição de um objeto baseado em modelo ou adiciona objetos artificiais sem sentido \cite{Evans:2003:DDT:861502}.
 
 Serviços agem como interfaces para prover operações. Eles não possuem um estado interno, seu objetivo é simplesmente fornecer funcionalidades para o domínio sobre um conjunto de entidades ou objetos de valor \cite{avram2007domain}.
 
 Declarando explicitamente um serviço, o conceito é encapsulado criando uma distinção clara no domínio. Desta forma evita-se criar a confusão de onde colocar essa funcionalidade, se em uma entidade ou objeto de valor.
 Serviços de domínio não possuem qualquer tipo de estado por si só \cite{DDDinPHP}.
 
-\subsection{Agregados}
-Agrupar as entidades e objetos de valor em agregados e definir limites em torno cada. Escolha uma entidade para ser a raiz de cada agregado, e controlar todo o acesso aos objetos dentro do limite através da raiz. Permitir que objetos externos para armazenar referências a apenas a raiz. referências transitória a membros internos pode ser passado para fora para o uso dentro de uma única operação. Porque o acesso controles de raiz, não podem ser surpreendidos por alterações para os internos. este arrangement torna prático para fazer cumprir todas as invariantes para objetos no agregado e para o Agregada, como um todo, em qualquer mudança de estado \cite{Evans:2003:DDT:861502}.
-	Em um modelo dirigido por domínio, utiliza-se o conceito de Agregado , que é um grupo de objetos associados que tratamos como sendo uma unidade para fins de alterações de dados, de forma que cada agregado possui um entidade raiz e um limite (o que está dentro do agregado). \cite{vernon2013implementing} Os agregados demarcam o escopo dentro do qual as invariantes (invariante: algo que não tem variação), tem que ser mantidas em cada estágio do ciclo de vida \cite{vernon2013implementing}.
 \subsection{Fábricas}
-Criação de um objeto pode ser uma grande operação em si, mas as operações de montagem complexas não se encaixam a responsabilidade dos objetos criados. Combinando essas responsabilidades podem produzir desenhos desajeitados que são difíceis de entender. Fazendo o cliente construção directa turva a concepção do cliente, violações encapsulamento do objecto montado ou agregado, e excessivamente acopla o cliente para a implementação do objecto criado \cite{Evans:2003:DDT:861502}.
+Segundo \cite{avram2007domain} a criação de um objeto pode ser uma grande operação em si, mas as operações de montagem complexas não se encaixam a responsabilidade dos objetos criados. 
+
+No domínio, fábricas ajudam a criar objetos complexos e agregados e definir uma interface para criar um objeto, mas deixar a escolha do seu tipo na subclasse, a criação a ser definida em tempo de execução \cite{DDDinPHP}.
+
 	Fábricas em DDD são as mesmas classes normalmente responsáveis pela criação de objetos complexos, onde é necessário esconder alguma implementação, onde cada operação deve ser atômica e se preocupar caso a criação do objeto falhe, minimizando a dependência e o acoplamento \cite{avram2007domain}.
 Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma factory (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante.\cite{vernon2013implementing}
-	Fábricas podem criar Value Objects, que produzem objetos prontos, no formato final, ou Entity factories apenas para os atributos essenciais \cite{DDDinPHP}.
+	Fábricas podem criar \textit{Value Objects}, que produzem objetos prontos, no formato final, ou \textit{Entity factories} apenas para os atributos essenciais \cite{DDDinPHP}.
 \subsection{Repositórios}
-Um cliente precisa de um meio prático de adquirir referências a preexistente objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo \cite{Evans:2003:DDT:861502}. Por outro lado, eles pode-se usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação \cite{Evans:2003:DDT:861502}.
+Um cliente precisa de um meio prático para obter referências e persistir objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo \cite{Evans:2003:DDT:861502}. Por outro lado, eles pode-se usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação \cite{Evans:2003:DDT:861502}.
 	Muitas regras no \textit{domain model} acabam sendo colocadas nas consultas sql, consequentemente se perdendo da aplicação, os repositórios tentam fazer a transição entre o \textit{domain} e a camada de persistência.
 	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar calculos, somatórias ou relatórios \cite{vernon2013implementing}.
 	Pensando em DDD, o \textit{repository} é um padrão conceitual simples para encapsular soluções de SQL, mapeamento de dados (ORM, DAO, e etc), fábricas e trazer de volta o foco no modelo. Quando o desenvolvedor tiver construído uma consulta SQL, transmitindo essa consulta para um serviço de consultas da camada de infraestrutura, obtendo um \textit{ RecordSet} que extrai as informações e transmite para um construtor ou fábrica, o foco do modelo já não existe mais \cite{vernon2013implementing}.
@@ -226,12 +226,10 @@ Coleções são importantes por serem uma forma de expressar um dos mais fundamenta
 	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final \cite{DDDinPHP}.
 	
 \subsection{Módulos}
-Quando você coloca algumas aulas juntos em um módulo, você está dizendo a próxima desenvolvedor que olha para o seu projeto para pensar sobre eles juntos. Se o seu modelo é contar uma história, Os módulos são capítulos \cite{Evans:2003:DDT:861502}.
-	Uma preocupação comum ao criar um aplicativo segundo o DDD, é onde é colocar o código? Qual é a maneira recomendada para colocar o código no aplicativo? Onde colocar código de infra-estrutura? E mais importante, como devem os diferentes conceitos dentro do modelo ser estruturado? Há um padrão tático para isso: módulos \cite{DDDinPHP}. 
+Para aplicações complexas, o modelo tende a ficar muito grande, tornando-se difícil de ser compreendido como um todo \cite{DDDinPHP}. Por esse motivo, é preciso reorganizar o modelo em módulos. Existem várias formas de coesão entre elementos de um módulo. Os módulos são capítulos \cite{Evans:2003:DDT:861502}.
+	Uma preocupação comum ao criar uma aplicação segundo o DDD, é onde é colocar o código, qual é a maneira recomendada para colocar o código na aplicação, onde colocar código de infra-estrutura? E o mais importante, como devem os diferentes conceitos dentro do modelo ser estruturados. Existe um padrão tático para isso: módulos \cite{DDDinPHP}. 
 	
 	Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente  \cite{DDDinPHP}.
-
-
 
 Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua e seus nomes devem refletir uma visão sobre o domínio \cite{Evans:2003:DDT:861502}.
 
@@ -257,11 +255,6 @@ Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo exte
   \item É flexível e tem uma clara separação de responsabilidades entre as camdas, tornando fácil  				refatorar
   \item Conduz a um estável e maduro do produto final.
 \end{itemize}
-
-A solução implementada pelo autor vem ao encontro da proposta de solução neste artigo uma vez que
-aplica os conceitos de \textit{Domain-Driven Design} para tentar normalizar o processo de desenvolvimento de software. Sobretudo para garantir a manutenibilidade do sistema e padronizar o processo de codificação. Um dos pontos importantes que é citado pelo autor é o fato de repassar o conhecimento a novos membros da equipe, o atual artigo foca bastante na linguagem ubiqua, no caso é utilizado diagramas de classe e diagramas de caso de uso, respeitando os papéis dos atores. Isso tudo ainda ajuda para que o conhecimento sobre o negócio não fique preso a uma ou duas pessoas. E, o fator tempo de desenvolvimento, é diretamente prorporcional ao entendimento das regras de negócio.
-
-O maior valor do sistema de gerenciamento de GRU está no foco no negócio principal da empresa. As telas que serão apresentadas ao usuário final terão mais relação com a operação de negócio. 
     
 \subsection{Implications of Domain-driven Design in Complex Software Value Estimation and Maintenance using DSL Platform}
 
@@ -286,7 +279,7 @@ Esta tese de mestrado descreve a utilização de \textit{Domain-Drive Design} na r
 
 O autor cita que o principal desafio é que o DDD foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
 
-Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo Domain-Driven Design. A justificativa se origina do sistema de ser muito antigo. Outro fator é a comunicação, pois para aumentar esse problema, existem desenvolvedor na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilados pela equipe de desenvolimento.
+Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo \textit{Domain-Driven Design}. A justificativa se origina do sistema de ser muito antigo. Outro fator é a comunicação, pois para aumentar esse problema, existem desenvolvedor na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilados pela equipe de desenvolimento.
 
 O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubiqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
 
@@ -315,8 +308,6 @@ Esta dissertação de mestrado tem como principal objetivo demonstrar através de u
 
 O autor afirma que o processo de desenvolvimento em linhas de produtos de software (LPS) geralmente é sequencial e que o projeto não está focado em um modelo de domínio, mas mais intenssamente preocupado com questões técnicas, como alocação de componentes e separação em subsistemas. O aumento no reúso do software leva a um aumento por transformações nos sistemas.
 
-Os métodos tradicionais não incorporam o conceito de adaptabilidade a mudanças no seu corpo de princípios. Por não reconhecerem as mudanças como parte natural do desenvolvimento de software, esses métodos tentam evitá-la ao máximo, por meio de especificações prematuras e exaustivas. 
-
 O trabalho apresenta um estudo de caso, em que se desenvolve uma linha de produtos baseados em DDD para sistemas de transporte urbano. O BET (Bilhetes Eletrônicos de Transporte) é um protótipo de sistema que tem por objetivo gerenciamento de sistemas de transporte urbano onde propõe-se um conjunto de diretrizes de desenvolvimento de LPS. Segundo o autor são regras de caráter prático que visam a guiar o desenvolvimento de novas linhas de produtos. Adaptadas a cada contexto particular, as diretrizes podem ajudar a alcançar maior flexibilidade e extensibilidade nas LPS.
 
 O estudao de caso considera que as regras para transporte urbano variam de cidade para cidade, essas diferenças foram modeladas como variabilidades da linha, enquanto as regras e conceitos comuns foram desenvolvidos como parte do núcleo. 
@@ -324,13 +315,8 @@ O estudao de caso considera que as regras para transporte urbano variam de cidad
 Foi priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o DDD o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
 A camada de aplicação é composta por classes de serviço que coordenam outros serviços ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
 
-Por isso, a cada iteração, o modelo reflete apenas o conhecimento necessário para o desenvolvimento das funcionalidades previstas em suas respectivas histórias de usuário A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
+A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
 Ao contrário de métodos tradicionais onde é encorajado criar o modelo completo de todo o projeto logo no início, baseado nas \textit{features} que são as funcionalidades previstas para o sistema crescem a cada iteração.
-
-De modo geral, o processo utilizado começa com um entendimento superficial do domínio,
-seus principais conceitos e regras. Neste ponto, o conhecimento obtido não é suficiente para prever todos os desafios que o projeto apresentará. No entanto, esse contato inicial é de extrema importância. A partir dele, o conhecimento pode ser refinado, de modo a dar origem a um modelo de domínio iterativo.
-Tendo esse conhecimento superficial sobre o domínio, os desenvolvedores podem começar a
-planejar a primeira iteração. É importante que a implementação comece o mais cedo possível, porque a existência de software funcionando (mesmo que incompleto e sem interface amigável, por exemplo) é o que dá chance ao cliente ou especialista no domínio de dar uma resposta e guiar os desenvolvedores no caminho correto. Assim, quaisquer erros ou não-conformidades podem ser detectados tão logo sejam criados.
 
 O estudo de caso sugere que é possível construir linhas de produtos fundamentadas em um
 modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A expressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de
@@ -356,11 +342,11 @@ Como a equipe de desenvolvimento não tinham experiência anterior com o \textit{D
 
 A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apresentados nesta seção, e que resume a conceito central utilizado em cada artigo na solução do problema do domínio segundo o \textit{Domain-Driven design}.
 
-\newpage
+%\newpage
 
 \begin{table}[ht]
 \centering
-\caption{?}
+\caption{Soluções apresentadas por cada artigo baseados no \textit{Domain-Driven design}}
 \label{my-label}
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -374,6 +360,7 @@ A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apres
 \end{tabular}
 \end{table}
 
+\newpage
 %\clearpage
 
 
@@ -459,28 +446,6 @@ Restrições/Validações                                                           
 
 \begin{table}[ht]
 \centering
-\caption{Documentação do Caso de Uso Emitir GRU de Ensaio}
-\label{my-label}
-\begin{tabular}{|p{7cm}|p{7cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Emitir GRU de Ensaio \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar ensaio com GRU emitida até 2015.                           \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado; Nº de protocolo gerado na selagem\\ \hline
-Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar o nº do protocolo\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Gerar GRU\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um \\ posto PAC \\ 3. Validar GRU \end{tabular} 
-
-\\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[ht]
-\centering
 \caption{Documentação do Caso de Uso Informar Ensaio}
 \label{my-label}
 \begin{tabular}{|p{7cm}|p{7cm}|}
@@ -501,26 +466,7 @@ Restrições/Validações                                                           
 \end{tabular}
 \end{table}
 
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Suspender GRU}
-\label{my-label}
-\begin{tabular}{|p{7cm}|p{7cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Suspender GRU    \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de uso descreve as etapas para uma GRU ser considerada suspensa.                           \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar Selagem ou Ensaio\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Suspender a GRU dois meses antes da \\ data de término do contrato do posto.\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Verificar a data de término do contrato\end{tabular} \\ \hline
-\end{tabular}
-\end{table}
-
-\clearpage
+%\clearpage
 
 \begin{table}[ht]
 \centering
@@ -556,7 +502,7 @@ Ator Principal& Posto                                                           
 Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
 Resumo                                                                                               & Este caso de  \\ \hline
 Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Realizar o pagamento da GRU                                                                                                                          \\ \hline
+Pós-condições                                                                                        & Informar o motivo do cancelamento  \\ \hline
 \multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
 \multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
 \begin{tabular}[c]{@{}l@{}}1. Consultar a GRU\end{tabular} \\ 2. Informar o motivo do cancelamento & \begin{tabular}[c]{@{}l@{}}3. Cancelar o pagamento\end{tabular}                                                 \\ \hline
@@ -565,9 +511,10 @@ Restrições/Validações                                                           
 \end{table}
 
 \clearpage
-
-
+\newpage
 \subsection{Mapa de Contexto}
+
+A figura 5 representa uma visão geral do domínio GRU e em quais outros subdomínios o domínio GRU também é utilizado.
 
 \begin{figure}[ht]
 \centering
@@ -580,9 +527,11 @@ Restrições/Validações                                                           
 
 \subsection{Arquitetura da Aplicação}
 
-A figura 7 representa através de um diagrama de pacotes estrutura hierarquica dentro da aplicação relacionandos os conceitos do DDD.
+A figura 6 representa através do diagrama de pacotes a estrutura hierarquica dentro da aplicação segundo os conceitos do \textit{Domain-Drive design}.
 
-Todas as camandas tem como dependência a camada Domain, foco no dom?io do negócio como é proposto pelo DDD, as outras camandas não conseguem agir sem o domínio do negócio. A interface precisa acessar coisas do dominio comunicar com a plaicação e da infraestrutura para ser montada. A Aplicação precisa da infraestrutura a intereface e aplicação se aplicação se comunicam o tempo todo. A aplicação tem por responsabilidade capturar as requsiçãoes, conecta a interface com o restante da aplicação.
+Todas as camandas tem como dependência a camada \textit{Domain}, com foco no domínio do negócio como é proposto pelo \textit{Domain-Driven design}, as outras camandas não conseguem agir sem o domínio do negócio. A interface precisa acessar coisas do domínio e se comunicar com a aplicação e a infraestrutura para ser montada. A Aplicação precisa da infraestrutura e da intereface. A aplicação tem por responsabilidade capturar as requsiçãoes e conectar a interface com o restante da aplicação.
+
+Mais externo ao contexto do sistema tem-se o \textit{Database} que representa a fonte de dados do sistema. Também torna-se evidente a relevância maior do domínio e a necessidade de tirar o banco de dados do centro da aplicação.
 
 \begin{figure}[ht]
 \centering
@@ -591,16 +540,9 @@ Todas as camandas tem como dependência a camada Domain, foco no dom?io do negóci
 \label{fig:diagram-use-case}
 \end{figure}
 
+A figura 7 representa através do diagrama de pacotes a mesma estrutra apresentada na figura 6 mas de forma detalhada. É possível entender como está organizada a aplicação e a responsabilidade de cada camada. Nesse nível de detalhamento é visível notar a redução do acoplamento, aonde na camada de dominio concentra-se todo o conceito de \textit{Domain-Driven design}
 
-A camada de intereface camada mais externa da aplicação.
-
-Aplicaao liga a interface com o restante da aplicação, aplication services que são responsaveis por fazer a regra de negócio acontecer.
-
-Na camada de dominio concentra-se todo o conceito de DDD
-
-Na infraestrutura temos acesso a dados, configuração de serviço da aplicação, de bibliotecas de terceiros.
-
-
+Destaca-se a camada \textit{Domain} que comportará repositórios, fábricas, serviços, agregados e entidades. Na infraestrutura tem-se acesso a dados, configuração de serviço da aplicação, e de bibliotecas de terceiros.
 
 \begin{figure}[ht]
 \centering
@@ -610,6 +552,48 @@ Na infraestrutura temos acesso a dados, configuração de serviço da aplicação, de
 \end{figure}
 
 \clearpage
+
+\subsection{Repositórios}
+
+A figura 8 representa o diagrama de classes relacionando classes que tem como responsabilidades acessar dados externos a aplicação. E isso permite maior flexibilidades quando se precisa trabalhar com mais de uma fonte de dados diferentes, como criar repositórios específicos para fonte de dados específicos. Poderia a aplicação possuir um repositório específico para OracleRepository, MongoDBRepository, SqlServerRepository e nelas conter implementações específicas de acesso a dados.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.9\textwidth, height=0.6\textheight]{imagens/repository-crono.png}
+\caption{Representação de repositórios no diagrama de classes}
+\label{fig:diagram-use-case}
+\end{figure}
+
+\newpage
+
+\subsection{Módulos}
+
+A figura 9 apresenta a organização do sistema na camada do domínio, foi organizado dentro dela além de entidades quem tem maior afinidade com o contexto, também repositórios, interfaces, objetos de valor e fábricas.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth, height=0.72\textheight]{imagens/modulos-crono.png}
+\caption{Representação da camada \textit{Domain} baseada em módulos}
+\label{fig:diagram-use-case}
+\end{figure}
+
+\newpage
+
+\section{Conclusão}
+
+Este artigo demonstrou através de um problema real a aplicação de alguns conceitos de \textit{Domain-Driven design} na solução do problema, e a partir dele é possível considerar vários fatores que podem levar ao sucesso ou ao fracasso do projeto mesmo seguindo todas as etapas do \textit{Domain-Driven design}.
+
+Tão ou mais importante do que aplicar \textit{Domain-Driven design} é necessário que todos os desenvolvedores da equipe tenham o domínio de orientação a objetos juntamente com SOLID e GRASP por exemplo, e que são importantíssimos para ajudar a pensar no design do software, em como as classes serão relacionadas e estruturadas. Conhecer ferramentas de testes unitários, ser capaz de trabalhar com desenvolvimento guiado por testes, entender sobre a importância da integração contínua, automatização de rotinas, boas práticas de desenvolvimento de software e tudo mais que puder ser relevante para ajudar a construir software confiável e manutenível de forma rápida e com ritmo e qualidade sustentável.
+
+Quando se fala em orientação a objetos pensa-se logo em classes, heranças, polimorfismo, encapsulamento. Mas a essência da orientação a objetos também tem coisas como: alinhamento do código com o negócio, favorecer a reutilização e baixo acoplamento. \textit{Domain-Driven design} poderia ser visto como uma evolução da orientação a objetos, mas ele não foca em tecnologia, mas sim em entender as regras de negócio e como elas devem estar refletidas no código e no modelo de domínio. 
+
+O \textit{Domain-Driven design} permite realmente alinhar o conhecimento dos desenvolvedores e dos especialistas do domínio produzindo software mais coerente com o negócio e reduzindo as chances de que o conhecimento sobre o modelo do domínio fique nas mãos de poucas ou de uma única pessoa.
+
+O grande desafio ao propor o desenvolvimento de software utilizando \textit{Domain-Driven design} é manter a equipe comprometida desde o início com os novos conceitos, fazendo-os entender dos benefícios, pois cada um teve experiências anteriores com outros projetos complexos que não se utilizou da aplicação de conceitos mais evoluídos sugeridos pelo \textit{Domain-Driven design}. A equipe também terá dificuldades senão conhecer muito bem o \textit{framework}, no caso deste artigo o \textit{CAKEPHP}, que pela versão utilizada já pode ser considerado ultrapassado e que tornaria mais trabalhoso e custoso para o cliente aplicar \textit{Domain-Driven design}.
+
+Independente do framework e aplicando-se muito bem os conceitos de orientação a objetos é possível chegar bem próximo de alguns conceitos apresentados pelo \textit{Domain-Driven design}. Pode-se afirmar que \textit{Domain-Driven design} é programar utilizando orientação a objetos com responsabilidade e qualidade.
+
+\newpage
 
 \section{Referencias}
 
