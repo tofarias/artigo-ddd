@@ -29,7 +29,7 @@ Since 1997, when it was instituted the Brazilian Traffic Code, cargo vehicles wi
 \end{abstract}
      
 \begin{resumo} 
-Desde 1997, quando foi instituído o Código de Trânsito Brasileiro, veículos de carga com peso bruto superior a 4.536 kg e de passageiros com mais de 10 lugares devem possuir cronotacógrafo. A partir de 2009, os instrumentos também devem ser verificados periodicamente pelo Inmetro (Instituto Nacional de Metrologia, Qualidade e Tecnologia), o que aumenta a confiabilidade das medições. Todo o processo de verificação do cronotacógrafo é gerenciado através de um sistema web, neste sistema é utilizado um framework que oferece uma arquitetura baseada na arquitetura MVC. Este trabalho apresenta uma proposta de reestruturação da arquitetura atual segundo as técnicas de \textit{Domain-Driven Design}. Ao longo deste trabalho é feito um estudo sobre o conceito de Domain-Driven Design e como ele ajuda na identificação do domínio, bem como a delegação de responsabilidades do ponto de vista arquitetural, além do estudo de caso da nova organização do módulo de GRU de Cronotacógrafo.
+Desde 1997, quando foi instituído o Código de Trânsito Brasileiro, veículos de carga com peso bruto superior a 4.536 kg e de passageiros com mais de 10 lugares devem possuir cronotacógrafo. A partir de 2009, os instrumentos também devem ser verificados periodicamente pelo Inmetro (Instituto Nacional de Metrologia, Qualidade e Tecnologia), o que aumenta a confiabilidade das medições. Todo o processo de verificação do cronotacógrafo é gerenciado através de um sistema web, neste sistema é utilizado um framework que oferece uma arquitetura baseada na arquitetura MVC. Este trabalho apresenta uma proposta de reestruturação da arquitetura atual segundo as técnicas de \textit{Domain-Driven Design}. Ao longo deste trabalho é feito um estudo sobre o conceito de \textit{Domain-Driven design} e como ele ajuda na identificação do domínio, bem como a delegação de responsabilidades do ponto de vista arquitetural, além do estudo de caso da nova organização do módulo de GRU de Cronotacógrafo.
 \end{resumo}
 
 
@@ -50,7 +50,7 @@ Essa alteração afetou diretamente a codificação no sistema, o código e a arquite
 
 O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
 
-Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Drive design}.
+Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Driven design}.
 
 \section{Referencial Teórico} \label{sec:firstpage}
 
@@ -75,22 +75,22 @@ Pensar nos problemas de forma técnica não é ruim, o único problema é que, às vez
 De forma geral \cite{DDDinPHP} afirma que os benefícios com a utilização do DDD são:
 \begin{itemize}
   \item Alinhamento com o modelo do domínio
-  \item Especialistas do domínio contribuem para o design do software
+  \item Especialistas do domínio contribuem para o \textit{design} do software
   \item Melhor experiência do usuário
   \item Limites claros
   \item Melhor organização da arquitetura
   \item Modelagem contínua de forma ágil
 \end{itemize}
 
-\subsection{Linguagem Ubiqua}
+\subsection{Linguagem Ubíqua}
 
 A linguagem ubíqua é uma linguagem de equipe compartilhada. Ela é compartilhada por especialistas em domínio e desenvolvedores. Na verdade, ela é compartilhada por todos na equipe do projeto. Não importa o seu papel na equipe, uma vez que você está na equipe que usa a linguagem ubíqua do projeto \cite{vernon2013implementing}.
 Esta linguagem é composta de documentos, diagramas de modelo, e mesmo código. Se um termo está ausente no projeto, é uma oportunidade para melhorar o modelo incluindo-a \cite{Evans:2003:DDT:861502}.
 A linguagem ubíqua exige que os desenvolvedores trabalhem duro para entender o domínio do problema, mas também exige que a empresa trabalhe duro para ser precisa em suas nomenclaturas e descrição desses conceitos \cite{haywood2009domain}. Se uma ideia não pode ser expressa usando este grupo de conceitos, o modelo deve ser extendido para procurar e remover as ambiguidades e as inconsistências \cite{haywood2009domain}.
 
-Especialistas do domínio podem se comunicar com os times de desenvolvedores de sistema sobre as regras do domínio através da linguagem ubiqua que também representa a especificação formal do sistema \cite{vernon2013implementing}. 
+Especialistas do domínio podem se comunicar com os times de desenvolvedores de sistema sobre as regras do domínio através da linguagem ubíqua que também representa a especificação formal do sistema \cite{vernon2013implementing}. 
 
-Para \cite{millett2015patterns} se a equipe de desenvolvimento não se envolver com especialistas de domínio para compreender plenamente a linguagem e usá-la no âmbito da implementação de código, muito do seu benefício é perdido. Para alcançar uma melhor compreensão, as equipes precisam se comunicar de forma eficaz. É a criação da linguagem onipresente que permite uma compreensão mais profunda do que vai permanecer após o código ser reescrito e substituído \cite{millett2015patterns}. Ainda segundo \cite{millett2015patterns} a utilidade da criação de uma linguagem ubiqua tem um impacto que vai além da aplicação para o produto em desenvolvimento. Ela ajuda a definir explicitamente o que a empresa faz, revela uma compreensão mais profunda do processo e a lógica do negócio, e melhora a comunicação empresarial. Enquanto as equipes estão implementando o modelo em código, novos conceitos podem aparecer. Estes termos descobertos precisam ser levados de volta para os especialistas de domínio para validação e esclarecimentos \cite{millett2015patterns}.
+Para \cite{millett2015patterns} se a equipe de desenvolvimento não se envolver com especialistas de domínio para compreender plenamente a linguagem e usá-la no âmbito da implementação de código, muito do seu benefício é perdido. Para alcançar uma melhor compreensão, as equipes precisam se comunicar de forma eficaz. É a criação da linguagem onipresente que permite uma compreensão mais profunda do que vai permanecer após o código ser reescrito e substituído \cite{millett2015patterns}. Ainda segundo \cite{millett2015patterns} a utilidade da criação de uma linguagem ubíqua tem um impacto que vai além da aplicação para o produto em desenvolvimento. Ela ajuda a definir explicitamente o que a empresa faz, revela uma compreensão mais profunda do processo e a lógica do negócio, e melhora a comunicação empresarial. Enquanto as equipes estão implementando o modelo em código, novos conceitos podem aparecer. Estes termos descobertos precisam ser levados de volta para os especialistas de domínio para validação e esclarecimentos \cite{millett2015patterns}.
 
 Um projeto enfrenta sérios problemas quando os membros da equipe não compartilham uma linguagem comum para discutir o domínio \cite{avram2007domain}.
 Ele ainda defende usar um modelo como espinha dorsal de uma línguagem. Solicitando que a equipe deve usar a linguagem de forma consistente em todas as comunicações e
@@ -102,7 +102,7 @@ Além de demonstrar como o modelo se relaciona dentro de outros contextos, permit
 
 Segundo é de vital importância para proteger a integridade de cada modelo  definir claramente os limites da sua responsabilidade no código \cite{millett2015patterns}.
 
-Ainda segundo \cite{Evans:2003:DDT:861502}, o mapa de contexto é uma ferramenta de modelagem muito importante no \textit{Domain-Drive Design} e quando se pensa em vários subsistemas de uma aplicação como \textit{Bounded Contexts}, se perde a visão geral do negócio como um todo, e que é inevitável que os vários delimitadores de contextos de uma aplicação serão necessários para comunicar ou compartilhar dados entre eles.
+Ainda segundo \cite{Evans:2003:DDT:861502}, o mapa de contexto é uma ferramenta de modelagem muito importante no \textit{Domain-Driven Design} e quando se pensa em vários subsistemas de uma aplicação como \textit{Bounded Contexts}, se perde a visão geral do negócio como um todo, e que é inevitável que os vários delimitadores de contextos de uma aplicação serão necessários para comunicar ou compartilhar dados entre eles.
 
 Um mapa de contexto é uma visão geral da aplicação como um todo. Cada contexto delimitado (\textit{Bounded Context}) se encaixa dentro de um mapa de contexto para mostrar como eles devem se comunicar entre si e como os dados devem ser compartilhados.
 
@@ -125,7 +125,7 @@ Normalmente em aplicações do meio web tem diferentes definições em contextos dif
 
 \subsection{Blocos de Construção}
 
-A finalidade desses padrões é apresentar alguns dos principais elementos da modelagem de objeto e design de software do ponto de vista do design orientado por domínio \cite{avram2007domain}.
+A finalidade desses padrões é apresentar alguns dos principais elementos da modelagem de objeto e \textit{design} de software do ponto de vista do \textit{design} orientado por domínio \cite{avram2007domain}.
 
 \begin{figure}[ht]
 \centering
@@ -178,7 +178,7 @@ As camadas da arquitetura são descritas por \cite{Evans:2003:DDT:861502}:
 \label{fig:exampleFig1}
 \end{figure}
     
-    Model View Controller (MVC) é o design pattern mais conhecido de todos. Seus conceitos remontam à plataforma Smaltalk na década de 1970. Basicamente uma aplicação que segue o pattern Model View Controller é dividida em três camadas. As letras que compõem o nome deste pattern representam cada um desses aspectos \cite{dall2015php}.
+    Model View Controller (MVC) é o \textit{design} pattern mais conhecido de todos. Seus conceitos remontam à plataforma Smaltalk na década de 1970. Basicamente uma aplicação que segue o pattern Model View Controller é dividida em três camadas. As letras que compõem o nome deste pattern representam cada um desses aspectos \cite{dall2015php}.
 
 \subsection{Entidades}
 Muitos objetos não são fundamentalmente definidos por seus atributos, mas sim por uma linha de continuidade e identidade \cite{Evans:2003:DDT:861502}.
@@ -241,12 +241,12 @@ Módulos não separam o código mas separam o significado conceitual \cite{DDDinPHP
 Nesta tese de mestrado, os princípios de \textit{Domain-Driven Design} são usados para modelar um problema de negócio do mundo real, um provedor de identidade extensível (PDI). O trabalho mostra que a aplicação de \textit{Domain-Driven Design} é uma boa abordagem para a modelagem de um domínio complexo.
 O projeto do trabalho é desenvolvido na empresa Safewhere e tem como interessados além do autor do trabalho também o diretor técnico e o CEO da Safewhere.
 
-O trabalho cita que no início, a empresa por ter pouco capital para investir, ainda tinha como prioridade máxima mostrar um produto real. Dessa forma não houve comprometimento com design de software e modelagem. Desenvolvedores eram contratados, e cada um tinha seu próprio estilo de desenvolvimento e compreensção do domínio comercial.
+O trabalho cita que no início, a empresa por ter pouco capital para investir, ainda tinha como prioridade máxima mostrar um produto real. Dessa forma não houve comprometimento com \textit{design} de software e modelagem. Desenvolvedores eram contratados, e cada um tinha seu próprio estilo de desenvolvimento e compreensção do domínio comercial.
 
 E, que no inicio não parecia causar grandes problemas e a versão do produto foi entregue e totalmente funcional. Após o lançamento inicial a necessidade de novos recursos cresceu rapidamente. O produto estava funcionando bem, mas se tornou cada vez mais dificil adicionar novos recursos em funcionalidades existentes, como refatorar o código base. Apesar de orientações de codificação estabelecidas, havia algo faltando no processo de desenvolvimento. Uma das maneiras de como isso se manifesta em si foi que tínhamos várias classes na di entravarão um conjuntos com nomes semelhantes mas com significado desiguais. Foi também difícil explicar a arquitectura para novos membros da equipe, dado que o código não foi organizado de forma heterogênea.
 Em retrospecto, o problema foi que claramente não tinha um modelo nem um idioma onipresente.
 
-Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo extensível o autor solicitou a alguns dos colegas para rever o modelo. Entrevistou cada pessoa para que avalia-se a qualidade do design e os benefícios do DDD:
+Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo extensível o autor solicitou a alguns dos colegas para rever o modelo. Entrevistou cada pessoa para que avalia-se a qualidade do \textit{design} e os benefícios do DDD:
 
 \begin{itemize}
   \item Resolve bem o problema do negócio.
@@ -274,19 +274,19 @@ Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vez
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
 
-Esta tese de mestrado descreve a utilização de \textit{Domain-Drive Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
+Esta tese de mestrado descreve a utilização de \textit{Domain-Driven Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
 
 O autor cita que o principal desafio é que o DDD foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
 
 Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo \textit{Domain-Driven Design}. A justificativa se origina do sistema de ser muito antigo. Outro fator é a comunicação, pois para aumentar esse problema, existem desenvolvedor na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilados pela equipe de desenvolimento.
 
-O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubiqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
+O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubíqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
 
 Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 
-Neste artigo é apresentado a utilização de \textit{Domain-Drive Design} na empresa de petróleo Statoil ASA situada na Noruega, com foco nos conceitos do nível estratégico. O objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente de empresarial para melhorar a arquitetura de software de um grande sistema corporativo.
+Neste artigo é apresentado a utilização de \textit{Domain-Driven Design} na empresa de petróleo Statoil ASA situada na Noruega, com foco nos conceitos do nível estratégico. O objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente de empresarial para melhorar a arquitetura de software de um grande sistema corporativo.
 
 O artigo cita a utilização de mapas de contexto e que a utilização foi de grande valor também pelo conhecimento adquirido, permitiu melhorar o escopo de novos projetos arquiteturais e melhoria do softwre existente de forma controlada.
 
@@ -359,7 +359,7 @@ A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apres
 \section{Solução Implementada}
 
 \subsection{Diagramas de Casos de Uso}
-O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, era fácil identificar o propósito das classes e seus métodos e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
+O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, fácil identificar o propósito das classes e seus métodos e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
 
 Assim houve a necessidade de se aumentar aos poucos a equipe de desenvolvimento e muitas vezes é difícil alinhar o conhecimento, manter o mesmo padrão no desenvolvimento do código, refatorar, realizar testes unitários, mesmo porque novos programadores são vinculados a equipe e outros acabam saindo.
 
@@ -528,7 +528,7 @@ A figura 5 representa uma visão geral do domínio GRU e em quais outros subdomíni
 
 \subsection{Arquitetura da Aplicação}
 
-A figura 6 representa através do diagrama de pacotes a estrutura hierarquica dentro da aplicação segundo os conceitos do \textit{Domain-Drive design}.
+A figura 6 representa através do diagrama de pacotes a estrutura hierarquica dentro da aplicação segundo os conceitos do \textit{Domain-Driven design}.
 
 Todas as camandas tem como dependência a camada \textit{Domain}, com foco no domínio do negócio como é proposto pelo \textit{Domain-Driven design}, as outras camandas não conseguem agir sem o domínio do negócio. A interface precisa acessar coisas do domínio e se comunicar com a aplicação e a infraestrutura para ser montada. A Aplicação precisa da infraestrutura e da intereface. A aplicação tem por responsabilidade capturar as requsiçãoes e conectar a interface com o restante da aplicação.
 
@@ -580,17 +580,33 @@ A figura 9 apresenta a organização do sistema na camada do domínio, foi organiza
 
 \newpage
 
+\section{Limitações}
+
+Segundo \cite{mauricioaniche} não é o \textit{framework} que vai fazer o software parar, nem ele que será mantido no futuro, são as classes que mantém as regras de negócio que precisam de atenção. 
+
+Essa afirmação se reflete por inteiro no sistema do Cronotacógrafo, não somente pela utilização do \textit{framework}, não somente pelas implementações do código que apesar de possuir classes e métodos, é visível que a codificação fica longe do paradigma de orientação à objetos, existe também uma má tradução das regras de negócio quando transformadas em código. Mas o sistema consegue atingir o objetivo, que é entregar valor ao cliente segundo as regras de negócio definidas. O problema realmente é quando começam a exisitr exceções a regra e as classes já estão tão acopladas que é difícil identificar e separar responsabilidades, ainda mais quando o desenvolvedor que dará manutenção não é o mesmo que criou a funcionalidade, e assim acontece no Cronotacógrafo, os desenvolvedores não são responsáveis apenas por um módulo, assim como o módulo poderá ter vários responsáveis diferentes.
+
+O amadurecimento da equipe também é muito importante para tentar aplicar \textit{Domain-Driven design}, e concerteza o não entendimento dos conceitos descritos por \cite{Evans:2003:DDT:861502} causará confusão nos membros da equipe, e no caso deste artigo, tão difícil quanto compreender os conceitos de \textit{Domain-Driven design} é tomar decisões com relação a quais contextos pertencem os objetos de domínio. Pois como em qualquer sistema as regras de negócio podem variar bastante, e talvez os objetos que antes faziam sentido dentro de um contexto podem não se encaixar no mesmo contexto a medida que as regras de negócio evoluem.
+
+Atualmente o sistema do Cronotacógrafo utiliza o banco de dados da Oracle, e todas as classes tem uma implementação direta referenciando o banco de dados Oracle, não existe nenhuma classe intermediaria que permita abstrair as chamadas ao banco. Dessa maneira surgiu a necessidade da utilização de repositórios para chegar nos objetos de conhecimento do domínio. Passando então a fazer parte da linguagem ubíqua, uma vez que não deveria ser utilizado somente como algo interno ao código, estando presente também nas conversas com os especialistas do domínio e por consequencia no modelo do domínio. Mantendo-se o princípio da linguagem ubíqua não existe problema ao trazer termos técnicos se todos entendem o conceito, e se no contexto do domínio GRU existisse outro nome que fizesse mais sentido do que o nome repositório esse novo nome seria utilizado, mesmo os desenvolvedores sabendo que no fundo aquilo é um repositório.
+
+O problema das pessoas é que utilizando \textit{Domain-Driven design} acreditam que nele contem toda a essência das coisas. O \textit{Domain-Driven design} não é uma descrição de padrões de projeto, embora tenha alguns, ele auxilia o time de desenvolvedores a ficar atento em alguns pontos-chave para conseguir um melhor \textit{design}, mas não ensinará um \textit{design} melhor para o problema específico de gerenciamento de GRU.
+
+Abri-se mão de classes coesas e flexíveis para ganhar os benefícios do \textit{framework} e classes difíceis de serem testadas e mantidas são escritas pela simples questão da produtividade \cite{mauricioaniche}.
+
+
+
 \section{Conclusão}
 
-Este artigo demonstrou através de um problema real a aplicação de alguns conceitos de \textit{Domain-Driven design} na solução do problema, e a partir dele é possível considerar vários fatores que podem levar ao sucesso ou ao fracasso do projeto mesmo seguindo todas as etapas do \textit{Domain-Driven design}.
+Este artigo demonstrou através de um problema real a aplicação de alguns conceitos de \textit{Domain-Driven design} na solução do problema de gerenciamento de GRU de Cronotacógrafo, e a partir dele é possível considerar vários fatores que podem levar ao sucesso ou ao fracasso do projeto mesmo seguindo todas as etapas do \textit{Domain-Driven design}.
 
-Tão ou mais importante do que aplicar \textit{Domain-Driven design} é necessário que todos os desenvolvedores da equipe tenham o domínio de orientação a objetos juntamente com SOLID e GRASP por exemplo, e que são importantíssimos para ajudar a pensar no design do software, em como as classes serão relacionadas e estruturadas. Conhecer ferramentas de testes unitários, ser capaz de trabalhar com desenvolvimento guiado por testes, entender sobre a importância da integração contínua, automatização de rotinas, boas práticas de desenvolvimento de software e tudo mais que puder ser relevante para ajudar a construir software confiável e manutenível de forma rápida e com ritmo e qualidade sustentável.
+Tão ou mais importante do que aplicar \textit{Domain-Driven design} é necessário que todos os desenvolvedores da equipe tenham o domínio de orientação a objetos juntamente com SOLID e GRASP por exemplo, e que são importantíssimos para ajudar a pensar no \textit{design} do software, em como as classes serão relacionadas e estruturadas. Conhecer ferramentas de testes unitários, ser capaz de trabalhar com desenvolvimento guiado por testes, entender sobre a importância da integração contínua, automatização de rotinas, boas práticas de desenvolvimento de software e tudo mais que puder ser relevante para ajudar a construir software confiável e manutenível de forma rápida e com ritmo e qualidade sustentável.
 
 Quando se fala em orientação a objetos pensa-se logo em classes, heranças, polimorfismo, encapsulamento. Mas a essência da orientação a objetos também tem coisas como: alinhamento do código com o negócio, favorecer a reutilização e baixo acoplamento. \textit{Domain-Driven design} poderia ser visto como uma evolução da orientação a objetos, mas ele não foca em tecnologia, mas sim em entender as regras de negócio e como elas devem estar refletidas no código e no modelo de domínio. 
 
 O \textit{Domain-Driven design} permite realmente alinhar o conhecimento dos desenvolvedores e dos especialistas do domínio produzindo software mais coerente com o negócio e reduzindo as chances de que o conhecimento sobre o modelo do domínio fique nas mãos de poucas ou de uma única pessoa.
 
-O grande desafio ao propor o desenvolvimento de software utilizando \textit{Domain-Driven design} é manter a equipe comprometida desde o início com os novos conceitos, fazendo-os entender dos benefícios, pois cada um teve experiências anteriores com outros projetos complexos que não se utilizou da aplicação de conceitos mais evoluídos sugeridos pelo \textit{Domain-Driven design}. A equipe também terá dificuldades senão conhecer muito bem o \textit{framework}, no caso deste artigo o \textit{CAKEPHP}, que pela versão utilizada já pode ser considerado ultrapassado e que tornaria mais trabalhoso e custoso para o cliente aplicar \textit{Domain-Driven design}.
+O grande desafio ao propor o desenvolvimento de software utilizando \textit{Domain-Driven design} é manter a equipe comprometida desde o início com os novos conceitos, fazendo-os entender dos benefícios, pois cada um teve experiências anteriores com outros projetos complexos que não se utilizou da aplicação de conceitos mais evoluídos sugeridos pelo \textit{Domain-Driven design} e mesmo assim o software entregou valor ao cliente. A equipe também terá dificuldades senão conhecer muito bem o \textit{framework}, no caso deste artigo o \textit{CAKEPHP}, que pela versão utilizada já pode ser considerado ultrapassado e que tornaria mais trabalhoso e custoso para o cliente aplicar \textit{Domain-Driven design}.
 
 Independente do framework e aplicando-se muito bem os conceitos de orientação a objetos é possível chegar bem próximo de alguns conceitos apresentados pelo \textit{Domain-Driven design}. Pode-se afirmar que \textit{Domain-Driven design} é programar utilizando orientação a objetos com responsabilidade e qualidade.
 

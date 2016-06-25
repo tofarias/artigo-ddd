@@ -5,45 +5,45 @@ The style file: sbc.bst
 Database file #1: sbc-template.bib
 Warning--empty journal in millett2015patterns
 Warning--empty journal in vlahovicimplications
-You've used 15 entries,
+You've used 16 entries,
             1935 wiz_defined-function locations,
-            545 strings with 5739 characters,
-and the built_in function-call counts, 4409 in all, are:
-= -- 426
-> -- 128
-< -- 15
-+ -- 38
-- -- 38
-* -- 292
-:= -- 821
-add.period$ -- 44
-call.type$ -- 15
-change.case$ -- 86
-chr.to.int$ -- 15
-cite$ -- 17
-duplicate$ -- 208
-empty$ -- 327
-format.name$ -- 57
-if$ -- 854
+            549 strings with 5826 characters,
+and the built_in function-call counts, 4684 in all, are:
+= -- 451
+> -- 135
+< -- 16
++ -- 40
+- -- 40
+* -- 309
+:= -- 872
+add.period$ -- 47
+call.type$ -- 16
+change.case$ -- 91
+chr.to.int$ -- 16
+cite$ -- 18
+duplicate$ -- 222
+empty$ -- 350
+format.name$ -- 60
+if$ -- 908
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 17
-newline$ -- 76
-num.names$ -- 45
-pop$ -- 99
+missing$ -- 19
+newline$ -- 81
+num.names$ -- 48
+pop$ -- 107
 preamble$ -- 1
-purify$ -- 94
+purify$ -- 100
 quote$ -- 0
-skip$ -- 165
+skip$ -- 175
 stack$ -- 0
-substring$ -- 212
-swap$ -- 20
+substring$ -- 224
+swap$ -- 21
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 78
+type$ -- 82
 warning$ -- 2
-while$ -- 33
+while$ -- 35
 width$ -- 0
-write$ -- 184
+write$ -- 196
 (There were 2 warnings)

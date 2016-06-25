@@ -1,5 +1,10 @@
 \begin{thebibliography}{}
 
+\bibitem[Aniche 2015]{mauricioaniche}
+Aniche, M. (2015).
+\newblock {\em Orientac{\~a}o a Objetos e SOLID para Ninjas}.
+\newblock Casa do Codigo.
+
 \bibitem[Avram 2007]{avram2007domain}
 Avram, A. (2007).
 \newblock {\em Domain-driven design Quickly}.
