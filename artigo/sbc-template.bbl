@@ -5,8 +5,8 @@ Avram, A. (2007).
 \newblock {\em Domain-driven design Quickly}.
 \newblock Lulu. com.
 
-\bibitem[CakePHP ]{cakephpmvc}
-CakePHP.
+\bibitem[CakePHP 2008]{cakephpmvc}
+CakePHP (2008).
 \newblock
   http://book.cakephp.org/1.3/pt/the-manual/beginning-with-cakephp/understanding-model-view-controller.html.
 \newblock {\em Acesso em 21/05/2016}.
@@ -45,8 +45,8 @@ Hoffmann, K.~B. (2009).
 \newblock Domain-driven design in action: Design an identity provider.
 \newblock Master's thesis, University of Copenhagen.
 
-\bibitem[Inmetro ]{oquecronotacografo}
-Inmetro.
+\bibitem[Inmetro 2011]{oquecronotacografo}
+Inmetro (2011).
 \newblock http://cronotacografo.rbmlq.gov.br/o-que-e-cronotacografo.
 \newblock {\em Acesso em 20/05/2016}.
 
@@ -58,16 +58,11 @@ Landre, E., Wesenberg, H., and R{\o}nneberg, H. (2006).
   Object-oriented programming systems, languages, and applications}, pages
   809--814. ACM.
 
-\bibitem[Macedo ]{macedodiretrizes}
-Macedo, O. A.~C.
+\bibitem[Macedo 2009]{macedodiretrizes}
+Macedo, O. A.~C. (2009).
 \newblock {\em Diretrizes para desenvolvimento de linhas de produtos de
   software com base em Domain-Driven Design e m{\'e}todos {\'a}geis}.
 \newblock PhD thesis, Universidade de S{\~a}o Paulo.
-
-\bibitem[Michaelis 2011]{michaelis2011disponivel}
-Michaelis, D. (2011).
-\newblock http://michaelis.uol.com.br.
-\newblock {\em Acesso em 28/05/2016}, 7.
 
 \bibitem[Millett and Tune 2015]{millett2015patterns}
 Millett, S. and Tune, N. (2015).
@@ -82,8 +77,8 @@ Vernon, V. (2013).
 \newblock {\em Implementing domain-driven design}.
 \newblock Addison-Wesley.
 
-\bibitem[Vlahovic ]{vlahovicimplications}
-Vlahovic, N.
+\bibitem[Vlahovic 2015]{vlahovicimplications}
+Vlahovic, N. (2015).
 \newblock Implications of domain-driven design in complex software value
   estimation and maintenance using dsl platform.
 
