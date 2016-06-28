@@ -228,7 +228,7 @@ Coleções são importantes por serem uma forma de expressar um dos mais fundamenta
 Para aplicações complexas, o modelo tende a ficar muito grande, tornando-se difícil de ser compreendido como um todo \cite{DDDinPHP}. Por esse motivo, é preciso reorganizar o modelo em módulos. Existem várias formas de coesão entre elementos de um módulo. Os módulos são capítulos \cite{Evans:2003:DDT:861502}.
 	Uma preocupação comum ao criar uma aplicação segundo o DDD, é onde é colocar o código, qual é a maneira recomendada para colocar o código na aplicação, onde colocar código de infra-estrutura? E o mais importante, como devem os diferentes conceitos dentro do modelo ser estruturados. Existe um padrão tático para isso: módulos \cite{DDDinPHP}. 
 	
-	Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma applicação independente  \cite{DDDinPHP}.
+	Módulo é responsável pela representação de todos os fluxos de uma aplicação. Desde a sua criação até que ele seja entregue ao cliente. Além disso, é uma aplicação independente  \cite{DDDinPHP}.
 
 Dar aos módulos nomes que passam a fazer parte da linguagem ubíqua e seus nomes devem refletir uma visão sobre o domínio \cite{Evans:2003:DDT:861502}.
 
@@ -241,12 +241,14 @@ Módulos não separam o código mas separam o significado conceitual \cite{DDDinPHP
 Nesta tese de mestrado, os princípios de \textit{Domain-Driven Design} são usados para modelar um problema de negócio do mundo real, um provedor de identidade extensível (PDI). O trabalho mostra que a aplicação de \textit{Domain-Driven Design} é uma boa abordagem para a modelagem de um domínio complexo.
 O projeto do trabalho é desenvolvido na empresa Safewhere e tem como interessados além do autor do trabalho também o diretor técnico e o CEO da Safewhere.
 
-O trabalho cita que no início, a empresa por ter pouco capital para investir, ainda tinha como prioridade máxima mostrar um produto real. Dessa forma não houve comprometimento com \textit{design} de software e modelagem. Desenvolvedores eram contratados, e cada um tinha seu próprio estilo de desenvolvimento e compreensção do domínio comercial.
+O trabalho cita que no início, a empresa por ter pouco capital para investir, ainda tinha como prioridade máxima mostrar um produto real. Dessa forma não houve comprometimento com \textit{design} de software e modelagem. Desenvolvedores eram contratados, e cada um tinha seu próprio estilo de desenvolvimento e compreensão do domínio \cite{DesigningIidentityProvider}.
 
-E, que no inicio não parecia causar grandes problemas e a versão do produto foi entregue e totalmente funcional. Após o lançamento inicial a necessidade de novos recursos cresceu rapidamente. O produto estava funcionando bem, mas se tornou cada vez mais dificil adicionar novos recursos em funcionalidades existentes, como refatorar o código base. Apesar de orientações de codificação estabelecidas, havia algo faltando no processo de desenvolvimento. Uma das maneiras de como isso se manifesta em si foi que tínhamos várias classes na di entravarão um conjuntos com nomes semelhantes mas com significado desiguais. Foi também difícil explicar a arquitectura para novos membros da equipe, dado que o código não foi organizado de forma heterogênea.
+Ainda segundo \cite{DesigningIidentityProvider} se o design não é pensado desde o início, e todos os envolvidos na programação solucionam  os problemas do domínio conforme compreendem, existe grandes chances de acabar com um código confuso que é difícil de compreender, manter e extender.
+
+No inicio não parecia causar grandes problemas e a versão do produto foi entregue e totalmente funcional. Após o lançamento inicial a necessidade de novos recursos cresceu rapidamente. O produto estava funcionando bem, mas se tornou cada vez mais dificil adicionar novos recursos em funcionalidades existentes, como refatorar o código base. Apesar de orientações de codificação estabelecidas, havia algo faltando no processo de desenvolvimento. Uma das maneiras de como isso se manifestou foi que havia várias classes na aplicação em conjuntos com nomes semelhantes mas com significado desiguais. Foi também difícil explicar a arquitectura para novos membros da equipe, dado que o código não foi organizado de forma heterogênea.
 Em retrospecto, o problema foi que claramente não tinha um modelo nem um idioma onipresente.
 
-Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo extensível o autor solicitou a alguns dos colegas para rever o modelo. Entrevistou cada pessoa para que avalia-se a qualidade do \textit{design} e os benefícios do DDD:
+Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo extensível o autor solicitou a alguns dos colegas para rever o modelo. Entrevistou cada pessoa para que avalia-se a qualidade do \textit{design} e os benefícios do \textit{Domain-driven design}:
 
 \begin{itemize}
   \item Resolve bem o problema do negócio.
@@ -254,81 +256,78 @@ Para ter a certeza de ter conseguido fazer uma fácil manutenção e um modelo exte
   \item É flexível e tem uma clara separação de responsabilidades entre as camdas, tornando fácil  				refatorar
   \item Conduz a um estável e maduro do produto final.
 \end{itemize}
+
+Do posto de vista do desenvolvedor muitas vezes o modelo não fica tão completo quanto do ponto de vista do especialista do domínio e assim o modelo produzido pelo dono da obra não é tão rico e comunicativo quanto o produzido junto ao especialista do domínio \cite{DesigningIidentityProvider}.
     
 \subsection{Implications of Domain-driven Design in Complex Software Value Estimation and Maintenance using DSL Platform}
 
-Neste artigo é apresentado e analisado a ferramenta DSL. Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio. O objetivo deste artigo é analisar as implicações do uso do DDD através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
+Neste artigo é apresentado e analisado a ferramenta DSL. A Plataforma de DSL é um serviço que permite a concepção, criação e manutenção de aplicações de negócio \cite{vlahovicimplications}. O objetivo do artigo é analisar as implicações do uso do \textit{Domain-driven design} através da plataforma DSL sobre vários aspectos importantes do gerenciamento de software.
 
-O objetivo deste trabalho é investigar possíveis benefícios da adopção de \textit{Domain-Driven Design} no gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. Inevitavelmente estas considerações irá reflectir sobre o valor do ativo de software e assim uma abordagem validada estimatida de ativos de software é chamado para implementar as principais características do objeto. Usando \textit{Domain-Driven Design} pode ser utilizado para criar uma plataforma unificada para de desenvolvimento e evolução de sistemas de software complexos.
+Segundo \cite{vlahovicimplications} o objetivo é investigar possíveis benefícios da adoção de \textit{Domain-Driven Design} no gerenciamento de software, com especial ênfase na fase de manutenção durante a produção de ativos de software. \cite{vlahovicimplications} afirma que inevitavelmente estas considerações iram refletir sobre o valor do ativo de software e assim é ncessário uma abordagem válida para implementar as principais características do objeto \cite{vlahovicimplications}. Usando \textit{Domain-Driven Design} pode ser utilizado para criar uma plataforma unificada para de desenvolvimento e evolução de sistemas de software complexos \cite{vlahovicimplications}.
 
-A Plataforma DSL permite a a automação do processo de desenvolvimento de aplicativos de negócios. A
-plataforma utiliza o modelo de negócio específico como entrada e saídas de componentes acabados para software de negócios correspondente sistema.
+A Plataforma DSL permite a a automação do processo de desenvolvimento de aplicativos de negócios \cite{vlahovicimplications}. A plataforma utiliza o modelo de negócio específico como entrada e saídas de componentes acabados para software de negócios correspondente sistema \cite{vlahovicimplications}.
 
-Dois principais desafios que podem ser eficazmente solucionados com Plataforma DSL e abordagem DDD subjacente é a eliminação de falta de comunicação entre clientes e desenvolvedores em equipes de desenvolvedores.
+Para \cite{vlahovicimplications} são dois os principais desafios que podem ser eficazmente solucionados com Plataforma DSL e abordagem do DDD. A eliminação de falta de comunicação entre clientes e desenvolvedores em equipes de desenvolvedores.
 
-A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao automatizar tarefas repetitivas no processo de desenvolvimento.
+A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao automatizar tarefas repetitivas no processo de desenvolvimento \cite{vlahovicimplications}.
 
 O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
-
-Assim como no sistem de gerenciamento de GRU, a equipe de desenvolvimento às vezes esbarra na questão de conhecimento sobre a tecnologia que esta sendo utilizada para codificação, embora muitas as vezes a compreensão do domínio esteja bem disolvida na equipe.
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
 
 Esta tese de mestrado descreve a utilização de \textit{Domain-Driven Design} na refatoração e evolução de um sistema legado na empresa MERCAREON.
 
-O autor cita que o principal desafio é que o DDD foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
+Segundo \cite{hess2016evaluating} o principal desafio é que o \textit{Domain-Driven Design} foi concebido para aplicação em novos sistemas, e não para refatoração de sistemas existentes. E foi necessário fazer um mapeamento da arquitetura antiga no sentido de obter conhecimento necessário para utilizar o \textit{Design-Domain Driven} de uma forma eficiente. Se fez necessário criar camadas que impedissem o vazamento de informações independentes para a nova arquitetura.
 
-Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo \textit{Domain-Driven Design}. A justificativa se origina do sistema de ser muito antigo. Outro fator é a comunicação, pois para aumentar esse problema, existem desenvolvedor na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilados pela equipe de desenvolimento.
+Embora o sistema de gestão esteja sendo executado com êxito, a empresa MERCAREON decidiu alterar a arquitetura do sistema introduzindo \textit{Domain-Driven Design}. A justificativa se origina do sistema de ser muito antigo \cite{hess2016evaluating}. Outro fator citado por \cite{hess2016evaluating} é a comunicação, pois para aumentar esse problema, existem desenvolvedores na Alemanha e na Polônia o que prejudica tanto pela distância física quanto nos termos utilizados pela equipe de desenvolimento.
 
-O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade. O Autor ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo DDD também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubíqua que dee ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
+O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicionais, que sofre continuamente de complexidade \cite{hess2016evaluating}. \cite{hess2016evaluating} ainda afirma que como em qualquer arquitetura de refatoração, a arquitetura sugerida pelo \textit{Domain-Driven Design} também pode sofrer pela complexidade, mas menos do que as propostas tradicionais. Durante o processo de refatoração foi definido utilizar linguadem ubíqua que deve ser utilizada para qualquer comunicação e deve-se mantê-la atualizada.
 
-Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes.
+Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes \cite{hess2016evaluating}.
+
+Como a equipe de desenvolvimento não tinha experiência anterior com o \textit{Domain-Driven design} e ainda tem que manter o atual sistema de TSM a MERCAREON decidiu-se que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, que foi criado usando a proposta de técnicas de refatoração baseadas em \textit{Domain-Driven Design} para estabelecer uma arquitetura sustentável  \cite{hess2016evaluating}. Este módulo vai coexistir com o atual sistema de TSM. Quando concluído, o módulo a partir do limite do contexto deverá ser continuamente expandido até chegar a uma verdadeira arquitectura de refatoração.
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 
-Neste artigo é apresentado a utilização de \textit{Domain-Driven Design} na empresa de petróleo Statoil ASA situada na Noruega, com foco nos conceitos do nível estratégico. O objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente de empresarial para melhorar a arquitetura de software de um grande sistema corporativo.
+Neste artigo é apresentado a utilização de \textit{Domain-Driven Design} na empresa de petróleo \textit{Statoil ASA} situada na Noruega, com foco nos conceitos do nível estratégico. Segundo \cite{landre2006architectural} o objetivo é aumentar a arquitetura corporativa utilizando a extensão da arquitetura empresarial e melhoria de software existente para melhorar a arquitetura de software de um grande sistema corporativo.
 
 O artigo cita a utilização de mapas de contexto e que a utilização foi de grande valor também pelo conhecimento adquirido, permitiu melhorar o escopo de novos projetos arquiteturais e melhoria do softwre existente de forma controlada.
 
-O autor afirma que grandes empresas não tem um único núcelo. Mas que por outro lado, a nível de projeto, deve-se sempre ter um núcleo e que assim é melhor para conhecer o domínio principal e os objetivos.
+Grandes empresas não tem um único núcelo. Mas que por outro lado, a nível de projeto, deve-se sempre ter um núcleo e que assim é melhor para conhecer o domínio principal e os objetivos \cite{landre2006architectural}.
 
-A partir da análise da criação do mapa de contexto, um novo objetivo foi estabelecido e utilizado posteriormente para definir o escopo de um novo projeto, e este objetivo é a melhoria da arquitetura em novos projetos, gerenciamento e controle de recursos de documento.
+A partir da análise da criação do mapa de contexto, um novo objetivo foi estabelecido e utilizado posteriormente para definir o escopo de um novo projeto, e este objetivo é a melhoria da arquitetura em novos projetos, gerenciamento e controle de recursos de documento \cite{landre2006architectural}.
 
-Os contextos reais são derivados da Arquitetura corporativa, e transformando a arquitetura da empresa em uma ferramenta útila para a arquitetura de software de melhoria.
+Os contextos reais são derivados da arquitetura corporativa, e transformando a arquitetura da empresa em uma ferramenta útila para a arquitetura de software de melhoria.
 
-Um mapa de contexto é um desenho que documenta contextos de modelagem e suas relações. Grandes sistemas contém vários contextos de modelagem, então, eles representaram no contexto de modelagem de interesses, não as aplicações ou sistemas de informação que implementam os diferentes contextos.
-O autor ainda afirma que mapa de contexto representa o primeiro ítem no nível estratégico \textit{Domain-Driven design}. Para o autor ficou a percepção de que a utilização do mapa de contexto e o seu papel na melhoria da arquitetura foi bem compreendido pela equipe, e que o sistema \textit{Digital Cargo File (DCF)} foi refatorado em 2006 para corresponder as recomendações sugeridas.
+Um mapa de contexto é um desenho que documenta contextos de modelagem e suas relações. Grandes sistemas contém vários contextos de modelagem, então, eles representaram no contexto de modelagem de interesses, não as aplicações ou sistemas de informação que implementam os diferentes contextos \cite{landre2006architectural}.
+O autor ainda afirma que mapa de contexto representa o primeiro ítem no nível estratégico \textit{Domain-Driven design}. Para \cite{landre2006architectural} ficou a percepção de que a utilização do mapa de contexto e o seu papel na melhoria da arquitetura foi bem compreendido pela equipe, e que o sistema \textit{Digital Cargo File (DCF)} foi refatorado em 2006 para corresponder as recomendações sugeridas.
 
-A empresa Statoil também adotou formalmente o uso de mapas de contexto como um artefato da arquitetura. O autor finaliza afirmando que o uso de camadas de responsabilidade parece reduzir a complexidade percebida.
+A empresa \textit{Statoil} também adotou formalmente o uso de mapas de contexto como um artefato da arquitetura. O autor finaliza afirmando que o uso de camadas de responsabilidade parece reduzir a complexidade percebida.
 
 \subsection{Diretrizes para desenvolvimento de linhas de produtos de software com base em Domain-Driven Design e métodos ágeis}
 
-Esta dissertação de mestrado tem como principal objetivo demonstrar através de um estudo de caso a aplicação de DDD (Domain-Driven Design) e métodos ágeis no desenvolvimento de linhas de produtos de software, a fim de analisar as principais vantagens em relação aos métodos tradicionais.
+Esta dissertação de mestrado tem como principal objetivo demonstrar através de um estudo de caso a aplicação de \textit{Domain-Driven Design} e métodos ágeis no desenvolvimento de linhas de produtos de software, a fim de analisar as principais vantagens em relação aos métodos tradicionais.
 
-O autor afirma que o processo de desenvolvimento em linhas de produtos de software (LPS) geralmente é sequencial e que o projeto não está focado em um modelo de domínio, mas mais intenssamente preocupado com questões técnicas, como alocação de componentes e separação em subsistemas. O aumento no reúso do software leva a um aumento por transformações nos sistemas.
+Segundo \cite{macedodiretrizes} o processo de desenvolvimento em linhas de produtos de software (LPS) geralmente é sequencial e que o projeto não está focado em um modelo de domínio, mas mais intenssamente preocupado com questões técnicas, como alocação de componentes e separação em subsistemas. O aumento no reúso do software leva a um aumento por transformações nos sistemas.
 
-O trabalho apresenta um estudo de caso, em que se desenvolve uma linha de produtos baseados em DDD para sistemas de transporte urbano. O BET (Bilhetes Eletrônicos de Transporte) é um protótipo de sistema que tem por objetivo gerenciamento de sistemas de transporte urbano onde propõe-se um conjunto de diretrizes de desenvolvimento de LPS. Segundo o autor são regras de caráter prático que visam a guiar o desenvolvimento de novas linhas de produtos. Adaptadas a cada contexto particular, as diretrizes podem ajudar a alcançar maior flexibilidade e extensibilidade nas LPS.
+O trabalho apresenta um estudo de caso, em que se desenvolve uma linha de produtos baseados em \textit{Domain-Driven Design} para sistemas de transporte urbano. O BET (Bilhetes Eletrônicos de Transporte) é um protótipo de sistema que tem por objetivo gerenciamento de sistemas de transporte urbano onde propõe-se um conjunto de diretrizes de desenvolvimento de LPS \cite{macedodiretrizes}. Segundo \cite{macedodiretrizes} são regras de caráter prático que visam a guiar o desenvolvimento de novas linhas de produtos. Adaptadas a cada contexto particular, as diretrizes podem ajudar a alcançar maior flexibilidade e extensibilidade nas LPS.
 
 O estudao de caso considera que as regras para transporte urbano variam de cidade para cidade, essas diferenças foram modeladas como variabilidades da linha, enquanto as regras e conceitos comuns foram desenvolvidos como parte do núcleo. 
 
-Foi priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o DDD o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
-A camada de aplicação é composta por classes de serviço que coordenam outros serviços ou objetos do domínio, na camada de infra-estrutura encontram-se classes para persistencia de dados e onde objetos de domínio não conhecem nada sobre persistencia. Toda essa organização favorece ainda a injeção de dependência.
+Segundo foi \cite{macedodiretrizes} priorizado um backlog contendo as histórias de usuário ordenadas por prioridade. Conforme sugere o \textit{Domain-Driven Design} o sistema foi arquitetado em quatro camadas: apresentação, aplicação, domínio e infra-estrutura, e ainda sob o conceito do MVC (Model-View-Controller).
 
-A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão Durante a implementação do sistema BET utilizando como base os princípios de DDD e métodos ágeis, surgiram vários problemas práticos de projeto.
-Ao contrário de métodos tradicionais onde é encorajado criar o modelo completo de todo o projeto logo no início, baseado nas \textit{features} que são as funcionalidades previstas para o sistema crescem a cada iteração.
+A criação das histórias e a conseqüente priorização do backlog foi feita com a ajuda de uma pessoa com bastante conhecimento sobre o domínio em questão e durante a implementação do sistema BET utilizando como base os princípios de \textit{Domain-Driven Design} e métodos ágeis, surgiram vários problemas práticos de projeto \cite{macedodiretrizes}.
 
 O estudo de caso sugere que é possível construir linhas de produtos fundamentadas em um
-modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A expressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de produtos e, conseqüentemente, na sua evolução. Com isso, a adaptabilidade a mudanças ao longo do tempo é bem maior. Além disso, um modelo de domínio expresso diretamente no código da aplicação reduz a necessidade de documentação não executável, como diagramas UML e documentos de casos de uso.
+modelo de domínio mais expressivo, comparado ao que propõem os métodos tradicionais. A expressividade do modelo tem um grande impacto na facilidade de manutenção de uma linha de produtos e, conseqüentemente, na sua evolução. Com isso, a adaptabilidade a mudanças ao longo do tempo é bem maior. Além disso, um modelo de domínio expresso diretamente no código da aplicação reduz a necessidade de documentação não executável, como diagramas UML e documentos de casos de uso \cite{macedodiretrizes}.
 
-Durante o desenvolvimento do projeto, houve uma preocupação em aumentar a coesão das classes e reduzir o acoplamento entre elas. Para tal, foram utilizadas várias técnicas e princípios, como polimorfismo e princípio da responsabilidade única. O \textit{design} resultante mostrou-se bastante flexível e extensível. A inclusão ou alteração de regras de negócio ou mesmo de fluxos inteiros de atividade (como a funcionalidade de crédito em lote) podem ser feitas facilmente. A configuração das funcionalidades requeridas para um produto consiste apenas de configuração do grafo de dependências, por meio de uma linguagem específica de domínio.
+Durante o desenvolvimento do projeto, \cite{macedodiretrizes} descreve que houve uma preocupação em aumentar a coesão das classes e reduzir o acoplamento entre elas. Para tal, foram utilizadas várias técnicas e princípios, como polimorfismo e princípio da responsabilidade única. O \textit{design} resultante mostrou-se bastante flexível e extensível. A inclusão ou alteração de regras de negócio ou mesmo de fluxos inteiros de atividade (como a funcionalidade de crédito em lote) podem ser feitas facilmente. A configuração das funcionalidades requeridas para um produto consiste apenas de configuração do grafo de dependências, por meio de uma linguagem específica de domínio \cite{macedodiretrizes}.
 
-A aplicação de DDD ao desenvolvimento de linhas de produtos de software mostrou-se bastante adequada. A razão disto é o enfoque do desenvolvimento baseado em uma linguagem ubíqua do domínio. Destarte, os conceitos do domínio revelam-se com muito mais clareza no código da LPS. O efeito mais relevante dessa transparência é uma maior facilidade de manutenção da linha a curto e longo prazo. As principais vantagens observadas na abordagem proposta em relação aos métodos tradicionais são: menor esforço na implementação de uma nova regra de negócios (em geral, uma nova classe, comparada a vários componentes e classes no modelo de componentes da implementação de referência) e maior capacidade de reúso, pela atribuição adequada de responsabilidades, pela divisão em vários níveis de granularidade (compatíveis com o nível de abstração da classe) e pela aplicação de princípios de orientação a objetos, como o princípio de substituição de Liskov e o princípio aberto-fechado.
+Para \cite{macedodiretrizes} a aplicação de \textit{Domain-Driven Design} no desenvolvimento de linhas de produtos de software mostrou-se bastante adequada. A razão disto é o enfoque do desenvolvimento baseado em uma linguagem ubíqua do domínio. Os conceitos do domínio revelam-se com muito mais clareza no código da LPS. O efeito mais relevante dessa transparência é uma maior facilidade de manutenção da linha a curto e longo prazo \cite{macedodiretrizes}. Segundo \cite{macedodiretrizes} as principais vantagens observadas na abordagem proposta em relação aos métodos tradicionais são: menor esforço na implementação de uma nova regra de negócios (em geral, uma nova classe, comparada a vários componentes e classes no modelo de componentes da implementação de referência) e maior capacidade de reúso, pela atribuição adequada de responsabilidades, pela divisão em vários níveis de granularidade (compatíveis com o nível de abstração da classe) e pela aplicação de princípios de orientação a objetos, como o princípio de substituição de Liskov e o princípio aberto-fechado.
 
 Em algumas situações, o uso de uma linguagem ubíqua pode trazer problemas, embora estes
 não tenham sido experimentados neste trabalho. Trata-se dos casos em que as linguagens utiliza-
-das no contexto de cada produto sejam diferentes.
-
-Como a equipe de desenvolvimento não tinham experiência anterior com o \textit{Domain-Driven design} e ainda tem de manter o atual sistema de TSM a MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, foi criado usando a proposta de refatoração técnicas baseadas em DDD para estabelecer uma arquitetura sustentável. Este módulo vai coexistir com o atual sistema de TSM. Quando concluído, o módulo a partir do limite do contexto deverá ser continuamente expandido até chegar a uma verdadeira arquitectura de refatoração.
+das no contexto de cada produto sejam diferentes \cite{macedodiretrizes}.
 
 \subsection{ Quadro Comparativo }
 
@@ -359,7 +358,7 @@ A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apres
 \section{Solução Implementada}
 
 \subsection{Diagramas de Casos de Uso}
-O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, fácil identificar o propósito das classes e seus métodos e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
+O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, fácil era identificar o propósito das classes e seus métodos, e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
 
 Assim houve a necessidade de se aumentar aos poucos a equipe de desenvolvimento e muitas vezes é difícil alinhar o conhecimento, manter o mesmo padrão no desenvolvimento do código, refatorar, realizar testes unitários, mesmo porque novos programadores são vinculados a equipe e outros acabam saindo.
 
@@ -467,50 +466,6 @@ Restrições/Validações                                                           
 \end{tabular}
 \end{table}
 
-%\clearpage
-
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Cancelar GRU}
-\label{my-label}
-\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de  \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Informar o motivo do cancelamento \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Consultar a GRU\end{tabular} \\ 2. Informar o motivo do cancelamento & \begin{tabular}[c]{@{}l@{}}3. Cancelar a GRU\end{tabular}                                                \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser SURRS \\ 2. Se possui ensaio/selagem não pode ser \\ cancelada. \end{tabular} \\ \hline
-\end{tabular}
-\end{table}
-
-%\clearpage
-
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Cancelar Pagamento}
-\label{my-label}
-\begin{tabular}{|p{7.1cm}|p{7.1cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Cancelar GRU \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de  \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado \\ \hline
-Pós-condições                                                                                        & Informar o motivo do cancelamento  \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Consultar a GRU\end{tabular} \\ 2. Informar o motivo do cancelamento & \begin{tabular}[c]{@{}l@{}}3. Cancelar o pagamento\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser SURRS \\ 2. Identificar pagamento duplicado \\ 3. Identificar pagamento inferior ao \\ contratado na GRU\end{tabular} \\ \hline
-\end{tabular}
-\end{table}
-
 \clearpage
 \newpage
 \subsection{Mapa de Contexto}
@@ -541,7 +496,7 @@ Mais externo ao contexto do sistema tem-se o \textit{Database} que representa a 
 \label{fig:diagram-use-case}
 \end{figure}
 
-A figura 7 representa através do diagrama de pacotes a mesma estrutra apresentada na figura 6 mas de forma detalhada. É possível entender como está organizada a aplicação e a responsabilidade de cada camada. Nesse nível de detalhamento é visível notar a redução do acoplamento, aonde na camada de dominio concentra-se todo o conceito de \textit{Domain-Driven design}
+A figura 7 representa através do diagrama de pacotes a mesma estrutra apresentada na figura 6 mas de forma detalhada. É possível entender como está organizada a aplicação e a responsabilidade de cada camada. Nesse nível de detalhamento é visível notar a redução do acoplamento, aonde na camada de dominio concentra-se todo o conceito de \textit{Domain-Driven design}.
 
 Destaca-se a camada \textit{Domain} que comportará repositórios, fábricas, serviços, agregados e entidades. Na infraestrutura tem-se acesso a dados, configuração de serviço da aplicação, e de bibliotecas de terceiros.
 
@@ -590,7 +545,7 @@ O amadurecimento da equipe também é muito importante para tentar aplicar \textit
 
 Atualmente o sistema do Cronotacógrafo utiliza o banco de dados da Oracle, e todas as classes tem uma implementação direta referenciando o banco de dados Oracle, não existe nenhuma classe intermediaria que permita abstrair as chamadas ao banco. Dessa maneira surgiu a necessidade da utilização de repositórios para chegar nos objetos de conhecimento do domínio. Passando então a fazer parte da linguagem ubíqua, uma vez que não deveria ser utilizado somente como algo interno ao código, estando presente também nas conversas com os especialistas do domínio e por consequencia no modelo do domínio. Mantendo-se o princípio da linguagem ubíqua não existe problema ao trazer termos técnicos se todos entendem o conceito, e se no contexto do domínio GRU existisse outro nome que fizesse mais sentido do que o nome repositório esse novo nome seria utilizado, mesmo os desenvolvedores sabendo que no fundo aquilo é um repositório.
 
-O problema das pessoas é que utilizando \textit{Domain-Driven design} acreditam que nele contem toda a essência das coisas. O \textit{Domain-Driven design} não é uma descrição de padrões de projeto, embora tenha alguns, ele auxilia o time de desenvolvedores a ficar atento em alguns pontos-chave para conseguir um melhor \textit{design}, mas não ensinará um \textit{design} melhor para o problema específico de gerenciamento de GRU.
+O problema das pessoas é que utilizando \textit{Domain-Driven design} acreditam que nele concentra-se toda a essência das coisas. O \textit{Domain-Driven design} não é uma descrição de padrões de projeto, embora tenha alguns, ele auxilia o time de desenvolvedores a ficar atento em alguns pontos-chave para conseguir um melhor \textit{design}, mas não ensinará um \textit{design} melhor para o problema específico de gerenciamento de GRU, por exemplo.
 
 Abri-se mão de classes coesas e flexíveis para ganhar os benefícios do \textit{framework} e classes difíceis de serem testadas e mantidas são escritas pela simples questão da produtividade \cite{mauricioaniche}.
 
