@@ -50,7 +50,7 @@ Essa alteração afetou diretamente a codificação no sistema, o código e a arquite
 
 O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
 
-Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 é descrito como agrupar objetos de valor e entidades. A seção 2.9 descreve como trabalhar com objetos complexos através de fábricas. Na seção 2.10 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.11 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Driven design}.
+Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 descreve como trabalhar com objetos complexos através de fábricas. A seção 2.9 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.10 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Driven design}. Na seção 5 é discutido as limitações e dificuldades na implementação de \textit{Domain-Driven design}.
 
 \section{Referencial Teórico} \label{sec:firstpage}
 
@@ -285,7 +285,7 @@ O sistema de TSM, em especial foi criado com uma arquitetura em camadas tradicio
 
 Um ponto importante a ser observado durante a criação do mapa de contexto é que delimitar contextos também ajuda a pensar em como  distribuir as diferentes equipes \cite{hess2016evaluating}.
 
-Como a equipe de desenvolvimento não tinha experiência anterior com o \textit{Domain-Driven design} e ainda tem que manter o atual sistema de TSM a MERCAREON decidiu-se que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, que foi criado usando a proposta de técnicas de refatoração baseadas em \textit{Domain-Driven Design} para estabelecer uma arquitetura sustentável  \cite{hess2016evaluating}. Este módulo vai coexistir com o atual sistema de TSM. Quando concluído, o módulo a partir do limite do contexto deverá ser continuamente expandido até chegar a uma verdadeira arquitectura de refatoração.
+Como a equipe de desenvolvimento não tinha experiência anterior com o \textit{Domain-Driven design} e ainda tem que manter o atual sistema de TSM a MERCAREON decidiu que apenas como um primeiro passo de um pequeno módulo, o Live Yardview, que foi criado usando a proposta de técnicas de refatoração baseadas em \textit{Domain-Driven Design} para estabelecer uma arquitetura sustentável  \cite{hess2016evaluating}. Este módulo vai coexistir com o atual sistema de TSM. Quando concluído, o módulo a partir do limite do contexto deverá ser continuamente expandido até chegar a uma verdadeira arquitectura de refatoração.
 
 \subsection{Architectural Improvement by use of Strategic Level Domain-Driven Design}
 
@@ -358,7 +358,7 @@ A tabela 1 apresenta um quadro comparativo baseado na solulção dos artigos apres
 \section{Solução Implementada}
 
 \subsection{Diagramas de Casos de Uso}
-O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, fácil era identificar o propósito das classes e seus métodos, e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
+O atual sistema web de gerenciamento de verificação do cronotacógrafo que tem como ferramenta de desenvovlimento o \textit{framework} \textit{CakePHP} que inicialmente era responsável apenas pela simples emissão de GRU, então era um cenário simples de manter até por conta da regra de negócio que também era simples, fácil era identificar o propósito das classes e seus métodos, e por consequência se tornava fácil implementar as alterações de regras de negócio. Outro fator relevante é que somente um desenvolvedor era o responsável pela manutenção do sistema. Ao passar dos anos com a popularização da utilização de serviços web e a maior facilidade do acesso ao público à internet não somente pelo computador de casa mas também através de dispositivos móveis, fez com que no Cronotacógrafo muitos serviços que não existiam ou que eram realizados de forma manual passassem a ser realizados pelo atual sistema. E como o Inmetro do estado do Rio Grande do Sul é o orgão que mantém a equipe responsável por atender e regulamentar o processo de verificação de Cronotacógrafo abrangendo todos os estados do país, o sistema passou a ter que suportar muitas novas funcionalidades, funcionalidades estas que refletem diretamente desde a emissão da GRU até a emissão do certificado final.
 
 Assim houve a necessidade de se aumentar aos poucos a equipe de desenvolvimento e muitas vezes é difícil alinhar o conhecimento, manter o mesmo padrão no desenvolvimento do código, refatorar, realizar testes unitários, mesmo porque novos programadores são vinculados a equipe e outros acabam saindo.
 
@@ -422,49 +422,7 @@ Restrições/Validações                                                           
 \end{tabular}
 \end{table}
 
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso Informar Substituição de Selos}
-\label{my-label}
-\begin{tabular}{|p{7cm}|p{7cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Informar Subsituição de Selos \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar Subsituição de selos.                           \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado; Gru Paga; Deve existir uma selagem realizada \\ \hline
-Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar a GRU \\ 2. Informar  o veículo \end{tabular} & \begin{tabular}[c]{@{}l@{}}3. Informar os dados da selagem\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um posto \\ de Selagem ou PAC \\ 2. Validar veículo \\ 3. Validar GRU \end{tabular} 
 
-\\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[ht]
-\centering
-\caption{Documentação do Caso de Uso Informar Ensaio}
-\label{my-label}
-\begin{tabular}{|p{7cm}|p{7cm}|}
-\hline
-\begin{tabular}[c]{@{}l@{}}Nome do caso de Uso\end{tabular} & Informar Ensaio \\ \hline
-Caso de Uso Geral & Emitir GRU                                                                                                               \\ \hline
-Ator Principal& Posto                                                                                                                    \\ \hline
-Atores Secundários                                                                                   & -                                                                                                                        \\ \hline
-Resumo                                                                                               & Este caso de uso descreve as etapas percorridas por um usuário para informar ensaio com GRU emitida a partir de 2016.                           \\ \hline
-Pré­-condições                                                                                       & Usuário autenticado; Nº de protocolo gerado na selagem\\ \hline
-Pós-condições                                                                                        & Informar dados da selagem                                                                                                                          \\ \hline
-\multicolumn{2}{|c|}{Fluxo Principal}                                                                                                                                                                                           \\ \hline
-\multicolumn{1}{|c|}{Ações do Ator} & \multicolumn{1}{|c|}{Ações do Sistema}\\ \hline
-\begin{tabular}[c]{@{}l@{}}1. Informar o nº do protocolo\end{tabular} & \begin{tabular}[c]{@{}l@{}}2. Gerar GRU\end{tabular}                                                 \\ \hline
-Restrições/Validações                                                                                & \begin{tabular}[c]{@{}l@{}}1. Usuário autenticado deve ser um \\ posto PAC \\ 3. Validar GRU \end{tabular} 
-
-\\ \hline
-\end{tabular}
-\end{table}
 
 \clearpage
 \newpage
