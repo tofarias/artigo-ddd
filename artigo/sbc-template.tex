@@ -42,7 +42,7 @@ As informações do processo de verificação de Cronotacógrafo são gerenciadas atra
 
 A cada etapa do processo de selagem e de ensaio o posto deve registrar no site do Cronotacógrafo as informações sobre os serviços realizados.
 
-O sistema web de gerenciamento de verificação do cronotacógrafo existe há pelo menos oito anos e atende à todos os estados da federação. Foi desenvolvido em PHP com o \textit{framework} \textit{CakePHP}. Aplicações bem escritas em \textit{CakePHP} seguem o \textit{design pattern} MVC (\textit{Model-View-Controller}) \cite{cakephpmvc}. O \textit{framework} permitite uma programação orientada a objetos, mas é muito comum, por culpa do desenvolvedor ver código escrito de forma estruturada, implementação de regras de negócio dentro da camada \textit{view} e a mesma regra duplicada ou triplicada dentro de \textit{controllers}, classes que tem o papel apenas de repositório de funções e que não tem se quer relação com o propósito da classe. Algumas classes e métodos só fazem sentido para o desenvolvedor que a criou. As classes são altamente acopladas, e por isso alterações mesmo que pequenas se não bem testadas causam um grande defeito que se propaga em outros módulos do sistema. Algumas informações para serem utilizadas no site do Cronotacógrafo tem como origem o SGI (Sistema de Gestão Integrada) que possui banco de dados próprio, e alguns termos que tem o mesmo significado sofreram alteração de nome no banco de dados do Cronotacógrafo, causando mais dificuldades quando os desenvolvedores tentam fazer os dois sistemas se comunicarem.
+O sistema web de gerenciamento de verificação do cronotacógrafo existe há pelo menos oito anos e atende à todos os estados da federação. Foi desenvolvido em PHP com o \textit{framework} \textit{CakePHP}. Aplicações bem escritas em \textit{CakePHP} seguem o \textit{design pattern} MVC (\textit{Model-View-Controller}) \cite{cakephpmvc}. O \textit{framework} permitite uma programação orientada a objetos, mas é muito comum, por culpa do desenvolvedor ver código escrito de forma estruturada, implementação de regras de negócio dentro da camada \textit{view} e a mesma regra duplicada ou triplicada dentro de \textit{controllers}, classes que tem o papel apenas de repositório de funções e que não tem se quer relação com o propósito da classe. Algumas classes e métodos só fazem sentido para o desenvolvedor que a criou. As classes são altamente acopladas, e por isso alterações mesmo que pequenas se não bem testadas causam um grande efeito colateral que se propaga em outros módulos do sistema. Algumas informações para serem utilizadas no site do Cronotacógrafo tem como origem o SGI (Sistema de Gestão Integrada) que possui banco de dados próprio, e alguns termos que tem o mesmo significado sofreram alteração de nome no banco de dados do Cronotacógrafo, causando mais dificuldades quando os desenvolvedores tentam fazer os dois sistemas se comunicarem.
 
 No dia 01 de janeiro de 2016 houve uma grande mudança no processo de emissão de GRU, atualmente os postos de selagem e de ensaio (PAC) emitem a GRU, e  semelhante a um plano pré-pago de celular, o posto compra créditos para cada GRU emitida, cada crédito permite ao posto acessar o site do Cronotacógrafo e registrar os dados do serviço realizado, seja serviço de selagem ou de ensaio metrológico.
 
@@ -50,7 +50,7 @@ Essa alteração afetou diretamente a codificação no sistema, o código e a arquite
 
 O objetivo deste artigo é fornecer uma estrutura organizada, altamente reutilizável e produtiva para o módulo de GRU, pois todas as etapas de verificação dependem da GRU, e utilizando os conceitos de \textit{Domain-Driven Design} que segundo \cite{Evans:2003:DDT:861502} reúne um conjunto de conceitos, princípios e técnicas cujo foco esta no domínio e na lógica do domínio para que o ciclo de vida da aplicação possa ser prolongado.
 
-Como roteiro, este artigo encontra-se estruturado da seguinte maneira. Na seção 2.2 é descrito o significa e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 descreve como trabalhar com objetos complexos através de fábricas. A seção 2.9 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.10 é apresentado o conceito de módulos. Na seção 3 é descrito trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Driven design}. Na seção 5 é discutido as limitações e dificuldades na implementação de \textit{Domain-Driven design}.
+Como roteiro, este artigo encontra-se estruturado da seguinte maneira. A seção 2.1 apresenta o conceito sobre DDD (\textit{Domain-Driven design}). Na seção 2.2 é descrito o significado e importância da linguagem ubíquia. A seção 2.3 apresenta a importância da criação de um mapa de contexto. Na seção 2.4 descreve a importância dos blocos de construção e seus elementos para auxiliar na modelagem do modelo do domínio. A seção 2.5 descreve o que são entidades. A seção 2.6 descreve as características de um objeto de valor. Na seção 2.7 é apresentado o conceito de serviços. Na seção 2.8 descreve como trabalhar com objetos complexos através de fábricas. A seção 2.9 é descrito como utilizar repositórios para acessar dados externos. Na seção 2.10 é apresentado o conceito de módulos. Na seção 3 é apresentado trabalhos relacionados ao \textit{Domain-Driven design} e as soluções propostas. A seção 4 descreve a solução referente ao problema apresentado neste artigo utilizando \textit{Domain-Driven design}. Na seção 5 é discutido as limitações e dificuldades na implementação de \textit{Domain-Driven design}.
 
 \section{Referencial Teórico} \label{sec:firstpage}
 
@@ -100,7 +100,7 @@ também no código.
 
 Além de demonstrar como o modelo se relaciona dentro de outros contextos, permite também delimitar a aplicabilidade de um modelo do domínio para que a equipe de desenvolvimento tenha um conhecimento mais claro e que possa ser compatilhado de forma eficiente \cite{Evans:2003:DDT:861502}.
 
-Segundo é de vital importância para proteger a integridade de cada modelo  definir claramente os limites da sua responsabilidade no código \cite{millett2015patterns}.
+Segundo \cite{Evans:2003:DDT:861502} e \cite{millett2015patterns} é de vital importância para proteger a integridade de cada modelo  definir claramente os limites da sua responsabilidade no código.
 
 Ainda segundo \cite{Evans:2003:DDT:861502}, o mapa de contexto é uma ferramenta de modelagem muito importante no \textit{Domain-Driven Design} e quando se pensa em vários subsistemas de uma aplicação como \textit{Bounded Contexts}, se perde a visão geral do negócio como um todo, e que é inevitável que os vários delimitadores de contextos de uma aplicação serão necessários para comunicar ou compartilhar dados entre eles.
 
@@ -138,7 +138,7 @@ A figura 1 representa os \textit{patterns} que ajudam na modelagem do  \textit{d
 
 Segundo \cite{avram2007domain} existe uma necessidade de se ter um conhecimento aprimorado do domínio e que a camada modelo, tem como principal objetivo organizar todas as informações obtidas através dos especialistas.
 
-Os efeitos destes padrões é apresentar alguns dos elementos-chave para modelagem de objetos e  software do ponto de vista no DDD. Neste caso, o domínio sendo modelado é o próprio DDD \cite{Evans:2003:DDT:861502}.
+Os efeitos destes padrões é apresentar alguns dos elementos-chave para modelagem de objetos e  software do ponto de vista do DDD. Neste caso, o domínio sendo modelado é o próprio DDD \cite{Evans:2003:DDT:861502}.
 
 A criação de programas que podem lidar com chamadas de tarefas muito complexas para a separação de responsabilidades, permitindo a concentração em diferentes partes do projeto isoladamente. Ao mesmo tempo, o complexo de interações dentro do sistema deve ser mantido apesar da separação \cite{Evans:2003:DDT:861502}.
 
@@ -149,8 +149,8 @@ A criação de programas que podem lidar com chamadas de tarefas muito complexas p
 \label{fig:exampleFig1}
 \end{figure}
 
-Desenvolver um projeto dentro de cada camada que seja coesa e que depende apenas de níveis abaixo. Siga os padrões de padrões de arquitetura para fornecer acoplamento frouxo para as camadas acima. Concentrar todo o código relacionadas com o modelo de domínio em uma camada e isolar a partir da interface do usuário, aplicativo e código de infra-estrutura  \cite{avram2007domain}.
-Normalmente encontra-se no desenvolvimento códigos de lógica comercial incorporado no comportamento de elementos na interface do usuário juntando e adicionando os scripts de acesso  dados e até de retorno de informações do objeto. Isso acontece porque é a maneira mais fácil que o desenvolvedor encontra para fazer com que as funcionalidades apresentem resultados, no curto prazo. \cite{vernon2013implementing}
+Desenvolver um projeto dentro de cada camada que seja coesa e que depende apenas de níveis abaixo e seguir os padrões de arquitetura para fornecer acoplamento flexível para as camadas acima. Concentrar todo o código relacionado com o modelo de domínio em uma camada e isolar a partir da interface do usuário, aplicação e código de infra-estrutura  \cite{avram2007domain}.
+Normalmente encontra-se no desenvolvimento códigos de lógica comercial incorporado no comportamento de elementos na interface do usuário juntando e adicionando os scripts de acesso a dados e até de retorno de informações do objeto. Isso acontece porque é a maneira mais fácil que o desenvolvedor encontra para fazer com que as funcionalidades apresentem resultados, no curto prazo. \cite{vernon2013implementing}
 
 Observa-se que neste contexto fala-se a respeito de uma lógica comercial incorporada em elementos, ou seja não há uma separação de responsabilidade entre as camadas. Desse modo pode-se chamar de camadas, aquilo que tem uma separação de responsabilidades entre elas  \cite{Evans:2003:DDT:861502}.
 
@@ -185,7 +185,7 @@ Muitos objetos não são fundamentalmente definidos por seus atributos, mas sim po
 Um objeto deve ser distinguido por sua identidade, ao invés de seus atributos. Esse objeto, que é definido por sua identidade, é chamado de entidade. O modelo deve definir o que significa ser a mesma coisa. Suas identidades devem ser definidas de modo que possam ser efetivamente controladas. 
 Normalmente existem 4 maneiras de definir a identidade de uma entidade: Um cliente fornece a identidade, o próprio aplicativo fornece uma identidade, o mecanismo de persistência fornece a identidade ou outro contexto limitado fornece uma identidade \cite{DDDinPHP}.
 
-Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclos de vida que podem mudar sua forma e conteúdo, mas sua continuidade deve ser mantida. Suas definições de responsabilidades, atributos e associações devem girar em torno de quem elas são mais do que sobre os atributos que elas carregam \cite{vernon2013implementing}. Entidades são objetos importantes de um modelo de domínio, e elas deve ser considerada a partir do começo da modelagem processo. É também importante para determinar se um objeto precisa de ser uma entidade ou não. \cite{avram2007domain}
+Entidades têm considerações especiais de modelagem e arquitetura. Elas têm ciclos de vida que podem mudar sua forma e conteúdo, mas sua continuidade deve ser mantida. Suas definições de responsabilidades, atributos e associações devem girar em torno de quem elas são mais do que sobre os atributos que elas carregam \cite{vernon2013implementing}. Entidades são objetos importantes de um modelo de domínio, e ela deve ser considerada a partir do começo da modelagem processo. É também importante para determinar se um objeto precisa de ser uma entidade ou não. \cite{avram2007domain}
 
 \subsection{Objetos de Valor}
 Um objeto que representa um aspecto descritivo do domínio sem identidade conceitual é chamado de Objeto de Valor e entidades de implementação em software significa criar
@@ -199,7 +199,7 @@ Em banco de dados utiliza-se chave primária (PK), para tal identificação. Objeto
 Quando um objeto de valor é do tipo imutável no projeto, os desenvolvedores são livres para tomar decisões sobre questões como a cópia e compartilhamento em uma base puramente técnica, com a certeza de que a aplicação não depende de determinadas instâncias dos objetos \cite{Evans:2003:DDT:861502}.
 	
 \subsection{Serviços}
-Alguns conceitos do domínio não são naturais para modelar como objetos \cite{vernon2013implementing}. Forçar a funcionalidade de domínio necessário para ser da responsabilidade de uma entidade ou valor ou distorce a definição de um objeto baseado em modelo ou adiciona objetos artificiais sem sentido \cite{Evans:2003:DDT:861502}.
+Alguns conceitos do domínio não são naturais para modelar como objetos \cite{vernon2013implementing}. Forçar a funcionalidade de domínio necessária para ser da responsabilidade de uma entidade ou valor ou distorce a definição de um objeto baseado em modelo ou adiciona objetos artificiais sem sentido \cite{Evans:2003:DDT:861502}.
 
 Serviços agem como interfaces para prover operações. Eles não possuem um estado interno, seu objetivo é simplesmente fornecer funcionalidades para o domínio sobre um conjunto de entidades ou objetos de valor \cite{avram2007domain}.
 
@@ -212,17 +212,17 @@ Segundo \cite{avram2007domain} a criação de um objeto pode ser uma grande operaç
 No domínio, fábricas ajudam a criar objetos complexos e agregados e definir uma interface para criar um objeto, mas deixar a escolha do seu tipo na subclasse, a criação a ser definida em tempo de execução \cite{DDDinPHP}.
 
 	Fábricas em DDD são as mesmas classes normalmente responsáveis pela criação de objetos complexos, onde é necessário esconder alguma implementação, onde cada operação deve ser atômica e se preocupar caso a criação do objeto falhe, minimizando a dependência e o acoplamento \cite{avram2007domain}.
-Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma factory (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante.\cite{vernon2013implementing}
+Para manter o baixo acoplamento, o cliente faz uma solicitação por meio de uma \textit{factory} (fábrica). A fábrica por sua vez cria o produto solicitado. Outra maneira de pensar é que a fábrica torna o produto independente de seu solicitante \cite{vernon2013implementing}.
 	Fábricas podem criar \textit{Value Objects}, que produzem objetos prontos, no formato final, ou \textit{Entity factories} apenas para os atributos essenciais \cite{DDDinPHP}.
 \subsection{Repositórios}
-Um cliente precisa de um meio prático para obter referências e persistir objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente pode adicionar associações mais traversable, atrapalhando o modelo \cite{Evans:2003:DDT:861502}. Por outro lado, eles pode-se usar consultas para puxar os dados exatos de que precisam a partir do banco de dados, ou para puxar alguns objetos específicos, em vez de navegar a partir de raízes de agregação \cite{Evans:2003:DDT:861502}.
+Um cliente precisa de um meio prático para obter referências e persistir objetos de domínio. Se a infra-estrutura torna mais fácil para fazer isso, os desenvolvedores do cliente podem adicionar associações mais acopladas, atrapalhando o modelo \cite{Evans:2003:DDT:861502}. Por outro lado, pode-se usar consultas para buscar os dados exatos de que precisam a partir do banco de dados, ou para buscar alguns objetos específicos, em vez de navegar a partir das raízes de agregação \cite{Evans:2003:DDT:861502}.
 	Muitas regras no \textit{domain model} acabam sendo colocadas nas consultas sql, consequentemente se perdendo da aplicação, os repositórios tentam fazer a transição entre o \textit{domain} e a camada de persistência.
-	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar calculos, somatórias ou relatórios \cite{vernon2013implementing}.
+	Repositórios podem representar algo muito próximo aos objetos guardados na camada de persistência ou mesmo retornar cálculos, somatórias ou relatórios \cite{vernon2013implementing}.
 	Pensando em DDD, o \textit{repository} é um padrão conceitual simples para encapsular soluções de SQL, mapeamento de dados (ORM, DAO, e etc), fábricas e trazer de volta o foco no modelo. Quando o desenvolvedor tiver construído uma consulta SQL, transmitindo essa consulta para um serviço de consultas da camada de infraestrutura, obtendo um \textit{ RecordSet} que extrai as informações e transmite para um construtor ou fábrica, o foco do modelo já não existe mais \cite{vernon2013implementing}.
 
 Repositórios representam coleções, enquanto DAOs estão mais perto do banco de dados. Normalmente, um DAO conteria métodos CRUD para um objeto de domínio particular  \cite{avram2007domain}.
 Coleções são importantes por serem uma forma de expressar um dos mais fundamentais tipos de variação na programação:  a variação de número [Beck, Kent. 2013].
-	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do clico de vida até o seu final \cite{DDDinPHP}.
+	O padrão repositório representa todos objetos de um determinado tipo como sendo um conjunto conceitual. Ele age como uma coleção, exceto por ter recursos mais elaborados para consultas. Essa definição une um conjunto coeso de responsabilidades para fornecer acesso às raízes dos agregados desde o início do ciclo de vida até o final \cite{DDDinPHP}.
 	
 \subsection{Módulos}
 Para aplicações complexas, o modelo tende a ficar muito grande, tornando-se difícil de ser compreendido como um todo \cite{DDDinPHP}. Por esse motivo, é preciso reorganizar o modelo em módulos. Existem várias formas de coesão entre elementos de um módulo. Os módulos são capítulos \cite{Evans:2003:DDT:861502}.
@@ -271,7 +271,7 @@ Para \cite{vlahovicimplications} são dois os principais desafios que podem ser e
 
 A outra é a eliminação do trabalho repetitivo realizado pelos desenvolvedores ao automatizar tarefas repetitivas no processo de desenvolvimento \cite{vlahovicimplications}.
 
-O principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
+Segundo \cite{vlahovicimplications} o principal obstáculo impedindo a maior aceitação de \textit{Domain-Driven Design} na prática, é a falta de compreensão dos benefícios do DDD e as ferramentas potenciais que ele fornece.
 
 \subsection{Evaluating Domain-Driven Design for Refactoring Existing Information Systems}
 
@@ -469,7 +469,7 @@ Destaca-se a camada \textit{Domain} que comportará repositórios, fábricas, servi
 
 \subsection{Repositórios}
 
-A figura 8 representa o diagrama de classes relacionando classes que tem como responsabilidades acessar dados externos a aplicação. E isso permite maior flexibilidades quando se precisa trabalhar com mais de uma fonte de dados diferentes, como criar repositórios específicos para fonte de dados específicos. Poderia a aplicação possuir um repositório específico para OracleRepository, MongoDBRepository, SqlServerRepository e nelas conter implementações específicas de acesso a dados.
+A figura 8 representa o diagrama de classes relacionando classes que tem como responsabilidades acessar dados externos a aplicação. E isso permite maior flexibilidades quando se precisa trabalhar com mais de uma fonte de dados diferente, como criar repositórios específicos para fonte de dados específicos. Poderia a aplicação possuir um repositório específico para OracleRepository, MongoDBRepository, SqlServerRepository e nelas conter implementações específicas de acesso a dados.
 
 \begin{figure}[ht]
 \centering
@@ -482,7 +482,7 @@ A figura 8 representa o diagrama de classes relacionando classes que tem como re
 
 \subsection{Módulos}
 
-A figura 9 apresenta a organização do sistema na camada do domínio, foi organizado dentro dela além de entidades quem tem maior afinidade com o contexto, também repositórios, interfaces, objetos de valor e fábricas.
+A figura 9 apresenta a organização do sistema na camada do domínio, foi organizado dentro dela além de entidades, quem tem maior afinidade com o contexto, também repositórios, interfaces, objetos de valor e fábricas.
 
 \begin{figure}[ht]
 \centering
